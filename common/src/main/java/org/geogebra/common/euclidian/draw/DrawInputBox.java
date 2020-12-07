@@ -48,6 +48,8 @@ public class DrawInputBox extends CanvasDrawable {
 	public static final int TF_MARGIN_VERTICAL = 10;
 	/** Padding of the field (plain text) */
 	public static final int TF_PADDING_HORIZONTAL = 2;
+
+	public static final int SYMBOLIC_MIN_HEIGHT = 40;
 	public static final int MIN_HEIGHT = 24;
 
 	/** textfield */
@@ -438,7 +440,7 @@ public class DrawInputBox extends CanvasDrawable {
 			view.getViewTextField().setBoxBounds(labelRectangle);
 		}
 
-		if (!editing) {
+		if (!editing || view.getApplication().isExporting()) {
 			drawTextfieldOnCanvas(g2);
 		}
 
@@ -634,13 +636,6 @@ public class DrawInputBox extends CanvasDrawable {
 	 */
 	public AutoCompleteTextField getTextField() {
 		return view.getTextField(getGeoInputBox(), this);
-	}
-
-	/**
-	 * Writes the real textfield's value to the GeoInputBox.
-	 */
-	public void apply() {
-		getGeoInputBox().updateLinkedGeo(getTextField().getText());
 	}
 
 	/**

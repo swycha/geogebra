@@ -7,6 +7,7 @@ import org.geogebra.common.kernel.arithmetic.Equation;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
 import org.geogebra.common.kernel.arithmetic.ExpressionNodeConstants;
 import org.geogebra.common.kernel.arithmetic.ExpressionValue;
+import org.geogebra.common.kernel.arithmetic.MinusOne;
 import org.geogebra.common.kernel.arithmetic.MySpecialDouble;
 import org.geogebra.common.kernel.arithmetic.MyVecNDNode;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
@@ -64,7 +65,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 	private boolean niceQuotes = false;
 
 	private boolean shouldPrintMethodsWithParenthesis;
-	private boolean useOperatorWhitespace = true;
+	private boolean forEditorParser = false;
 
 	/**
 	 * Default template, but do not localize commands
@@ -335,7 +336,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 		initForEditing(editTemplate);
 		editTemplate.changeArcTrig = false;
 		initForEditing(editorTemplate);
-		editorTemplate.useOperatorWhitespace = false;
+		editorTemplate.forEditorParser = true;
 	}
 
 	/**
@@ -460,7 +461,14 @@ public class StringTemplate implements ExpressionNodeConstants {
 	 * Not localized template, allow bigger precision for Numeric command
 	 */
 	public static final StringTemplate numericNoLocal = new StringTemplate(
-			"numericNoLocal");
+			"numericNoLocal") {
+
+		@Override
+		public double getRoundHalfUpFactor(double abs, NumberFormatAdapter nf2,
+				ScientificFormatAdapter sf2, boolean useSF) {
+			return 1;
+		}
+	};
 
 	static {
 		numericNoLocal.allowMoreDigits = true;
@@ -1754,7 +1762,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 			appendGiacMultiplication(sb, left, right, leftStr, rightStr, valueForm);
 			break;
 		default:
-			appendMultiplySpecial(sb, leftStr, rightStr, left, right, valueForm, loc);
+			appendMultiplySpecial(sb, leftStr, rightStr, left, loc);
 			if (sb.length() > 0) {
 				break;
 			}
@@ -1773,11 +1781,8 @@ public class StringTemplate implements ExpressionNodeConstants {
 
 			// left wing
 			if (left.isLeaf() || (ExpressionNode
-					.opID(left) >= Operation.MULTIPLY.ordinal())) { // not
-				// +,
-				// -
-				if (ExpressionNode.isEqualString(left, -1, !valueForm)) { // unary
-																			// minus
+					.opID(left) >= Operation.MULTIPLY.ordinal())) { // not +, -
+				if (left instanceof MinusOne) { // unary minus
 					nounary = false;
 					sb.append('-');
 				} else {
@@ -1861,7 +1866,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 									!leftIsNumber
 											|| Character.isDigit(firstRight)
 											|| rightStr.equals(RAD)
-											|| (!useOperatorWhitespace && !isDegree(right));
+											|| (forEditorParser && !isDegree(right));
 						}
 					}
 
@@ -1991,24 +1996,11 @@ public class StringTemplate implements ExpressionNodeConstants {
 	}
 
 	private void appendMultiplySpecial(StringBuilder sb, String leftStr, String rightStr,
-					ExpressionValue left, ExpressionValue right, boolean valueForm,
-					Localization loc) {
-		Operation operation = Operation.MULTIPLY;
-		// check for 1 at left
-		if (ExpressionNode.isEqualString(left, 1, !valueForm)
-				&& !Unicode.DEGREE_STRING.equals(rightStr)
-				&& !RAD.equals(rightStr)
-				&& stringType != StringType.SCREEN_READER) {
-			append(sb, rightStr, right, operation);
-		}
-		// check for 1 at right
-		else if (ExpressionNode.isEqualString(right, 1, !valueForm)) {
-			append(sb, leftStr, left, operation);
-		}
+					ExpressionValue left, Localization loc) {
 		// no chceck for 0: we need 0x + 1 to be a function, not number
 
 		// check for degree sign or 1degree or degree1 (eg for Arabic)
-		else if ((rightStr.length() == 2
+		if ((rightStr.length() == 2
 				&& ((rightStr.charAt(0) == Unicode.DEGREE_CHAR
 				&& rightStr.charAt(1) == (loc.getZero() + 1))
 				|| (rightStr.charAt(1) == Unicode.DEGREE_CHAR
@@ -2089,7 +2081,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 
 		case GEOGEBRA:
 			// space for multiplication
-			return useOperatorWhitespace ? " * " : "*";
+			return !forEditorParser ? " * " : "*";
 
 		case SCREEN_READER:
 			return ScreenReader.getTimes(loc);
@@ -2104,13 +2096,13 @@ public class StringTemplate implements ExpressionNodeConstants {
 	 * @param sb string builder
 	 */
 	public void appendOptionalSpace(StringBuilder sb) {
-		if (useOperatorWhitespace) {
+		if (!forEditorParser) {
 			sb.append(" ");
 		}
 	}
 
 	public String getOptionalSpace() {
-		return useOperatorWhitespace ? " " : "";
+		return !forEditorParser ? " " : "";
 	}
 
 	/**
@@ -2212,11 +2204,10 @@ public class StringTemplate implements ExpressionNodeConstants {
 			break;
 
 		default:
-			// check for 1 in denominator
-			// #5396
-			if (left.isLeaf()
-					&& ExpressionNode.isEqualString(right, 1, !valueForm)) {
-				sb.append(leftStr);
+			if (forEditorParser) {
+				appendWithBrackets(sb, leftStr);
+				sb.append('/');
+				appendWithBrackets(sb, rightStr);
 				break;
 			}
 
@@ -2622,7 +2613,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 			return andString(left, right, leftStr, rightStr);
 		}
 		if (right.isExpressionNode()) {
-			sb.append(left.wrap().getCASstring(this, !valueForm));
+			sb.append(expressionToString(left, valueForm));
 			appendOptionalSpace(sb);
 			switch (((ExpressionNode) right).getOperation()) {
 			case LESS:
@@ -2660,11 +2651,15 @@ public class StringTemplate implements ExpressionNodeConstants {
 						+ " invalid in chain");
 			}
 			appendOptionalSpace(sb);
-			sb.append(((ExpressionNode) right).getRightTree().getCASstring(this,
-					!valueForm));
+			sb.append(expressionToString(((ExpressionNode) right).getRight(), valueForm));
 			return sb.toString();
 		}
 		return andString(left, right, leftStr, rightStr);
+	}
+
+	private String expressionToString(ExpressionValue left, boolean valueForm) {
+		return valueForm ? left.toValueString(this)
+				: ExpressionNode.getLabelOrDefinition(left, this);
 	}
 
 	/**
@@ -3511,7 +3506,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 	 * @return equal sign with appropriate whitespace symbols
 	 */
 	public String getEqualsWithSpace() {
-		if (!useOperatorWhitespace) {
+		if (forEditorParser) {
 			return "=";
 		}
 		return stringType == StringType.LATEX ? "\\, = \\," : " = ";
