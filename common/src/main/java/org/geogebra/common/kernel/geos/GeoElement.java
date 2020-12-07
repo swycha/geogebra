@@ -3626,9 +3626,6 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	public String getDefinitionDescription(StringTemplate tpl) {
 		if (algoParent == null) {
 			if (getDefinition() != null) {
-				if (this.isGeoNumeric()) {
-					return null;
-				}
 				return getDefinition().toString(tpl);
 			}
 			return "";
