@@ -125,7 +125,7 @@ public class DrawParametricCurve extends Drawable {
 		}
 
 		labelVisible = getTopLevelGeo().isLabelVisible();
-		if (IntervalFunction.isSupported((GeoFunction) geo) && intervalPlotter.isEnabled()) {
+		if (IntervalFunction.isSupported(geo) && intervalPlotter.isEnabled()) {
 			updateStrokes(geo);
 			updateIntervalPlot();
 			Log.debug("[Plotter] Interval");
