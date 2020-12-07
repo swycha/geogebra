@@ -125,19 +125,22 @@ public class DrawParametricCurve extends Drawable {
 		}
 
 		labelVisible = getTopLevelGeo().isLabelVisible();
-		if (intervalPlotter.isEnabled()) {
+		if (IntervalFunction.isSupported((GeoFunction) geo) && intervalPlotter.isEnabled()) {
 			updateStrokes(geo);
 			updateIntervalPlot();
+			Log.debug("[Plotter] Interval");
 		} else {
 			updateParametric();
+			Log.debug("[Plotter] Segment");
 		}
 	}
 
 	private void updateIntervalPlot() {
+		gp.reset();
 		intervalPlotter.update();
 		GPoint labelPoint = intervalPlotter.getLabelPoint();
 		if (labelPoint != null) {
-			positionLabel(labelPoint);
+			updateLabel(labelPoint);
 		}
 	}
 
@@ -212,7 +215,7 @@ public class DrawParametricCurve extends Drawable {
 		}
 
 		if (labelPoint != null) {
-			positionLabel(labelPoint);
+			updateLabel(labelPoint);
 		}
 		// shape for filling
 
@@ -235,7 +238,7 @@ public class DrawParametricCurve extends Drawable {
 		}
 	}
 
-	private void positionLabel(GPoint labelPoint) {
+	private void updateLabel(GPoint labelPoint) {
 		xLabel = labelPoint.x;
 		yLabel = labelPoint.y;
 		switch (geo.getLabelMode()) {
@@ -623,5 +626,4 @@ public class DrawParametricCurve extends Drawable {
 		// generic curve (parametric) or function R->R, but not inequality
 		return !curve.isFunctionInX() || geo.isGeoFunction();
 	}
-
 }

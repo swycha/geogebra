@@ -66,6 +66,9 @@ public class IntervalPlotModel {
 			return;
 		}
 		IntervalTuple firstPoint = points.get(0);
+		if (firstPoint == null) {
+			return;
+		}
 		labelPoint = labelPositionCalculator.calculate(firstPoint.x().getHigh(),
 				firstPoint.y().getLow());
 	}
