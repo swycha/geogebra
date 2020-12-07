@@ -9142,7 +9142,7 @@ public abstract class EuclidianController implements SpecialPointsListener {
 		}
 
 		setMouseLocation(event);
-
+		updateFocusedPanel(event);
 		if (popupJustClosed) {
 			popupJustClosed = false;
 		} else if (penMode(mode)) {
@@ -9177,18 +9177,8 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		scriptsHaveRun = false;
 
-		if (app.isUsingFullGui() && app.getGuiManager() != null) {
-			// determine parent panel to change focus
-			app.getGuiManager().setFocusedPanel(event, false);
-			app.getGuiManager().mousePressedForPropertiesView();
-
-			if (view instanceof PlotPanelEuclidianViewInterface) {
-				setMode(EuclidianConstants.MODE_MOVE, ModeSetter.TOOLBAR);
-			}
-		} else if (app.isHTML5Applet()) {
-			if (!isComboboxFocused() && !textfieldHasFocus) {
-				view.requestFocus();
-			}
+		if (view instanceof PlotPanelEuclidianViewInterface) {
+			setMode(EuclidianConstants.MODE_MOVE, ModeSetter.TOOLBAR);
 		}
 
 		if (handleMousePressedForViewButtons()) {
@@ -9269,6 +9259,18 @@ public abstract class EuclidianController implements SpecialPointsListener {
 
 		}
 		switchModeForMousePressed(event);
+	}
+
+	protected void updateFocusedPanel(AbstractEvent event) {
+		if (app.isUsingFullGui() && app.getGuiManager() != null) {
+			// determine parent panel to change focus
+			app.getGuiManager().setFocusedPanel(event, false);
+			app.getGuiManager().mousePressedForPropertiesView();
+		} else if (app.isHTML5Applet()) {
+			if (!isComboboxFocused() && !textfieldHasFocus) {
+				view.requestFocus();
+			}
+		}
 	}
 
 	private void updateHits(AbstractEvent event) {
