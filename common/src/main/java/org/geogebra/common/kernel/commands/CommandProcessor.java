@@ -926,4 +926,11 @@ public abstract class CommandProcessor {
 	public Localization getLocalization() {
 		return loc;
 	}
+
+	protected GeoElement validate(GeoElement arg, boolean ok, Command c) throws MyError {
+		if (ok) {
+			return arg;
+		}
+		throw argErr(arg, c);
+	}
 }
