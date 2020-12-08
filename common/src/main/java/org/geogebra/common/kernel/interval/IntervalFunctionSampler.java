@@ -15,6 +15,7 @@ public class IntervalFunctionSampler {
 	private final IntervalFunction function;
 	private final int numberOfSamples;
 	private final LinearSpace space;
+	private final IntervalTuple range;
 
 	/**
 	 *
@@ -26,6 +27,7 @@ public class IntervalFunctionSampler {
 			int numberOfSamples) {
 		this.function = new IntervalFunction(geo);
 		this.numberOfSamples = numberOfSamples;
+		this.range = range;
 		space = new LinearSpace();
 		update(range);
 	}
@@ -80,8 +82,29 @@ public class IntervalFunctionSampler {
 				samples.add(null);
 			}
 		}
-
+		fixAsymtotes(samples);
 		return samples;
+	}
+
+	private void fixAsymtotes(IntervalTupleList samples) {
+		for (int i = 1; i < samples.count(); i++) {
+			IntervalTuple point = samples.get(i);
+			if (point == null) {
+				IntervalTuple prev = samples.get(i - 1);
+				IntervalTuple next = samples.get(i + 1);
+				if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
+					if (prev.y().getLow() > next.y().getHigh()) {
+						prev.y().set(prev.y().getLow(), Math.max(prev.y().getHigh(), range.y().getHigh()));
+						next.y().set(Math.min(range.y().getLow(), next.y().getLow()), next.y().getHigh());
+					}
+
+					if (prev.y().getHigh() < next.y().getLow()) {
+						prev.y().set(Math.min(prev.y().getLow(), range.y().getLow()), prev.y().getHigh());
+						next.y().set(next.y().getLow(), Math.max(range.y().getHigh(), next.y().getHigh()));
+					}
+				}
+			}
+		}
 	}
 
 	/**
