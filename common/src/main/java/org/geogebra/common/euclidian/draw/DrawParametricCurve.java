@@ -404,7 +404,7 @@ public class DrawParametricCurve extends Drawable {
 		} else {
 			drawParametric(g2);
 		}
-		if (labelVisible) {
+		if (labelVisible && isVisible) {
 			g2.setFont(view.getFontConic());
 			g2.setPaint(geo.getLabelColor());
 			drawLabel(g2);
