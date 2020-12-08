@@ -5,7 +5,6 @@ import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.euclidian.CoordSystemAnimation;
-import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianStyleBar;
 import org.geogebra.common.euclidian.EuclidianView;
@@ -376,8 +375,7 @@ public class EuclidianView3DW extends EuclidianView3D implements
 	}
 
 	@Override
-	protected CoordSystemAnimation newZoomer(
-			CoordSystemInfo coordSystemInfo) {
+	protected CoordSystemAnimation newZoomer() {
 		// TODO Auto-generated method stub
 		return null;
 	}

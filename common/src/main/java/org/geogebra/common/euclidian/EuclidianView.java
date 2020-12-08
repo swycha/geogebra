@@ -5187,10 +5187,8 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 * instantiate new zoomer
 	 * 
 	 * @return zoomer
-	 * @param coordSystemInfo {@link CoordSystemInfo}
 	 */
-	protected abstract CoordSystemAnimation newZoomer(
-			CoordSystemInfo coordSystemInfo);
+	protected abstract CoordSystemAnimation newZoomer();
 
 	/**
 	 * Zooms around fixed point (px, py)
@@ -5202,7 +5200,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			return;
 		}
 		if (zoomer == null) {
-			zoomer = newZoomer(coordSystemInfo);
+			zoomer = newZoomer();
 		}
 		zoomer.init(px, py, zoomFactor, steps, storeUndo);
 		zoomer.startAnimation();
@@ -5231,7 +5229,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		}
 
 		if (axesRatioZoomer == null) {
-			axesRatioZoomer = newZoomer(coordSystemInfo);
+			axesRatioZoomer = newZoomer();
 		}
 
 		coordSystemInfo.setAxisZoom(true);
@@ -5266,7 +5264,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 		if (needsZoomerForStandardRatio()) {
 			// set axes ratio back to 1
 			if (axesRatioZoomer == null) {
-				axesRatioZoomer = newZoomer(coordSystemInfo);
+				axesRatioZoomer = newZoomer();
 			}
 			axesRatioZoomer.initAxes(2, 2, false);
 			axesRatioZoomer.setStandardViewAfter(xzero, yzero);
@@ -5333,7 +5331,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			// same scales: translate view to standard origin
 			// do this with the following action listener
 			if (mover == null) {
-				mover = newZoomer(coordSystemInfo);
+				mover = newZoomer();
 			}
 			mover.init(ox, oy, storeUndo);
 			mover.startAnimation();
@@ -5348,7 +5346,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	final public void setAnimatedRealWorldCoordSystem(double xmin, double xmax,
 			double ymin, double ymax, int steps, boolean storeUndo) {
 		if (zoomerRW == null) {
-			zoomerRW = newZoomer(coordSystemInfo);
+			zoomerRW = newZoomer();
 		}
 		zoomerRW.initRW(xmin, xmax, ymin, ymax, steps, storeUndo);
 		zoomerRW.startAnimation();

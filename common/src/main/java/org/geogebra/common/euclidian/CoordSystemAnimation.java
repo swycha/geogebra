@@ -62,12 +62,10 @@ public abstract class CoordSystemAnimation {
 	 *
 	 * @param view
 	 *            view
-	 * @param coordSystemInfo info about the coordinate system
 	 */
-	public CoordSystemAnimation(EuclidianView view,
-			CoordSystemInfo coordSystemInfo) {
+	public CoordSystemAnimation(EuclidianView view) {
 		this.view = view;
-		this.coordSystemInfo = coordSystemInfo;
+		this.coordSystemInfo = view.getCoordSystemInfo();
 	}
 
 	/**

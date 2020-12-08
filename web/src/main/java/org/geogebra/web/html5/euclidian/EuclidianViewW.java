@@ -9,7 +9,6 @@ import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint;
 import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.CoordSystemAnimation;
-import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianCursor;
@@ -255,9 +254,8 @@ public class EuclidianViewW extends EuclidianView implements
 	}
 
 	@Override
-	protected final CoordSystemAnimation newZoomer(
-			CoordSystemInfo coordSystemInfo) {
-		return new CoordSystemAnimationW(this, coordSystemInfo);
+	protected final CoordSystemAnimation newZoomer() {
+		return new CoordSystemAnimationW(this);
 	}
 
 	@Override

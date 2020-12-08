@@ -47,7 +47,6 @@ import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GDimension;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GGraphics2D;
-import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianConstants;
 import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianCursor;
@@ -893,8 +892,8 @@ public class EuclidianViewD extends EuclidianView
 	}
 
 	@Override
-	protected MyZoomerD newZoomer(CoordSystemInfo coordSystemInfo) {
-		return new MyZoomerD(this, coordSystemInfo);
+	protected MyZoomerD newZoomer() {
+		return new MyZoomerD(this);
 	}
 
 	/**

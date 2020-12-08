@@ -6,14 +6,13 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import org.geogebra.common.euclidian.CoordSystemAnimation;
-import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianView;
 
 public class MyZoomerD extends CoordSystemAnimation implements ActionListener {
 	protected Timer timer; // for animation
 
-	public MyZoomerD(EuclidianView view, CoordSystemInfo coordSystemInfo) {
-		super(view, coordSystemInfo);
+	public MyZoomerD(EuclidianView view) {
+		super(view);
 		timer = new Timer(DELAY, this);
 	}
 

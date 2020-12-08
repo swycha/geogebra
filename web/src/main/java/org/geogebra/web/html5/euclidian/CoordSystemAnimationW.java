@@ -1,7 +1,6 @@
 package org.geogebra.web.html5.euclidian;
 
 import org.geogebra.common.euclidian.CoordSystemAnimation;
-import org.geogebra.common.euclidian.CoordSystemInfo;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.util.GTimerListener;
 import org.geogebra.web.html5.sound.GTimerW;
@@ -12,11 +11,9 @@ public class CoordSystemAnimationW extends CoordSystemAnimation implements GTime
 	/**
 	 * @param view
 	 *            zoomed / panned Euclidian view
-	 * @param coordSystemInfo {@link CoordSystemInfo}
 	 */
-	public CoordSystemAnimationW(EuclidianView view,
-			CoordSystemInfo coordSystemInfo) {
-		super(view, coordSystemInfo);
+	public CoordSystemAnimationW(EuclidianView view) {
+		super(view);
 		timer = new GTimerW(this, DELAY);
 	}
 
