@@ -5232,7 +5232,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			axesRatioZoomer = newZoomer();
 		}
 
-		coordSystemInfo.setAxisZoom(true);
+		coordSystemInfo.setXAxisZoom(true);
 		axesRatioZoomer.initAxes(newRatioX, newRatioY, storeUndo);
 		axesRatioZoomer.startAnimation();
 	}
@@ -5268,7 +5268,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 			}
 			axesRatioZoomer.initAxes(2, 2, false);
 			axesRatioZoomer.setStandardViewAfter(xzero, yzero);
-			coordSystemInfo.setAxisZoom(true);
+			coordSystemInfo.setXAxisZoom(true);
 			axesRatioZoomer.startAnimation();
 		} else {
 			setAnimatedCoordSystem(xzero, yzero, STANDARD_VIEW_STEPS, false);
@@ -6528,15 +6528,15 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 	 */
 	public void onResizeX() {
 		setCursor(EuclidianCursor.RESIZE_X);
-		coordSystemInfo.setAxisZoom(true);
+		coordSystemInfo.setXAxisZoom(true);
 	}
 
 	/**
 	 * Runs when axis zoom is canceled.
 	 */
 	void onAxisZoomCancel() {
-		if (coordSystemInfo.isAxisZoom()) {
-			coordSystemInfo.setAxisZoom(false);
+		if (coordSystemInfo.isXAxisZoom()) {
+			coordSystemInfo.setXAxisZoom(false);
 			euclidianController.notifyZoomerStopped();
 		}
 	}

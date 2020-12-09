@@ -2,7 +2,7 @@ package org.geogebra.common.euclidian;
 
 public class CoordSystemInfo {
 	private EuclidianView view;
-	private boolean axisZoom = false;
+	private boolean xAxisZoom = false;
 	private boolean centerView;
 
 	public CoordSystemInfo(EuclidianView view) {
@@ -17,12 +17,12 @@ public class CoordSystemInfo {
 		return view.yZero - view.yZeroOld;
 	}
 
-	public boolean isAxisZoom() {
-		return axisZoom;
+	public boolean isXAxisZoom() {
+		return xAxisZoom;
 	}
 
-	public void setAxisZoom(boolean axisZoom) {
-		this.axisZoom = axisZoom;
+	public void setXAxisZoom(boolean xAxisZoom) {
+		this.xAxisZoom = xAxisZoom;
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class CoordSystemInfo {
 		return "CoordSystemInfo{"
 				+ "dx: " + deltaX()
 				+ ", dy: " + deltaY()
-				+ ", axisZoom: " + isAxisZoom()
+				+ ", axisZoom: " + isXAxisZoom()
 				+ '}';
 	}
 
