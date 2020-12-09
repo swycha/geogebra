@@ -4,6 +4,7 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 
 import org.geogebra.common.euclidian.EuclidianConstants;
+import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.MyModeChangedListener;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.io.layout.DockPanelData.TabIds;
@@ -32,11 +33,13 @@ import org.geogebra.web.html5.gui.util.AriaHelper;
 import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
+import org.geogebra.web.html5.gui.zoompanel.FocusableWidget;
 import org.geogebra.web.html5.main.AppW;
 import org.geogebra.web.html5.util.Dom;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -71,10 +74,11 @@ public class ToolbarPanel extends FlowPanel
 	private Integer lastOpenWidth;
 	private AlgebraTab tabAlgebra;
 	private @CheckForNull TableTab tabTable;
-	private ToolsTab tabTools;
+	private @CheckForNull ToolsTab tabTools;
 	private ShowableTab tabContainer;
 	private boolean isOpen;
 	private final ScheduledCommand deferredOnRes = this::resize;
+	private UndoRedoPanel undoRedoPanel;
 
 	/**
 	 * @param app application
@@ -95,7 +99,9 @@ public class ToolbarPanel extends FlowPanel
 	 * this.
 	 */
 	public void setMoveMode() {
-		tabTools.setMoveMode();
+		if (tabTools != null) {
+			tabTools.setMoveMode();
+		}
 	}
 
 	/**
@@ -103,7 +109,9 @@ public class ToolbarPanel extends FlowPanel
 	 * @param mode the mode will be selected
 	 */
 	public void setMode(int mode) {
-		tabTools.setMode(mode);
+		if (tabTools != null) {
+			tabTools.setMode(mode);
+		}
 	}
 
 	/**
@@ -111,14 +119,66 @@ public class ToolbarPanel extends FlowPanel
 	 * or inactive
 	 */
 	public void updateUndoRedoActions() {
-		navRail.updateUndoRedoActions();
+		if (undoRedoPanel == null) {
+			boolean panelAdded = maybeAddUndoRedoPanel();
+			if (!panelAdded) {
+				return;
+			}
+		}
+		undoRedoPanel.updateUndoActions();
 	}
 
 	/**
-	 * Updates the position of undo and redo buttons
+	 * update position of undo+redo panel
 	 */
 	public void updateUndoRedoPosition() {
-		navRail.updateUndoRedoPosition();
+		final EuclidianView ev = app.getActiveEuclidianView();
+		if (ev != null && undoRedoPanel != null) {
+			double evTop = (ev.getAbsoluteTop() - (int) app.getAbsTop())
+					/ app.getGeoGebraElement().getScaleY();
+			double evLeft = (ev.getAbsoluteLeft() - (int) app.getAbsLeft())
+					/ app.getGeoGebraElement().getScaleX();
+			if ((evLeft <= 0) && !app.isPortrait()) {
+				return;
+			}
+			int move = app.isPortrait() && app.showMenuBar() && !navRail.needsHeader() ? 48 : 0;
+			undoRedoPanel.getElement().getStyle().setTop(evTop, Style.Unit.PX);
+			undoRedoPanel.getElement().getStyle().setLeft(evLeft + move,
+					Style.Unit.PX);
+		}
+	}
+
+	/**
+	 * Show the undo/redo panel.
+	 */
+	public void showUndoRedoPanel() {
+		if (undoRedoPanel != null) {
+			undoRedoPanel.removeStyleName("hidden");
+		}
+	}
+
+	/**
+	 * Hide the entire undo/redo panel (eg. during animation).
+	 */
+	public void hideUndoRedoPanel() {
+		if (undoRedoPanel != null) {
+			undoRedoPanel.addStyleName("hidden");
+		}
+	}
+
+	private boolean maybeAddUndoRedoPanel() {
+		boolean isAllowed = app.isUndoRedoEnabled() && app.isUndoRedoPanelAllowed();
+		if (isAllowed) {
+			addUndoRedoButtons();
+		}
+		return isAllowed;
+	}
+
+	private void addUndoRedoButtons() {
+		if (undoRedoPanel == null) {
+			undoRedoPanel = new UndoRedoPanel(app);
+		}
+		getFrame().add(undoRedoPanel);
 	}
 
 	/**
@@ -181,18 +241,13 @@ public class ToolbarPanel extends FlowPanel
 	 * Init gui, don't open any panels
 	 */
 	public void initGUI() {
-		if (tabTable != null && app.getConfig().hasTableView()) {
-			return;
-		}
-		if (tabAlgebra != null && tabTable == null && !app.getConfig().hasTableView()) {
+		if (!isTabUpdateNeeded()) {
 			return;
 		}
 		clear();
-		if (navRail != null) {
-			navRail.removeUndoRedoPanel();
-		}
 
 		addStyleName("toolbar");
+		maybeAddUndoRedoPanel();
 		navRail = new NavigationRail(this);
 		if (app.showToolBar()) {
 			add(navRail);
@@ -201,12 +256,16 @@ public class ToolbarPanel extends FlowPanel
 		sinkEvents(Event.ONCLICK);
 		main.addStyleName("main");
 		tabAlgebra = new AlgebraTab(this);
-		tabTools = new ToolsTab(this);
 		tabContainer = new TabContainer(this);
 
 		addTab(tabAlgebra, true);
-		addTab(tabTools, false);
-		if (app.getConfig().hasTableView()) {
+		if (isToolsTabExpected()) {
+			tabTools = new ToolsTab(this);
+			addTab(tabTools, false);
+		} else {
+			tabTools = null;
+		}
+		if (isTableTabExpected()) {
 			tabTable = new TableTab(this);
 			addTab(tabTable, false);
 		} else {
@@ -217,6 +276,20 @@ public class ToolbarPanel extends FlowPanel
 		ClickStartHandler.initDefaults(main, false, true);
 		hideDragger();
 		doOpen();
+	}
+
+	private boolean isToolsTabExpected() {
+		return app.getConfig().showToolsPanel() && app.showToolBar();
+	}
+
+	private boolean isTableTabExpected() {
+		return app.getConfig().hasTableView() && app.showToolBar();
+	}
+
+	private boolean isTabUpdateNeeded() {
+		return (tabAlgebra == null)
+				|| (tabTable != null ^ isTableTabExpected())
+		 		|| (tabTools != null ^ isToolsTabExpected());
 	}
 
 	@Override
@@ -279,7 +352,9 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	protected void moveBtnClicked() {
 		setMoveMode();
-		tabTools.showTooltip(EuclidianConstants.MODE_MOVE);
+		if (tabTools != null) {
+			tabTools.showTooltip(EuclidianConstants.MODE_MOVE);
+		}
 	}
 
 	private void hideDragger() {
@@ -590,7 +665,9 @@ public class ToolbarPanel extends FlowPanel
 		setFadeTabs(fade);
 		app.invokeLater(() -> {
 			tabAlgebra.setActive(tab == TabIds.ALGEBRA);
-			tabTools.setActive(tab == TabIds.TOOLS);
+			if (tabTools != null) {
+				tabTools.setActive(tab == TabIds.TOOLS);
+			}
 			if (tabTable != null) {
 				tabTable.setActive(tab == TabIds.TABLE);
 			}
@@ -607,7 +684,9 @@ public class ToolbarPanel extends FlowPanel
 			openAlgebra(fade);
 			return;
 		}
-		tabTools.setVisible(true);
+		if (tabTools != null) {
+			tabTools.setVisible(true);
+		}
 		ToolTipManagerW.hideAllToolTips();
 
 		switchTab(TabIds.TOOLS, fade);
@@ -640,7 +719,7 @@ public class ToolbarPanel extends FlowPanel
 	 * This getter is public only for testing.
 	 * @return tool tab
 	 */
-	public ToolsTab getToolsTab() {
+	public @CheckForNull ToolsTab getToolsTab() {
 		return tabTools;
 	}
 
@@ -848,7 +927,10 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void setLabels() {
 		navRail.setLabels();
-		if (!getToolsTab().isCustomToolbar) {
+		if (undoRedoPanel != null) {
+			undoRedoPanel.setLabels();
+		}
+		if (tabTools != null && !tabTools.isCustomToolbar) {
 			tabTools.toolsPanel.setLabels();
 			tabTools.moreBtn
 					.setText(app.getLocalization().getMenu("Tools.More"));
@@ -883,6 +965,9 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	public void setTabIndexes() {
 		navRail.setTabIndexes();
+		if (undoRedoPanel != null) {
+			undoRedoPanel.setTabIndexes();
+		}
 	}
 
 	/**
@@ -891,7 +976,9 @@ public class ToolbarPanel extends FlowPanel
 	 */
 	private void setFadeTabs(boolean fade) {
 		tabAlgebra.setFade(fade);
-		tabTools.setFade(fade);
+		if (tabTools != null) {
+			tabTools.setFade(fade);
+		}
 		if (tabTable != null) {
 			tabTable.setFade(fade);
 		}
@@ -915,7 +1002,10 @@ public class ToolbarPanel extends FlowPanel
 	 * Update toolbar content
 	 */
 	public void updateContent() {
-		getToolsTab().updateContent();
+		ToolsTab toolsTab = getToolsTab();
+		if (toolsTab != null) {
+			toolsTab.updateContent();
+		}
 	}
 
 	/**
@@ -982,6 +1072,12 @@ public class ToolbarPanel extends FlowPanel
 		}
 		return app.getAppletFrame().hasCompactNavigationRail()
 				? CLOSED_WIDTH_LANDSCAPE_COMPACT : CLOSED_WIDTH_LANDSCAPE;
+	}
+
+	protected void setMenuButton(FocusableWidget focusableMenuButton) {
+		if (undoRedoPanel != null) {
+			undoRedoPanel.redoAnchor = focusableMenuButton;
+		}
 	}
 
 	/**
