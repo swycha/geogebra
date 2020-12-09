@@ -622,4 +622,20 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public double getLength() {
 		return high - low;
 	}
+
+	/**
+	 *
+	 * @param low to set.
+	 */
+	public void setLow(double low) {
+		this.low = low;
+	}
+
+	/**
+	 *
+	 * @param high to set.
+	 */
+	public void setHigh(double high) {
+		this.high = high;
+	}
 }

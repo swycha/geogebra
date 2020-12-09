@@ -12154,8 +12154,13 @@ public abstract class EuclidianController implements SpecialPointsListener {
 	 * Notify listeners that zoom stopped animating.
 	 */
 	public void notifyZoomerStopped() {
+		CoordSystemInfo info = view.getCoordSystemInfo();
+		if (view.isStandardView()) {
+			info.setCenterView(false);
+		}
+
 		for (CoordSystemAnimationListener listener: zoomerAnimationListeners) {
-			listener.onZoomStop(view.getCoordSystemInfo());
+			listener.onZoomStop(info);
 		}
 	}
 

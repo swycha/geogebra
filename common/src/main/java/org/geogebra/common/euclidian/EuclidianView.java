@@ -5260,7 +5260,7 @@ public abstract class EuclidianView implements EuclidianViewInterfaceCommon,
 
 		xzero = getXZeroStandard();
 		yzero = getYZeroStandard();
-
+		coordSystemInfo.setCenterView(true);
 		if (needsZoomerForStandardRatio()) {
 			// set axes ratio back to 1
 			if (axesRatioZoomer == null) {

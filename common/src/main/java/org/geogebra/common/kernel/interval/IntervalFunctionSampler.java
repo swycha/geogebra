@@ -94,13 +94,13 @@ public class IntervalFunctionSampler {
 				IntervalTuple next = samples.get(i + 1);
 				if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
 					if (prev.y().getLow() > next.y().getHigh()) {
-						prev.y().set(prev.y().getLow(), Math.max(prev.y().getHigh(), range.y().getHigh()));
-						next.y().set(Math.min(range.y().getLow(), next.y().getLow()), next.y().getHigh());
+						prev.y().setHigh(Math.max(prev.y().getHigh(), range.y().getHigh()));
+						next.y().setLow(Math.min(range.y().getLow(), next.y().getLow()));
 					}
 
 					if (prev.y().getHigh() < next.y().getLow()) {
-						prev.y().set(Math.min(prev.y().getLow(), range.y().getLow()), prev.y().getHigh());
-						next.y().set(next.y().getLow(), Math.max(range.y().getHigh(), next.y().getHigh()));
+						prev.y().setLow(Math.min(prev.y().getLow(), range.y().getLow()));
+						next.y().setHigh(Math.max(range.y().getHigh(), next.y().getHigh()));
 					}
 				}
 			}

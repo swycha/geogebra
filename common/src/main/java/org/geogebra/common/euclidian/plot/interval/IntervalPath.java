@@ -43,7 +43,6 @@ public class IntervalPath {
 			} else {
 				moveTo = true;
 			}
-
 		}
 	}
 

@@ -41,7 +41,7 @@ public class IntervalPlotController implements CoordSystemAnimationListener {
 
 	@Override
 	public void onMove(CoordSystemInfo info) {
-		if (info.isAxisZoom()) {
+		if (info.isAxisZoom() || info.isCenterVew()) {
 			return;
 		}
 		model.updateDomain();

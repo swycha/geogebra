@@ -3,6 +3,7 @@ package org.geogebra.common.euclidian;
 public class CoordSystemInfo {
 	private EuclidianView view;
 	private boolean axisZoom = false;
+	private boolean centerView;
 
 	public CoordSystemInfo(EuclidianView view) {
 		this.view = view;
@@ -31,5 +32,13 @@ public class CoordSystemInfo {
 				+ ", dy: " + deltaY()
 				+ ", axisZoom: " + isAxisZoom()
 				+ '}';
+	}
+
+	public boolean isCenterVew() {
+		return centerView;
+	}
+
+	public void setCenterView(boolean value) {
+		this.centerView = value;
 	}
 }
