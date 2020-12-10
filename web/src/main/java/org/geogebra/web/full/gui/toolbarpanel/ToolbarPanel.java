@@ -241,9 +241,6 @@ public class ToolbarPanel extends FlowPanel
 	 * Init gui, don't open any panels
 	 */
 	public void initGUI() {
-		if (!isTabUpdateNeeded()) {
-			return;
-		}
 		clear();
 
 		addStyleName("toolbar");
@@ -284,12 +281,6 @@ public class ToolbarPanel extends FlowPanel
 
 	private boolean isTableTabExpected() {
 		return app.getConfig().hasTableView() && app.showToolBar();
-	}
-
-	private boolean isTabUpdateNeeded() {
-		return (tabAlgebra == null)
-				|| (tabTable != null ^ isTableTabExpected())
-		 		|| (tabTools != null ^ isToolsTabExpected());
 	}
 
 	@Override
