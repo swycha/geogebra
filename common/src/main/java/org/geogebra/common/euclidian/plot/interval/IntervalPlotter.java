@@ -18,6 +18,7 @@ public class IntervalPlotter {
 	private final IntervalPathPlotter gp;
 	private boolean enabled;
 	private IntervalPlotModel model = null;
+	private boolean updateAll = true;
 
 	/**
 	 * Creates a disabled plotter
@@ -35,7 +36,8 @@ public class IntervalPlotter {
 		enabled = true;
 		createModel(function);
 		createController();
-		model.updateAll();
+		needsUpdateAll();
+		update();
 	}
 
 	private void createController() {
@@ -57,7 +59,12 @@ public class IntervalPlotter {
 	 * Update path to draw.
 	 */
 	public void update() {
-		model.update();
+		if (updateAll) {
+			model.updateAll();
+			updateAll = false;
+		} else {
+			model.update();
+		}
 	}
 
 	/**
@@ -92,5 +99,12 @@ public class IntervalPlotter {
 	 */
 	public GPoint getLabelPoint() {
 		return model.getLabelPoint();
+	}
+
+	/**
+	 * Call it when plotter needs a full update
+	 */
+	public void needsUpdateAll() {
+		updateAll = true;
 	}
 }
