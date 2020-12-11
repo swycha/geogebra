@@ -79,4 +79,14 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		assertFalse(isSupported(add("x!")));
 		assertFalse(isSupported(add("gamma(x)")));
 	}
+
+	@Test
+	public void evaluateFunctionWinthNumeric() throws Exception {
+		add("a = 2");
+		GeoFunction geo = add("a*x");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(0, 2));
+		shouldEqual(interval(0, 4), actual);
+	}
+
 }
