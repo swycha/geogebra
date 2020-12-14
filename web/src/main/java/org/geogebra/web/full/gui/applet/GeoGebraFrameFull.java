@@ -317,7 +317,7 @@ public class GeoGebraFrameFull
 		ToolbarPanel toolbarPanel = getGuiManager()
 				.getUnbundledToolbar();
 		if (toolbarPanel != null) {
-			toolbarPanel.hideMoveFloatingButton();
+			toolbarPanel.setMoveFloatingButtonVisible(false);
 		}
 
 		keyboard.prepareShow(animated);

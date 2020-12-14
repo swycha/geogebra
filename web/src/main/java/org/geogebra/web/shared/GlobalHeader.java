@@ -243,6 +243,9 @@ public class GlobalHeader implements EventRenderable {
 	 * remove exam timer and put back button panel
 	 */
 	public void resetAfterExam() {
+		if (getButtonElement() == null) {
+			return;
+		}
 		forceVisible(Visibility.HIDDEN);
 		getExamPanel().getElement().removeFromParent();
 		getButtonElement().getStyle().setDisplay(Display.FLEX);
@@ -261,6 +264,9 @@ public class GlobalHeader implements EventRenderable {
 	 */
 	public void addExamTimer() {
 		forceVisible(Visibility.VISIBLE);
+		if (getButtonElement() == null) {
+			return;
+		}
 		// remove other buttons
 		getButtonElement().getStyle()
 				.setDisplay(Display.NONE);

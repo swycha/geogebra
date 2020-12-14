@@ -7,7 +7,6 @@ import org.geogebra.web.full.gui.toolbarpanel.ToolbarPanel;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,6 +19,8 @@ public class ToolbarDockPanelW extends DockPanelW
 
 	private ToolbarPanel toolbar;
 	private DockPanelData.TabIds tabId;
+	private static final int MIN_ROWS_WITHOUT_KEYBOARD = 5;
+	private static final int MIN_ROWS_WITH_KEYBOARD = 3;
 
 	/**
 	 * New panel with AV and tools
@@ -54,12 +55,7 @@ public class ToolbarDockPanelW extends DockPanelW
 
 	@Override
 	public void deferredOnResize() {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-				toolbar.resize();
-			}
-		});
+		Scheduler.get().scheduleDeferred(() -> toolbar.resize());
 	}
 
 	@Override
@@ -170,4 +166,15 @@ public class ToolbarDockPanelW extends DockPanelW
 		return null;
 	}
 
+	@Override
+	public int getNavigationRailWidth() {
+		return toolbar.getNavigationRailWidth();
+	}
+
+	@Override
+	public double getMinVHeight(boolean keyboard) {
+		int rows = keyboard ? MIN_ROWS_WITH_KEYBOARD
+				: MIN_ROWS_WITHOUT_KEYBOARD;
+		return rows * ToolbarPanel.CLOSED_HEIGHT_PORTRAIT;
+	}
 }
