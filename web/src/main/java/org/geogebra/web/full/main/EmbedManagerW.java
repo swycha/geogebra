@@ -44,7 +44,6 @@ import org.geogebra.web.html5.util.AppletParameters;
 import org.geogebra.web.html5.util.Dom;
 import org.geogebra.web.html5.util.GeoGebraElement;
 import org.geogebra.web.html5.util.ImageManagerW;
-import org.geogebra.web.html5.util.h5pviewer.H5PPaths;
 import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.dom.client.Element;
@@ -108,7 +107,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecu
 		int embedID = drawEmbed.getEmbedID();
 		FlowPanel container = createH5PContainer(embedID);
 		addWidgetToCache(drawEmbed, container);
-		widgets.get(drawEmbed).setContent(H5PPaths.SAMPLE_CONTENT);
+		widgets.get(drawEmbed).setContent(drawEmbed.getGeoEmbed().getURL());
 		return (H5PEmbedElement) widgets.get(drawEmbed);
 	}
 
@@ -563,9 +562,10 @@ public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecu
 	}
 
 	@Override
-	public void openH5PTool() {
+	public void openH5PTool(String url) {
 		int embedId = nextID();
 		GeoEmbed geoEmbed = new GeoEmbed(app.getKernel().getConstruction());
+		geoEmbed.setUrl(url);
 		geoEmbed.setEmbedId(embedId);
 		geoEmbed.setAppName("h5p");
 		geoEmbed.setLabel(null);
