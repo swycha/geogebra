@@ -30,6 +30,15 @@ public class IntervalPlotter {
 	}
 
 	/**
+	 * Creates a disabled plotter
+	 */
+	public IntervalPlotter(EuclidianView view, IntervalPathPlotter pathPlotter) {
+		this.view = view;
+		this.gp = pathPlotter;
+		this.enabled = false;
+	}
+
+	/**
 	 * Enables plotter
 	 */
 	public void enableFor(GeoFunction function) {

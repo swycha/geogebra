@@ -35,10 +35,13 @@ public class IntervalPath {
 		Interval lastY = new Interval();
 
 		int pointCount = model.getPoints().count();
+		if (pointCount == 1) {
+			return;
+		}
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple tuple =  model.getPoints().get(i);
 
-			if (tuple != null) {
+			if (tuple != null && !tuple.y().isEmpty()) {
 				plotInterval(lastY, tuple);
 			} else {
 				moveTo = true;

@@ -73,15 +73,9 @@ public class IntervalFunctionSampler {
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
 			Interval y = function.evaluate(x);
-
-			if (!y.isEmpty() && !y.isWhole()) {
-				samples.add(new IntervalTuple(x, y));
-			}
-			if (y.isWhole()) {
-				// means that the next and prev intervals need to be fixed
-				samples.add(null);
-			}
+			samples.add(y.isWhole() ? null : new IntervalTuple(x, y));
 		}
+
 		fixAsymtotes(samples);
 		return samples;
 	}

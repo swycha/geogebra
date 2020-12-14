@@ -214,4 +214,9 @@ public class IntervalAlgebraTest {
 		assertTrue(interval(-27, -8).nthRoot(interval(4, 3)).isEmpty());
 
 	}
+
+	@Test
+	public void testSqrtSinUndef() {
+		assertTrue(interval(4, 5).sin().sqrt().isEmpty());
+	}
 }
