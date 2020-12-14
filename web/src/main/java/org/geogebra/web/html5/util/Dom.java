@@ -163,6 +163,7 @@ public final class Dom {
 		}
 		return 0;
 	}
+
 	/**
 	 * Element.addEventListener extracted to static method for safe cast in tests.
 	 * @param element element
