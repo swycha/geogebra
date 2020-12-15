@@ -128,32 +128,24 @@ public class DrawParametricCurve extends Drawable {
 		if (isIntervalPlotterActive()) {
 			updateStrokes(geo);
 			updateIntervalPlot();
-			Log.debug("[Plotter] Interval");
 		} else {
 			updateParametric();
-			Log.debug("[Plotter] Segment");
 		}
 	}
 
-	public void updateNeeded() {
-		isVisible = geo.isEuclidianVisible();
-		if (!isVisible) {
-			return;
-		}
-
-		labelVisible = getTopLevelGeo().isLabelVisible();
-		if (isIntervalPlotterActive()) {
-			updateStrokes(geo);
-			updateIntervalPlot();
-			Log.debug("[Plotter] Interval");
+	private void enableIntervalPlotterIfSupported() {
+		if (IntervalFunction.isSupported(geo)) {
+			if (!intervalPlotter.isEnabled()) {
+				intervalPlotter.enableFor((GeoFunction) geo);
+			}
 		} else {
-			updateParametric();
-			Log.debug("[Plotter] Segment");
+			intervalPlotter.disable();
 		}
 	}
 
 	private boolean isIntervalPlotterActive() {
-		return IntervalFunction.isSupported(geo) && intervalPlotter.isEnabled();
+		return IntervalFunction.isSupported(geo)
+				&& intervalPlotter.isEnabled();
 	}
 
 	private void updateIntervalPlot() {
@@ -173,11 +165,19 @@ public class DrawParametricCurve extends Drawable {
 	public void updateIfNeeded() {
 		if (needsUpdate()) {
 			setNeedsUpdate(false);
-			if (isIntervalPlotterActive()) {
-				Log.debug("NEEDS UPDATEALL");
-				intervalPlotter.needsUpdateAll();
-			}
+			updateIntervalPlotterIfNeeded();
 			update();
+		}
+	}
+
+	private void updateIntervalPlotterIfNeeded() {
+		if (intervalPlotter == null) {
+			return;
+		}
+
+		enableIntervalPlotterIfSupported();
+		if (isIntervalPlotterActive()) {
+			intervalPlotter.needsUpdateAll();
 		}
 	}
 
