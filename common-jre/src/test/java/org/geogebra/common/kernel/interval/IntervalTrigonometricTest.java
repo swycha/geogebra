@@ -18,7 +18,7 @@ public class IntervalTrigonometricTest {
 	@Test
 	public void testPiTwice() {
 		Interval interval = IntervalConstants.piTwice();
-		assertArrayEquals(new double[] {PI_TWICE_LOW, PI_TWICE_HIGH},
+		assertArrayEquals(new double[]{PI_TWICE_LOW, PI_TWICE_HIGH},
 				interval.toArray(), 0);
 	}
 
@@ -141,5 +141,10 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-0.99932929973, 0.99932929973),
 				interval(-4, 4).tanh());
 		shouldEqual(interval(-1, 1), interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).tanh());
+	}
+
+	@Test
+	public void testSinLnXNegative() {
+		shouldEqual(IntervalConstants.empty(), new Interval(interval(-15, 0).log()).sin());
 	}
 }

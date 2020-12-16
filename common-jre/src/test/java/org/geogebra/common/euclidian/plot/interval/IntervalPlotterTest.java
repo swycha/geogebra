@@ -32,4 +32,15 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		plotter.enableFor(function);
 		assertEquals(EMPTY_PATH, gp.getLog());
 	}
+
+	@Test
+	public void testSinLnx() {
+		EuclidianView view = getApp().getActiveEuclidianView();
+		view.setRealWorldCoordSystem(-10, 0, -9, 9);
+		IntervalPathPlotterMock gp = new IntervalPathPlotterMock();
+		IntervalPlotter plotter = new IntervalPlotter(view, gp, 10);
+		GeoFunction function = add("sin(ln(x))");
+		plotter.enableFor(function);
+		assertEquals(EMPTY_PATH, gp.getLog());
+	}
 }

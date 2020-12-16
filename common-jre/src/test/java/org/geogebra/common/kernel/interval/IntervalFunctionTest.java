@@ -89,4 +89,12 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		shouldEqual(interval(0, 4), actual);
 	}
 
+	@Test
+	public void evaluateSinLnX() throws Exception {
+		GeoFunction geo = add("sin(ln(x))");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-10, -9));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
 }
