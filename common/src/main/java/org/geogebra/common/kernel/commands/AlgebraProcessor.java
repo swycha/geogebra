@@ -3318,7 +3318,8 @@ public class AlgebraProcessor {
 
 		if (isIndependent) {
 			if (isAngle) {
-				ret = new GeoAngle(cons, value, AngleStyle.UNBOUNDED);
+				boolean keepDegrees = n.getOperation().equals(Operation.ARCSIND);
+				ret = new GeoAngle(cons, value, AngleStyle.UNBOUNDED, keepDegrees);
 			} else {
 				ret = new GeoNumeric(cons, value);
 			}
