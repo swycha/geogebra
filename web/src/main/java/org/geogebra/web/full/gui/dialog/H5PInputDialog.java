@@ -2,6 +2,7 @@ package org.geogebra.web.full.gui.dialog;
 
 import org.geogebra.common.euclidian.EmbedManager;
 import org.geogebra.common.move.ggtapi.models.AjaxCallback;
+import org.geogebra.common.move.ggtapi.models.MaterialRestAPI;
 import org.geogebra.common.move.ggtapi.models.json.JSONException;
 import org.geogebra.common.move.ggtapi.models.json.JSONObject;
 import org.geogebra.common.move.ggtapi.models.json.JSONTokener;
@@ -89,7 +90,7 @@ public class H5PInputDialog extends EmbedInputDialog implements AjaxCallback {
 			if (reader.readyState == FileReader.DONE) {
 				String[] splitted = reader.result.asString().split("base64,");
 				if (splitted != null && splitted.length == 2) {
-					app.getLoginOperation().getGeoGebraTubeAPI()
+					((MaterialRestAPI) app.getLoginOperation().getGeoGebraTubeAPI())
 							.uploadAndUnzipH5P(splitted[1], this);
 				}
 
