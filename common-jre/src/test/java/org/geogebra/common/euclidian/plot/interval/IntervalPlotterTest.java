@@ -43,4 +43,15 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		plotter.enableFor(function);
 		assertEquals(EMPTY_PATH, gp.getLog());
 	}
+
+	@Test
+	public void testSqrtReciprocalX() {
+		EuclidianView view = getApp().getActiveEuclidianView();
+		view.setRealWorldCoordSystem(-1, 1, -9, 9);
+		IntervalPathPlotterMock gp = new IntervalPathPlotterMock();
+		IntervalPlotter plotter = new IntervalPlotter(view, gp, 100);
+		GeoFunction function = add("sqrt(1/x)");
+		plotter.enableFor(function);
+		assertEquals(EMPTY_PATH, gp.getLog());
+	}
 }

@@ -28,7 +28,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 */
 	public Interval(double value) {
 		this(value, value);
-
 	}
 
 	/**
@@ -405,8 +404,20 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return algebra.nthRoot(n);
 	}
 
+	/**
+	 *
+	 * @return cosine of the interval.
+	 */
 	public Interval cos() {
 		return trigonometric.cos();
+	}
+
+	/**
+	 *
+	 * @return secant of the interval
+	 */
+	public Interval sec() {
+		return trigonometric.sec();
 	}
 
 	/**
@@ -638,5 +649,13 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 */
 	public void setHigh(double high) {
 		this.high = high;
+	}
+
+	public boolean isHalfPositiveInfinity() {
+		return DoubleUtil.isEqual(0, low, 1E-5) && high == Double.POSITIVE_INFINITY;
+	}
+
+	public boolean isHalfNegativeInfinity() {
+		return low == Double.NEGATIVE_INFINITY && DoubleUtil.isEqual(high,0, 1E-5);
 	}
 }

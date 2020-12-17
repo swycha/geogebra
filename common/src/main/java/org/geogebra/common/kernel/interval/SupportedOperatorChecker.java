@@ -22,6 +22,7 @@ public class SupportedOperatorChecker implements Inspecting {
 		case DIFF:
 		case SIN:
 		case COS:
+//		case SEC:
 		case SQRT:
 		case TAN:
 		case EXP:

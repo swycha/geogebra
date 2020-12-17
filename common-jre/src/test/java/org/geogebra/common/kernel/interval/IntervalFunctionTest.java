@@ -97,4 +97,11 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		shouldEqual(IntervalConstants.empty(), actual);
 	}
 
+	@Test
+	public void evaluateSqrtReciprocalX() throws Exception {
+		GeoFunction geo = add("sqrt(1/x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-0.1, 0.1));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
 }

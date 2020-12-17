@@ -130,6 +130,10 @@ class IntervalAlgebra {
 	 * @return square root of the interval.
 	 */
 	Interval sqrt() {
+		if (interval.isEmpty()) {
+			interval.setEmpty();
+			return interval;
+		}
 		return nthRoot(2);
 	}
 

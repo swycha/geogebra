@@ -84,6 +84,7 @@ public class IntervalPath {
 		} else {
 			lineTo(x.getLow(), y.getHigh());
 		}
+
 		lineTo(x.getHigh(), y.getLow());
 	}
 

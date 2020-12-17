@@ -219,4 +219,10 @@ public class IntervalAlgebraTest {
 	public void testSqrtSinUndef() {
 		assertTrue(interval(4, 5).sin().sqrt().isEmpty());
 	}
+
+	@Test
+	public void testNegativeDividedZero() {
+		assertEquals(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+				interval(-7, 0).divide(IntervalConstants.zero()));
+	}
 }

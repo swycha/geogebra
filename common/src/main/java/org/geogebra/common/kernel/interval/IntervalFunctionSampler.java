@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.interval;
 import java.util.List;
 
 import org.geogebra.common.kernel.geos.GeoFunction;
+import org.geogebra.common.util.debug.Log;
 
 /**
  * Class to provide samples of the given function as a
@@ -83,20 +84,47 @@ public class IntervalFunctionSampler {
 	private void fixAsymtotes(IntervalTupleList samples) {
 		for (int i = 1; i < samples.count(); i++) {
 			IntervalTuple point = samples.get(i);
+			Interval y = point.y();
 			if (point == null) {
 				IntervalTuple prev = samples.get(i - 1);
 				IntervalTuple next = samples.get(i + 1);
-				if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
-					if (prev.y().getLow() > next.y().getHigh()) {
-						prev.y().setHigh(Math.max(prev.y().getHigh(), range.y().getHigh()));
-						next.y().setLow(Math.min(range.y().getLow(), next.y().getLow()));
-					}
-
-					if (prev.y().getHigh() < next.y().getLow()) {
-						prev.y().setLow(Math.min(prev.y().getLow(), range.y().getLow()));
-						next.y().setHigh(Math.max(range.y().getHigh(), next.y().getHigh()));
-					}
+				connect(prev, next);
+			} else if (y.isHalfPositiveInfinity()) {
+				IntervalTuple prev = samples.get(i - 1);
+				IntervalTuple next = samples.get(i + 1);
+				Log.debug("HalfPositiveHole prev: " + prev + " next: " + next);
+				if (prev.y().isEmpty()) {
+					y.set(next.y().getHigh(), Double.POSITIVE_INFINITY);
+				} else if (next.y().isEmpty()) {
+					y.set(prev.y().getHigh(), Double.POSITIVE_INFINITY);
 				}
+			} else if (y.isHalfNegativeInfinity()) {
+				IntervalTuple prev = samples.get(i - 1);
+				IntervalTuple next = samples.get(i + 1);
+				Log.debug("HalfNegativeHole prev: " + prev + " next: " + next);
+				if (prev.y().isEmpty()) {
+					y.set(next.y().getHigh(), Double.NEGATIVE_INFINITY);
+				} else if (next.y().isEmpty()) {
+					y.set(prev.y().getHigh(), Double.NEGATIVE_INFINITY);
+				}
+			}
+			if (!y.isEmpty() && (y.getLow() == Double.NEGATIVE_INFINITY || y.getHigh()
+			 == Double.NEGATIVE_INFINITY)) {
+				Log.debug("tadaaaaa: " + y);
+			}
+		}
+	}
+
+	private void connect(IntervalTuple prev, IntervalTuple next) {
+		if (prev != null && next != null && !prev.y().isOverlap(next.y())) {
+			if (prev.y().getLow() > next.y().getHigh()) {
+				prev.y().setHigh(Math.max(prev.y().getHigh(), range.y().getHigh()));
+				next.y().setLow(Math.min(range.y().getLow(), next.y().getLow()));
+			}
+
+			if (prev.y().getHigh() < next.y().getLow()) {
+				prev.y().setLow(Math.min(prev.y().getLow(), range.y().getLow()));
+				next.y().setHigh(Math.max(range.y().getHigh(), next.y().getHigh()));
 			}
 		}
 	}
