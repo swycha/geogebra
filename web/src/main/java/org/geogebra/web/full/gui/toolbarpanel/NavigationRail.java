@@ -90,9 +90,6 @@ class NavigationRail extends FlowPanel {
 		}
 		if (app.getConfig().hasTableView()) {
 			center.add(btnTableView);
-			if (showToolPanel) {
-				center.addStyleName("threeTab");
-			}
 		}
 		if (btnMenu != null && !isHeaderExternal()) {
 			center.addStyleName("withMenu");
