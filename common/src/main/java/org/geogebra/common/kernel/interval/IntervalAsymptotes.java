@@ -25,18 +25,18 @@ public class IntervalAsymptotes {
 		} else {
 			Interval value = value(index);
 			if (isLeftCutOff(index)) {
-				interpolate(right, value);
+				if (value.getHigh() == Double.POSITIVE_INFINITY) {
+					value.setLow(right.getHigh());
+				} else {
+					value.setHigh(right.getLow());
+				}
 			} else if (isRightCutOff(index)) {
-				interpolate(left, value);
+				if (value.getHigh() == Double.POSITIVE_INFINITY) {
+					value.setLow(left.getLow());
+				} else {
+					value.setHigh(left.getHigh());
+				}
 			}
-		}
-	}
-
-	private void interpolate(Interval neighbour, Interval value) {
-		if (value.getHigh() == Double.POSITIVE_INFINITY) {
-			value.setLow(neighbour.getHigh());
-		} else {
-			value.setHigh(neighbour.getHigh());
 		}
 	}
 
