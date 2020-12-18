@@ -22,7 +22,8 @@ public class IntervalAsymptotes {
 		Interval left = leftValue(index);
 		if (isCutOffPoint(index)) {
 			connect(left, right);
-		} else {
+		}
+		else {
 			Interval value = value(index);
 			if (isLeftCutOff(index)) {
 				if (value.getHigh() == Double.POSITIVE_INFINITY) {

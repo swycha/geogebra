@@ -265,7 +265,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 			if (low != 0) {
 				if (high != 0) {
 					// [negative, positive]
-					setWhole();
+					setEmpty();
 				} else {
 					// [negative, zero]
 					double d = low;
