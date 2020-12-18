@@ -89,12 +89,16 @@ class IntervalTrigonometric {
 	 * @return secant of the interval
 	 */
 	public Interval sec() {
-		if (interval.isEmpty() || interval.isOnlyInfinity()) {
-			interval.setEmpty();
-		} else {
-			interval.set(RMath.secLow(interval.getLow()), RMath.secHigh(interval.getHigh()));
-		}
-		return interval;
+		Interval interval = new Interval(this.interval);
+		return interval.cos().multiplicativeInverse();
+	}
+	/**
+	 *
+	 * @return cotangent of the interval
+	 */
+	public Interval cot() {
+		Interval interval = new Interval(this.interval);
+		return interval.tan().multiplicativeInverse();
 	}
 
 	/**

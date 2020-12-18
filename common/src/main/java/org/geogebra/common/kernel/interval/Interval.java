@@ -421,6 +421,14 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	/**
+	 *
+	 * @return cotangent of the interval
+	 */
+	public Interval cot() {
+		return trigonometric.cot();
+	}
+
+	/**
 	 * Checks if the interval is
 	 * either [-∞, -∞] or [∞, ∞].
 	 *

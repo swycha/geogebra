@@ -81,8 +81,12 @@ import org.geogebra.common.util.debug.Log;
 				return left.difference(right);
 			case SIN:
 				return left.sin();
+			case SEC:
+				return left.sec();
 			case COS:
 				return left.cos();
+			case COT:
+				return left.cot();
 			case SQRT:
 				return left.sqrt();
 			case TAN:
