@@ -664,6 +664,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return true if interval one or both border is infinite.
 	 */
 	public boolean hasInfinity() {
-		return Double.isInfinite(low) || Double.isInfinite(high);
+		return !isEmpty() && Double.isInfinite(low) || Double.isInfinite(high);
 	}
 }

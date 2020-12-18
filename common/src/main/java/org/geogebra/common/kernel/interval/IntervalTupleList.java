@@ -71,11 +71,15 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 
 	private boolean isAllUndefined() {
 		for (IntervalTuple tuple: list) {
-			if (!tuple.y().isEmpty()) {
+			if (hasTupleValue(tuple)) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private boolean hasTupleValue(IntervalTuple tuple) {
+		return tuple != null && tuple.y() != null && !tuple.y().isEmpty();
 	}
 
 	/**
