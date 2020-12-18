@@ -658,4 +658,12 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean isHalfNegativeInfinity() {
 		return low == Double.NEGATIVE_INFINITY && DoubleUtil.isEqual(high,0, 1E-5);
 	}
+
+	/**
+	 *
+	 * @return true if interval one or both border is infinite.
+	 */
+	public boolean hasInfinity() {
+		return Double.isInfinite(low) || Double.isInfinite(high);
+	}
 }
