@@ -24,6 +24,7 @@ public class SupportedOperatorChecker implements Inspecting {
 		case COS:
 		case SEC:
 		case COT:
+		case CSC:
 		case SQRT:
 		case TAN:
 		case EXP:

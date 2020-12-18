@@ -85,6 +85,8 @@ import org.geogebra.common.util.debug.Log;
 				return left.sec();
 			case COS:
 				return left.cos();
+			case CSC:
+				return left.csc();
 			case COT:
 				return left.cot();
 			case SQRT:

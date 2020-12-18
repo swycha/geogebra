@@ -212,4 +212,13 @@ class IntervalTrigonometric {
 		}
 		return interval;
 	}
+
+	/**
+	 *
+	 * @return 1 / sin(x)
+	 */
+	public Interval csc() {
+		Interval interval = new Interval(this.interval);
+		return interval.sin().multiplicativeInverse();
+	}
 }

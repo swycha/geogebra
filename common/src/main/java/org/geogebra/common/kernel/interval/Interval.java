@@ -420,6 +420,15 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return trigonometric.sec();
 	}
 
+
+	/**
+	 *
+	 * @return 1 / sin(x)
+	 */
+	public Interval csc() {
+		return trigonometric.csc();
+	}
+
 	/**
 	 *
 	 * @return cotangent of the interval
@@ -674,4 +683,5 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean hasInfinity() {
 		return !isEmpty() && Double.isInfinite(low) || Double.isInfinite(high);
 	}
+
 }
