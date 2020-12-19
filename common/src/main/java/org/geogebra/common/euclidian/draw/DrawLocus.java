@@ -26,7 +26,6 @@ import org.geogebra.common.euclidian.plot.GeneralPathClippedForCurvePlotter;
 import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.MyPoint;
 import org.geogebra.common.kernel.algos.AlgoElement;
-import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoLocusND;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
 import org.geogebra.common.kernel.geos.Traceable;
@@ -293,11 +292,6 @@ public class DrawLocus extends Drawable {
 		return strokedShape != null && strokedShape.intersects(rect);
 	}
 
-	@Override
-	final public GeoElement getGeoElement() {
-		return geo;
-	}
-
 	/**
 	 * Returns the bounding box of this DrawPoint in screen coordinates.
 	 */
@@ -364,5 +358,9 @@ public class DrawLocus extends Drawable {
 		if (locus instanceof GeoLocusStroke) {
 			((GeoLocusStroke) locus).resetXMLPointBuilder();
 		}
+	}
+
+	public GeneralPathClippedForCurvePlotter getPath() {
+		return gp;
 	}
 }

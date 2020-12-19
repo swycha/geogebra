@@ -6,26 +6,26 @@ import org.geogebra.common.main.AppConfig;
 
 abstract class AbstractAppConfig implements AppConfig {
 
-    private String appCode;
-    private String subAppCode;
+	private String appCode;
+	private String subAppCode;
 
-    AbstractAppConfig(String appCode) {
-        this(appCode, null);
-    }
+	AbstractAppConfig(String appCode) {
+		this(appCode, null);
+	}
 
-    AbstractAppConfig(String appCode, String subAppCode) {
-        this.appCode = appCode;
-        this.subAppCode = subAppCode;
-    }
+	AbstractAppConfig(String appCode, String subAppCode) {
+		this.appCode = appCode;
+		this.subAppCode = subAppCode;
+	}
 
-    @Override
-    public String getAppCode() {
-        return appCode;
-    }
+	@Override
+	public String getAppCode() {
+		return appCode;
+	}
 
-    @CheckForNull
-    @Override
-    public String getSubAppCode() {
-        return subAppCode;
-    }
+	@CheckForNull
+	@Override
+	public String getSubAppCode() {
+		return subAppCode;
+	}
 }

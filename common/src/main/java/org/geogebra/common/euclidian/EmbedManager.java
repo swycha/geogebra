@@ -110,14 +110,6 @@ public interface EmbedManager {
 	void executeAction(EventType action);
 
 	/**
-	 * @param action
-	 *            event type
-	 * @param embedId
-	 *            ID of embedded element
-	 */
-	void executeAction(EventType action, int embedId);
-
-	/**
 	 * Move embeds to chache so that they don't need rebuilding during undo
 	 */
 	void storeEmbeds();
@@ -131,6 +123,12 @@ public interface EmbedManager {
 	 * opens the  Graspable math tool
 	 */
 	void openGraspableMTool();
+
+	/**
+	 * opens the H5P tool
+	 * @param url of the unzipped h5p file
+	 */
+	void openH5PTool(String url);
 
 	void initAppEmbed(GeoEmbed ge);
 
@@ -151,4 +149,12 @@ public interface EmbedManager {
 	 * @param content embed content as JSON
 	 */
 	void setContent(int embedID, String content);
+
+	/**
+	 * @param action
+	 *            action to be executed
+	 * @param id
+	 *            embed ID
+	 */
+	void embeddedAction(EventType action, String id);
 }

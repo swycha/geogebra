@@ -23,6 +23,7 @@ import org.geogebra.common.gui.dialog.options.model.CoordsModel;
 import org.geogebra.common.gui.dialog.options.model.DecoAngleModel;
 import org.geogebra.common.gui.dialog.options.model.DecoAngleModel.IDecoAngleListener;
 import org.geogebra.common.gui.dialog.options.model.DecoSegmentModel;
+import org.geogebra.common.gui.dialog.options.model.DrawArrowsModel;
 import org.geogebra.common.gui.dialog.options.model.FillingModel;
 import org.geogebra.common.gui.dialog.options.model.IComboListener;
 import org.geogebra.common.gui.dialog.options.model.ISliderListener;
@@ -47,7 +48,7 @@ import org.geogebra.common.gui.dialog.options.model.TextFieldSizeModel;
 import org.geogebra.common.gui.dialog.options.model.TextOptionsModel;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
-import org.geogebra.common.kernel.algos.AlgoBarChart;
+import org.geogebra.common.kernel.algos.ChartStyle;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.main.App;
@@ -351,6 +352,9 @@ public class OptionsTab extends FlowPanel {
 		if (m instanceof TextFieldAlignmentModel) {
 			return new TextFieldAlignmentPanel((TextFieldAlignmentModel) m, app);
 		}
+		if (m instanceof DrawArrowsModel) {
+			return new CheckboxPanel("DrawArrows", loc, (DrawArrowsModel) m);
+		}
 
 		return null;
 	}
@@ -482,7 +486,8 @@ public class OptionsTab extends FlowPanel {
 				boolean hasBackground, boolean hasOpacity) {
 
 			GeoElement geo0 = model.getGeoAt(0);
-			colorChooserW.setAlgoBarChart(model.getAlgoBarChart());
+			colorChooserW.setChartAlgo(model.getBarChartIntervals(),
+					model.getGeos());
 
 			if (updateChooserFromBarChart(geo0)) {
 				return;
@@ -538,9 +543,9 @@ public class OptionsTab extends FlowPanel {
 		 * @return whether this is a barchart
 		 */
 		public boolean updateChooserFromBarChart(GeoElement geo0) {
-			AlgoBarChart algo = model.getAlgoBarChart();
+			ChartStyle chartStyle = model.getChartStyle();
 
-			if (algo == null) {
+			if (chartStyle == null) {
 				return false;
 			}
 
@@ -549,12 +554,12 @@ public class OptionsTab extends FlowPanel {
 			int barIdx = colorChooserW.getSelectedBar();
 
 			if (barIdx == ColorObjectModel.ALL_BARS
-					|| algo.getBarColor(barIdx) == null) {
+					|| chartStyle.getBarColor(barIdx) == null) {
 				selectedColor = geo0.getObjectColor();
 
 			} else {
-				selectedColor = algo.getBarColor(barIdx);
-				alpha = algo.getBarAlpha(barIdx);
+				selectedColor = chartStyle.getBarColor(barIdx);
+				alpha = chartStyle.getBarAlpha(barIdx);
 				if (selectedColor == null) {
 					selectedColor = geo0.getObjectColor();
 				}

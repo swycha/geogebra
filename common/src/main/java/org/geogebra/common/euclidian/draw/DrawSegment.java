@@ -572,11 +572,6 @@ public class DrawSegment extends SetDrawable implements Previewable {
 	}
 
 	@Override
-	public GeoElement getGeoElement() {
-		return geo;
-	}
-
-	@Override
 	public void setGeoElement(GeoElement geo) {
 		this.geo = geo;
 	}
@@ -657,4 +652,7 @@ public class DrawSegment extends SetDrawable implements Previewable {
 				view.toScreenCoordYd(point.getY2D())));
 	}
 
+	public GLine2D getLine() {
+		return line;
+	}
 }

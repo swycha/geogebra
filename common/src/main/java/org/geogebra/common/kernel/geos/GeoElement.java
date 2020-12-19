@@ -54,7 +54,6 @@ import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.Locateable;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.algos.AlgoAttachCopyToView;
-import org.geogebra.common.kernel.algos.AlgoBarChart;
 import org.geogebra.common.kernel.algos.AlgoCirclePointRadiusInterface;
 import org.geogebra.common.kernel.algos.AlgoDependentText;
 import org.geogebra.common.kernel.algos.AlgoElement;
@@ -63,6 +62,7 @@ import org.geogebra.common.kernel.algos.AlgoJoinPointsSegment;
 import org.geogebra.common.kernel.algos.AlgoName;
 import org.geogebra.common.kernel.algos.AlgorithmSet;
 import org.geogebra.common.kernel.algos.Algos;
+import org.geogebra.common.kernel.algos.ChartStyleAlgo;
 import org.geogebra.common.kernel.algos.ConstructionElement;
 import org.geogebra.common.kernel.algos.DrawInformationAlgo;
 import org.geogebra.common.kernel.algos.TableAlgo;
@@ -239,12 +239,10 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	protected boolean highlighted = false;
 	private boolean selected = false;
 	private String strAlgebraDescription;
-	private String strAlgebraDescTextOrHTML;
 	private String strLabelTextOrHTML;
 	/** LaTeX string for LaTeX export */
 	protected String strLaTeX;
 	private boolean strAlgebraDescriptionNeedsUpdate = true;
-	private boolean strAlgebraDescTextOrHTMLneedsUpdate = true;
 	private boolean strLabelTextOrHTMLUpdate = true;
 	/** true if strLaTex is out of sync */
 	protected boolean strLaTeXneedsUpdate = true;
@@ -1963,6 +1961,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 			return hasOnlyFreeInputPoints(view)
 					&& containsOnlyMoveableGeos(getFreeInputPoints(view));
 
+		case PIECHART:
 		case POLYGON:
 		case POLYGON3D:
 		case POLYLINE:
@@ -3174,7 +3173,6 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 
 	private void algebraStringsNeedUpdate() {
 		strAlgebraDescriptionNeedsUpdate = true;
-		strAlgebraDescTextOrHTMLneedsUpdate = true;
 		strLabelTextOrHTMLUpdate = true;
 		strLaTeXneedsUpdate = true;
 	}
@@ -3974,37 +3972,23 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 		if (!isAlgebraLabelVisible()) {
 			String desc = getLaTeXDescriptionRHS(false,
 					StringTemplate.defaultTemplate);
-			Log.debug("desc = " + desc);
 			if (LabelManager.isShowableLabel(desc)) {
 				builder.clear();
 				builder.append(desc);
 				return builder.toString();
 			}
 		}
-		if (strAlgebraDescTextOrHTMLneedsUpdate) {
-			final String algDesc = getAlgebraDescriptionDefault();
-			// convertion to html is only needed if indices are found
-			if (hasIndexLabel()) {
-				builder.indicesToHTML(algDesc);
-				strAlgebraDescTextOrHTML = builder.toString();
-			} else {
-				builder.clear();
-				builder.append(algDesc);
-				strAlgebraDescTextOrHTML = algDesc;
-			}
 
-			strAlgebraDescTextOrHTMLneedsUpdate = false;
+		final String algDesc = getAlgebraDescriptionDefault();
+		// convertion to html is only needed if indices are found
+		if (hasIndexLabel()) {
+			builder.indicesToHTML(algDesc);
+			return builder.toString();
 		} else {
-			// TODO in some cases we don't need this
-			if (!builder.canAppendRawHtml()) {
-				builder.indicesToHTML(strAlgebraDescription);
-			} else {
-				builder.clear();
-				builder.append(strAlgebraDescTextOrHTML);
-			}
+			builder.clear();
+			builder.append(algDesc);
+			return algDesc;
 		}
-
-		return strAlgebraDescTextOrHTML;
 	}
 
 	/**
@@ -4827,8 +4811,9 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	}
 
 	private void getExtraTagsXML(StringBuilder sb) {
-		if (this.getParentAlgorithm() instanceof AlgoBarChart) {
-			((AlgoBarChart) this.getParentAlgorithm()).barXml(sb);
+		if (this.getParentAlgorithm() instanceof ChartStyleAlgo) {
+			((ChartStyleAlgo) this.getParentAlgorithm()).getStyle().barXml(sb,
+					((ChartStyleAlgo) this.getParentAlgorithm()).getIntervals());
 		}
 	}
 
@@ -4901,6 +4886,11 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 		if (hasLineOpacity() && getLineOpacity() < 255) {
 			sb.append(" opacity=\"");
 			sb.append(lineOpacity);
+			sb.append("\"");
+		}
+		if (isDrawArrows()) {
+			sb.append(" drawArrow=\"");
+			sb.append("true");
 			sb.append("\"");
 		}
 		sb.append("/>\n");
@@ -6879,11 +6869,9 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 		if (getPackedIndex() > 0) {
 			return DescriptionMode.VALUE;
 		}
-		IndexHTMLBuilder sbDef = new IndexHTMLBuilder(false);
-		IndexHTMLBuilder sbVal = new IndexHTMLBuilder(false);
-		addLabelTextOrHTML(def0, sbDef);
-		String def = sbDef.toString();
-		String val = getAlgebraDescriptionTextOrHTMLDefault(sbVal);
+
+		String def = addLabelText(def0);
+		String val = getAlgebraDescriptionDefault();
 		return !def.equals(val) ? DescriptionMode.DEFINITION_VALUE
 				: DescriptionMode.VALUE;
 	}
@@ -6965,6 +6953,13 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	 * @return whether this is locusable (locus or function)
 	 */
 	public boolean isGeoLocusable() {
+		return false;
+	}
+
+	/**
+	 * @return if slopefield is drawn with arrows
+	 */
+	public boolean isDrawArrows() {
 		return false;
 	}
 

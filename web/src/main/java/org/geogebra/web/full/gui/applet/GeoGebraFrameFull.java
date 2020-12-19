@@ -26,6 +26,7 @@ import org.geogebra.web.full.gui.layout.panels.AlgebraPanelInterface;
 import org.geogebra.web.full.gui.layout.panels.EuclidianDockPanelW;
 import org.geogebra.web.full.gui.pagecontrolpanel.PageListPanel;
 import org.geogebra.web.full.gui.toolbar.mow.NotesLayout;
+import org.geogebra.web.full.gui.toolbar.mow.ToolbarMow;
 import org.geogebra.web.full.gui.toolbarpanel.ToolbarPanel;
 import org.geogebra.web.full.gui.util.VirtualKeyboardGUI;
 import org.geogebra.web.full.gui.view.algebra.AlgebraViewW;
@@ -316,7 +317,7 @@ public class GeoGebraFrameFull
 		ToolbarPanel toolbarPanel = getGuiManager()
 				.getUnbundledToolbar();
 		if (toolbarPanel != null) {
-			toolbarPanel.hideMoveFloatingButton();
+			toolbarPanel.setMoveFloatingButtonVisible(false);
 		}
 
 		keyboard.prepareShow(animated);
@@ -753,6 +754,15 @@ public class GeoGebraFrameFull
 	}
 
 	/**
+	 * update tools after login/logout
+	 */
+	public void updateNotesMediaToolbarPanel() {
+		if (notesLayout != null && notesLayout.getToolbar() != null) {
+			((ToolbarMow) notesLayout.getToolbar()).updateMediaPanel();
+		}
+	}
+
+	/**
 	 * @param show whether to show the button
 	 */
 	public void setPageControlButtonVisible(boolean show) {
@@ -824,7 +834,8 @@ public class GeoGebraFrameFull
 		if (!Dom.eventTargetsElement(event, getMenuElement())
 				&& !Dom.eventTargetsElement(event, getToolbarMenuElement())
 				&& !getGlassPane().isDragInProgress()
-				&& !app.isUnbundled() && panelTransitioner.getCurrentPanel() == null) {
+				&& !app.isUnbundledOrWhiteboard()
+				&& panelTransitioner.getCurrentPanel() == null) {
 			app.hideMenu();
 		}
 	}

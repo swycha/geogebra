@@ -3,6 +3,7 @@ package org.geogebra.common.euclidian.draw;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.geogebra.common.awt.GAffineTransform;
 import org.geogebra.common.awt.GGraphics2D;
 import org.geogebra.common.awt.GPoint2D;
 import org.geogebra.common.awt.GRectangle;
@@ -14,7 +15,6 @@ import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.MediaBoundingBox;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.kernel.StringTemplate;
-import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
 
 public class DrawFormula extends Drawable implements DrawInline {
@@ -92,11 +92,6 @@ public class DrawFormula extends Drawable implements DrawInline {
 	}
 
 	@Override
-	public GeoElement getGeoElement() {
-		return geo;
-	}
-
-	@Override
 	public MediaBoundingBox getBoundingBox() {
 		return rectangle.getBoundingBox();
 	}
@@ -111,6 +106,11 @@ public class DrawFormula extends Drawable implements DrawInline {
 		if (formulaController != null) {
 			formula.setContent(formulaController.getText());
 		}
+	}
+
+	@Override
+	public GAffineTransform getTransform() {
+		return rectangle.getDirectTransform();
 	}
 
 	@Override

@@ -49,9 +49,7 @@ public class ExportImageDialog extends ComponentDialog {
 			Browser.exportImage(base64Url,
 					app.getExportTitle() + getExtension(base64Url));
 		});
-		setOnNegativeAction(() -> {
-			app.copyGraphicsViewToClipboard();
-		});
+		setOnNegativeAction(app::copyGraphicsViewToClipboard);
 	}
 
 	/**

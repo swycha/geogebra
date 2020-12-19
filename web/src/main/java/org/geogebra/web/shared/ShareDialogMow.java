@@ -321,7 +321,7 @@ public class ShareDialogMow extends ComponentDialog
 	protected void getGroupsSharedWith() {
 		app.getLoginOperation().getGeoGebraTubeAPI()
 				.getGroups(material.getSharingKeyOrId(),
-								this::updateOnSharedGroups);
+						this::updateOnSharedGroups);
 	}
 
 	/**

@@ -87,6 +87,7 @@ import org.geogebra.web.full.gui.menubar.FileMenuW;
 import org.geogebra.web.full.gui.properties.PropertiesViewW;
 import org.geogebra.web.full.gui.toolbar.ToolBarW;
 import org.geogebra.web.full.gui.toolbarpanel.MenuToggleButton;
+import org.geogebra.web.full.gui.toolbarpanel.ShowableTab;
 import org.geogebra.web.full.gui.toolbarpanel.ToolbarPanel;
 import org.geogebra.web.full.gui.util.PopupBlockAvoider;
 import org.geogebra.web.full.gui.util.ScriptArea;
@@ -122,6 +123,7 @@ import org.geogebra.web.html5.gui.util.NoDragImage;
 import org.geogebra.web.html5.gui.view.browser.BrowseViewI;
 import org.geogebra.web.html5.javax.swing.GOptionPaneW;
 import org.geogebra.web.html5.main.AppW;
+import org.geogebra.web.html5.util.Dom;
 import org.geogebra.web.html5.util.FileConsumer;
 import org.geogebra.web.html5.util.StringConsumer;
 import org.geogebra.web.html5.util.Visibility;
@@ -477,7 +479,7 @@ public class GuiManagerW extends GuiManager
 	@Override
 	public void setShowView(final boolean flag, final int viewId, final boolean isPermanent) {
 		ToolbarPanel sidePanel = getUnbundledToolbar();
-		ToolbarPanel.ToolbarTab sidePanelTab = sidePanel != null ? sidePanel.getTab(viewId) : null;
+		ShowableTab sidePanelTab = sidePanel != null ? sidePanel.getTab(viewId) : null;
 		if (sidePanelTab != null) {
 			if (flag) {
 				sidePanelTab.open();
@@ -502,7 +504,8 @@ public class GuiManagerW extends GuiManager
 		}
 	}
 
-	private void onToolbarVisibilityChanged(int viewId, boolean isVisible) {
+	@Override
+	public void onToolbarVisibilityChanged(int viewId, boolean isVisible) {
 		DockPanel panel = layout.getDockManager().getPanel(viewId);
 		if (panel != null) {
 			panel.setVisible(isVisible);
@@ -619,8 +622,8 @@ public class GuiManagerW extends GuiManager
 			int widthChanged = width - geogebraFrame.getOffsetWidth();
 			int heightChanged = height - geogebraFrame.getOffsetHeight();
 			final DockSplitPaneW root = getLayout().getRootComponent();
-			root.setPixelSize(root.getOffsetWidth() + widthChanged,
-					root.getOffsetHeight() + heightChanged);
+			root.setPixelSize(getPxWidth(root) + widthChanged,
+					getPxHeight(root) + heightChanged);
 			root.onResize();
 		} else {
 			geogebraFrame.getStyle().setProperty("height",
@@ -653,6 +656,16 @@ public class GuiManagerW extends GuiManager
 			}
 
 		});
+	}
+
+	private int getPxWidth(DockSplitPaneW root) {
+		return root.getOffsetWidth() > 0 ? root.getOffsetWidth()
+				: Dom.getPxProperty(root.getElement(), "width");
+	}
+
+	private int getPxHeight(DockSplitPaneW root) {
+		return root.getOffsetHeight() > 0 ? root.getOffsetHeight()
+				: Dom.getPxProperty(root.getElement(), "height");
 	}
 
 	private ToolBarW getGeneralToolbar() {
@@ -867,9 +880,6 @@ public class GuiManagerW extends GuiManager
 	@Override
 	public InputBarHelpPanelW getInputHelpPanel() {
 		if (inputHelpPanel == null) {
-			if (getApp().showView(App.VIEW_CAS)) {
-				getApp().getCommandDictionaryCAS();
-			}
 			inputHelpPanel = new InputBarHelpPanelW(getApp());
 		}
 		return inputHelpPanel;
@@ -2284,7 +2294,7 @@ public class GuiManagerW extends GuiManager
 	@Override
 	public void updateUnbundledToolbar() {
 		if (getUnbundledToolbar() != null) {
-			getUnbundledToolbar().updateTabs();
+			getUnbundledToolbar().resizeTabs();
 		}
 	}
 

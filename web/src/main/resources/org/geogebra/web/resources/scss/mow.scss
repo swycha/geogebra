@@ -462,6 +462,7 @@
 	.mowWidget {
 		position: absolute;
 		border-style: none;
+		overflow: hidden;
 		z-index: $z-mow-video;
 		.gwt-Frame{
 			box-sizing: border-box;

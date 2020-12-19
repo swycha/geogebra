@@ -382,7 +382,7 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	}
 
 	private ExpressionNode getNodeFromOutput() throws ParseException {
-		return kernel.getParser().parseGiac(casOutputString).wrap();
+		return kernel.getParser().parseGeoGebraExpression(casOutputString).wrap();
 	}
 
 	private ExpressionNode getNodeFromInput() {
@@ -422,7 +422,15 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 			expressionNode.setForceVector();
 		}
 		GeoElement[] elements = algebraProcessor.processValidExpression(expressionNode);
-		return elements[0];
+		return elements.length > 1 ? toGeoList(elements) : elements[0];
+	}
+
+	private GeoElement toGeoList(GeoElement[] elements) {
+		GeoList geoList = new GeoList(cons);
+		for (GeoElement element : elements) {
+			geoList.add(element);
+		}
+		return geoList;
 	}
 
 	@Override

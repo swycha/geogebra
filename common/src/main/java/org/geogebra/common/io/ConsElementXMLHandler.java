@@ -14,7 +14,8 @@ import org.geogebra.common.factories.AwtFactory;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.Locateable;
 import org.geogebra.common.kernel.MacroConstruction;
-import org.geogebra.common.kernel.algos.AlgoBarChart;
+import org.geogebra.common.kernel.algos.ChartStyle;
+import org.geogebra.common.kernel.algos.ChartStyleAlgo;
 import org.geogebra.common.kernel.arithmetic.Equation;
 import org.geogebra.common.kernel.arithmetic.EquationValue;
 import org.geogebra.common.kernel.arithmetic.ExpressionNode;
@@ -39,6 +40,7 @@ import org.geogebra.common.kernel.geos.GeoInline;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
+import org.geogebra.common.kernel.geos.GeoLocus;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.kernel.geos.GeoNumeric;
@@ -1058,7 +1060,7 @@ public class ConsElementXMLHandler {
 	}
 
 	private boolean handleExtraTag(LinkedHashMap<String, String> attrs) {
-		AlgoBarChart algo = (AlgoBarChart) geo.getParentAlgorithm();
+		ChartStyle algo = ((ChartStyleAlgo) geo.getParentAlgorithm()).getStyle();
 		if (!"".equals(attrs.get("key")) && !"".equals(attrs.get("value"))
 				&& !"".equals(attrs.get("barNumber"))) {
 			switch (attrs.get("key")) {
@@ -1287,6 +1289,10 @@ public class ConsElementXMLHandler {
 			String opacity = attrs.get("opacity");
 			if (opacity != null) {
 				geo.setLineOpacity(Integer.parseInt(opacity));
+			}
+			String drawArrows = attrs.get("drawArrow");
+			if (drawArrows != null && geo instanceof GeoLocus) {
+				((GeoLocus) geo).drawAsArrows(MyXMLHandler.parseBoolean(drawArrows));
 			}
 
 			return true;

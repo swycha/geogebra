@@ -1,7 +1,7 @@
 package org.geogebra.web.shared;
 
 import org.geogebra.common.euclidian.event.PointerEventType;
-import org.geogebra.common.kernel.undoredo.UndoRedoExecutor;
+import org.geogebra.common.main.undo.UndoRedoButtonsController;
 import org.geogebra.common.move.events.BaseEvent;
 import org.geogebra.common.move.ggtapi.events.LogOutEvent;
 import org.geogebra.common.move.ggtapi.events.LoginEvent;
@@ -195,10 +195,11 @@ public class GlobalHeader implements EventRenderable {
 	 * Initialize the undo and redo buttons if these are on the header
 	 */
 	public void initUndoRedoButtonsIfOnHeader() {
-		ActionButton undoButton =  getUndoButton();
+		ActionButton undoButton = getUndoButton();
 		ActionButton redoButton = getRedoButton();
 		if (undoButton != null && redoButton != null) {
-			UndoRedoExecutor.addUndoRedoFunctionality(undoButton, redoButton, app.getKernel());
+			UndoRedoButtonsController.addUndoRedoFunctionality(undoButton,
+					redoButton, app.getKernel());
 		}
 	}
 
@@ -242,6 +243,9 @@ public class GlobalHeader implements EventRenderable {
 	 * remove exam timer and put back button panel
 	 */
 	public void resetAfterExam() {
+		if (getButtonElement() == null) {
+			return;
+		}
 		forceVisible(Visibility.HIDDEN);
 		getExamPanel().getElement().removeFromParent();
 		getButtonElement().getStyle().setDisplay(Display.FLEX);
@@ -260,6 +264,9 @@ public class GlobalHeader implements EventRenderable {
 	 */
 	public void addExamTimer() {
 		forceVisible(Visibility.VISIBLE);
+		if (getButtonElement() == null) {
+			return;
+		}
 		// remove other buttons
 		getButtonElement().getStyle()
 				.setDisplay(Display.NONE);

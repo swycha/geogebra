@@ -1436,6 +1436,11 @@ public class CAStestJSON {
 	}
 
 	@Test
+	public void testPlotSolve() {
+		testCat("PlotSolve.1");
+	}
+
+	@Test
 	public void testIntegralSymbolic() {
 		testCat("IntegralSymbolic.1");
 		testCat("IntegralSymbolic.2");
@@ -1454,11 +1459,6 @@ public class CAStestJSON {
 	@Test
 	public void testIsInteger() {
 		testCat("IsInteger.1");
-	}
-
-	@Test
-	public void testPlotSolve() {
-		testCat("PlotSolve.1");
 	}
 
 	@Test

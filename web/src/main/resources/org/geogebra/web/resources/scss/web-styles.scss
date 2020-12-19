@@ -1,6 +1,7 @@
 /**
  * The file contains some styles.
  */
+@import 'colors';
 @import 'z-index';
 
 .GeoGebraFrame {
@@ -469,7 +470,7 @@
 		cursor: pointer;
 	}
 
-	.button-up-disabled, .MyToggleButton.gwt-ToggleButton-up-disabled, .MyToggleButton.gwt-ToggleButton-down-disabled,
+	.button:disabled, .MyToggleButton.gwt-ToggleButton-up-disabled, .MyToggleButton.gwt-ToggleButton-down-disabled,
 	.MyCanvasButton.disabled {
 		cursor: default !important;
 		opacity: .5;
@@ -486,12 +487,12 @@
 		}
 	}
 
-	.button-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-down-disabled:focus {
+	.button:disabled, .MyToggleButton.gwt-ToggleButton-up-disabled:focus, .MyToggleButton.gwt-ToggleButton-down-disabled:focus {
 		outline: none;
 	}
 
-	.button-up-disabled:active, .MyToggleButton.gwt-ToggleButton-up-disabled:active, .MyToggleButton.gwt-ToggleButton-down-disabled:active {
-		border: 1px solid #6161FF;
+	.MyToggleButton.gwt-ToggleButton-up-disabled:active, .MyToggleButton.gwt-ToggleButton-down-disabled:active {
+		border: 1px solid $toolbar-header;
 	}
 
 	.gwt-Tree .gwt-TreeItem {
@@ -578,7 +579,6 @@
 		border-left: 1px solid #DCDCDC;
 		border-right: 1px solid #DCDCDC;
 		box-sizing: border-box;
-		box-shadow: 0 0 2px rgba(204, 204, 204, 0.5);
 	}
 
 	.splitterFixed {
@@ -588,7 +588,7 @@
 	}
 
 	.gwt-SplitLayoutPanel-VDragger {
-		cursor: row-resize;
+		cursor: ns-resize;
 		background: #F8F8F8;
 		border-top: 1px solid #DCDCDC;
 		border-bottom: 1px solid #DCDCDC;
@@ -596,30 +596,29 @@
 		box-shadow: 0 0 2px rgba(204, 204, 204, 0.5);
 	}
 
-	.gwt-SplitLayoutPanel-HDragger:ACTIVE {
-		background: #6161FF;
-		border-left: 1px solid #C6C6C6;
-		border-right: 1px solid #C6C6C6;
-	}
+	.highlightDraggers {
+		.gwt-SplitLayoutPanel-HDragger:active, .gwt-SplitLayoutPanel-Dragger-ACTIVE {
+			background: #6161FF;
+			border-left: 1px solid #C6C6C6;
+			border-right: 1px solid #C6C6C6;
+		}
 
-	.gwt-SplitLayoutPanel-HDragger.disabled:ACTIVE {
-		background: #F8F8F8;
-		border-left: 1px solid #DCDCDC;
-		border-right: 1px solid #DCDCDC;
-	}
+		.gwt-SplitLayoutPanel-HDragger.disabled:active {
+			background: #F8F8F8;
+			border-left: 1px solid #DCDCDC;
+			border-right: 1px solid #DCDCDC;
+		}
 
-	.gwt-SplitLayoutPanel-VDragger:ACTIVE {
-		background: #6161FF;
-		border-top: 1px solid #C6C6C6;
-		border-bottom: 1px solid #C6C6C6;
+		.gwt-SplitLayoutPanel-VDragger:active {
+			background: #6161FF;
+			border-top: 1px solid #C6C6C6;
+			border-bottom: 1px solid #C6C6C6;
+		}
 	}
 
 	/* Selector used for android chrome */
 
 	.gwt-SplitLayoutPanel-Dragger-ACTIVE {
-		background: #6161FF;
-		border-left: 1px solid #C6C6C6;
-		border-right: 1px solid #C6C6C6;
 		border-top: 1px solid #C6C6C6;
 		border-bottom: 1px solid #C6C6C6;
 	}
@@ -681,14 +680,6 @@
 
 	.cursor_drag {
 		cursor: pointer;
-	}
-
-	.cursor_resizeXAxis {
-		cursor: e-resize;
-	}
-
-	.cursor_resizeYAxis {
-		cursor: n-resize;
 	}
 
 	.cursor_resizeNESW {
@@ -2082,7 +2073,7 @@
 		margin-right: 20px;
 	}
 
-	.checkBoxPanel .gwt-Label, .panelRow .gwt-Label, .listBoxPanel .gwt-Label, .panelRowIndent .gwt-Label,
+	.checkBoxPanel .gwt-Label, .listBoxPanel .gwt-Label,
 	.optionsPanel .gwt-Label, .optionsPanelIndent .gwt-Label {
 		margin-right: 10px;
 	}
