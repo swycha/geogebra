@@ -97,7 +97,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @param high higher bound of the interval
 	 */
 	public Interval(double low, double high) {
-		if (high < low || Double.isNaN(low) || Double.isNaN(high) ) {
+		if (high < low || Double.isNaN(high)) {
 			setEmpty();
 		} else {
 			set(low, high);

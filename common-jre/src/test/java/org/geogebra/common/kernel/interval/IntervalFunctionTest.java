@@ -90,6 +90,14 @@ public class IntervalFunctionTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void evaluateLnX() throws Exception {
+		GeoFunction geo = add("ln(x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-10, -9));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
+	@Test
 	public void evaluateSinLnX() throws Exception {
 		GeoFunction geo = add("sin(ln(x))");
 		IntervalFunction function = new IntervalFunction(geo);
@@ -102,6 +110,14 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
+	@Test
+	public void evaluateReciprocalReciprocalX() throws Exception {
+		GeoFunction geo = add("1/(1/x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(0, 1E-7));
 		shouldEqual(IntervalConstants.empty(), actual);
 	}
 }

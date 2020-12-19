@@ -92,6 +92,7 @@ class IntervalTrigonometric {
 		Interval interval = new Interval(this.interval);
 		return interval.cos().multiplicativeInverse();
 	}
+
 	/**
 	 *
 	 * @return cotangent of the interval
