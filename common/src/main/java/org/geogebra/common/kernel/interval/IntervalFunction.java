@@ -72,7 +72,7 @@ import org.geogebra.common.util.debug.Log;
 			case MULTIPLY:
 				return left.multiply(right);
 			case DIVIDE:
-				return left.divide(right);
+				return divide(left, right);
 			case POWER:
 				return left.pow(right);
 			case NROOT:
@@ -123,6 +123,13 @@ import org.geogebra.common.util.debug.Log;
 				return IntervalConstants.empty();
 			}
 		}
+
+	private Interval divide(Interval left, Interval right) {
+		if (left.isOne()) {
+			return right.multiplicativeInverse();
+		}
+		return left.divide(right);
+	}
 
 	/**
 	 *

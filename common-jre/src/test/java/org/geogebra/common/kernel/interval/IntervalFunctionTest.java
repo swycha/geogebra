@@ -120,4 +120,36 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		Interval actual = function.evaluate(interval(0, 1E-7));
 		shouldEqual(IntervalConstants.empty(), actual);
 	}
+
+	@Test
+	public void evaluateReciprocalOfZeroDividedByX() throws Exception {
+		GeoFunction geo = add("1/(0/x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-5, 5));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
+	@Test
+	public void evaluateSqrtReciprocalOfZeroDividedByX() throws Exception {
+		GeoFunction geo = add("sqrt(1/(0/x))");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-15, 15));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
+	@Test
+	public void evaluateTangentInverse() throws Exception {
+		GeoFunction geo = add("1/tan(x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
+
+	@Test
+	public void evaluateSqrtTangentInverse() throws Exception {
+		GeoFunction geo = add("sqrt(1/tan(x))");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
+		shouldEqual(IntervalConstants.empty(), actual);
+	}
 }

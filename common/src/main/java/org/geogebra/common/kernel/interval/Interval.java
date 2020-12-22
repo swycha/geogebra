@@ -684,4 +684,11 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return !isEmpty() && Double.isInfinite(low) || Double.isInfinite(high);
 	}
 
+	/**
+	 *
+	 * @return if the interval is the unit one.
+	 */
+	public boolean isOne() {
+		return low == 1 && high == 1;
+	}
 }
