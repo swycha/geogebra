@@ -2,6 +2,7 @@ package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
+import static org.geogebra.common.kernel.interval.IntervalConstants.zero;
 
 import java.util.Objects;
 
@@ -261,11 +262,15 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 			return empty();
 		}
 
+		if (isWhole()) {
+			return zero();
+		}
+
 		if (hasZero()) {
 			if (low != 0) {
 				if (high != 0) {
 					// [negative, positive]
-					setEmpty();
+					setWhole();
 				} else {
 					// [negative, zero]
 					double d = low;
@@ -279,7 +284,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 					high = Double.POSITIVE_INFINITY;
 				} else {
 					// [zero, zero]
-					setEmpty();
+					setWhole();
 				}
 			}
 		} else {

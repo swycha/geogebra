@@ -23,6 +23,7 @@ public class IntervalMiscTest {
 	public void testLog() {
 		shouldEqual(interval(0, 0), interval(1, 1).log());
 		shouldEqual(interval(0, 3), interval(1, Math.exp(3)).log());
+		shouldEqual(IntervalConstants.empty(), interval(NEGATIVE_INFINITY, -1).log());
 	}
 
 	@Test

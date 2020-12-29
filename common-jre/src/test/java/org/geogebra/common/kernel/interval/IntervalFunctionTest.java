@@ -152,4 +152,12 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
 		shouldEqual(IntervalConstants.empty(), actual);
 	}
+
+	@Test
+	public void evaluateTangentXInverse() throws Exception {
+		GeoFunction geo = add("tan(1/x)");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-0.02, 0.02));
+		shouldEqual(IntervalConstants.whole(), actual);
+	}
 }
