@@ -24,7 +24,7 @@ public class IntervalMiscOperandsImpl implements IntervalMiscOperands {
 	@Override
 	public Interval log() {
 		if (!interval.isEmpty()) {
-			if (interval.getHigh() <= 0) {
+			if (interval.getHigh() < 0) {
 				interval.setEmpty();
 			} else {
 				double low = interval.getLow();

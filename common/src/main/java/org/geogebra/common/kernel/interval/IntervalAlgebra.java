@@ -134,7 +134,7 @@ class IntervalAlgebra {
 			interval.setEmpty();
 			return interval;
 		}
-		if (interval.isWhole()) {
+		if (interval.isWhole() || interval.isZero()) {
 			return IntervalConstants.whole();
 		}
 		return nthRoot(2);

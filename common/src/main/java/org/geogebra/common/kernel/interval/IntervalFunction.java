@@ -125,8 +125,8 @@ import org.geogebra.common.util.debug.Log;
 		}
 
 	private Interval divide(Interval left, Interval right) {
-		if (left.isOne()) {
-			return right.multiplicativeInverse();
+		if (left.isSingleton()) {
+			return right.multiplicativeInverse().multiply(left);
 		}
 		return left.divide(right);
 	}

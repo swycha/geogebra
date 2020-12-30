@@ -20,24 +20,9 @@ public class IntervalAsymptotes {
 	private void fixAt(int index) {
 		Interval right = rightValue(index);
 		Interval left = leftValue(index);
-		if (isCutOffPoint(index)) {
+		Interval value = value(index);
+		 if (isCutOffPoint(index)) {
 			connect(left, right);
-		}
-		else {
-			Interval value = value(index);
-			if (isLeftCutOff(index)) {
-				if (value.getHigh() == Double.POSITIVE_INFINITY) {
-					value.setLow(right.getHigh());
-				} else {
-					value.setHigh(right.getLow());
-				}
-			} else if (isRightCutOff(index)) {
-				if (value.getHigh() == Double.POSITIVE_INFINITY) {
-					value.setLow(left.getLow());
-				} else {
-					value.setHigh(left.getHigh());
-				}
-			}
 		}
 	}
 
@@ -64,7 +49,9 @@ public class IntervalAsymptotes {
 		}
 	}
 	private boolean isLeftCutOff(int index) {
-		return isLeftValueEmpty(index) && isValueInfinite(index);
+		return leftValue(index).isEmpty()  &&
+				!rightValue(index).isWhole()
+				&& !rightValue(index).isEmpty();
 	}
 
 	private boolean isValueInfinite(int index) {
@@ -72,19 +59,6 @@ public class IntervalAsymptotes {
 				&& value(index).hasInfinity();
 	}
 
-	private boolean isLeftValueEmpty(int index) {
-		Interval left = leftValue(index);
-		return left == null || left.isEmpty();
-	}
-
-	private boolean isRightCutOff(int index) {
-		return isRightValueEmpty(index) && isValueInfinite(index);
-	}
-
-	private boolean isRightValueEmpty(int index) {
-		Interval right = rightValue(index);
-		return right == null || right.isEmpty();
-	}
 
 	private Interval value(int index) {
 		IntervalTuple point = point(index);

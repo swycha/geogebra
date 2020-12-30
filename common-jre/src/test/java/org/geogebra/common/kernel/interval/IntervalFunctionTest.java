@@ -118,7 +118,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(0, 1E-7));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.zero(), actual);
 	}
 
 	@Test
@@ -142,15 +142,16 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/tan(x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
+
 
 	@Test
 	public void evaluateSqrtTangentInverse() throws Exception {
 		GeoFunction geo = add("sqrt(1/tan(x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
 	@Test
@@ -158,6 +159,14 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("tan(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.02, 0.02));
+		shouldEqual(IntervalConstants.whole(), actual);
+	}
+
+	@Test
+	public void evaluateTangentOfCotX() throws Exception {
+		GeoFunction geo = add("tan(cot(x))");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(-0.1, 0.1));
 		shouldEqual(IntervalConstants.whole(), actual);
 	}
 }

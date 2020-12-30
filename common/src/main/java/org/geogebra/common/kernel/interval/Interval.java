@@ -32,6 +32,22 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	/**
+	 * Creates an interval with bounds [low, high]
+	 *
+	 * @param low lower bound of the interval
+	 * @param high higher bound of the interval
+	 */
+	public Interval(double low, double high) {
+		if (Double.isNaN(low) && Double.isNaN(high)) {
+			setWhole();
+		} else if (high < low || Double.isNaN(high)) {
+			setEmpty();
+		} else {
+			set(low, high);
+		}
+	}
+
+	/**
 	 * Creates an empty interval.
 	 */
 	public Interval() {
@@ -65,7 +81,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return new Interval(Math.max(interval.low, other.low),
 				Math.max(interval.high, other.high));
 	}
-
 	/**
 	 *
 	 * @param interval interval.
@@ -89,20 +104,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * as in the original lib. */
 	void setEmpty() {
 		set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-	}
-
-	/**
-	 * Creates an interval with bounds [low, high]
-	 *
-	 * @param low lower bound of the interval
-	 * @param high higher bound of the interval
-	 */
-	public Interval(double low, double high) {
-		if (high < low || Double.isNaN(high)) {
-			setEmpty();
-		} else {
-			set(low, high);
-		}
 	}
 
 	/**
@@ -449,7 +450,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return true if infinite.
 	 */
 	public boolean isOnlyInfinity() {
-		return Double.isInfinite(low) && DoubleUtil.isEqual(high, low);
+		return isLowInfinite() && DoubleUtil.isEqual(high, low);
 	}
 
 	/**
@@ -686,7 +687,24 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return true if interval one or both border is infinite.
 	 */
 	public boolean hasInfinity() {
-		return !isEmpty() && Double.isInfinite(low) || Double.isInfinite(high);
+		return !isEmpty() && isLowInfinite() || isHighInfinite();
+	}
+
+
+	/**
+	 *
+	 * @return true if high is infinite
+	 */
+	public boolean isHighInfinite() {
+		return high == Double.POSITIVE_INFINITY;
+	}
+
+	/**
+	 *
+	 * @return true if low is infinite
+	 */
+	public boolean isLowInfinite() {
+		return low == Double.NEGATIVE_INFINITY;
 	}
 
 	/**
