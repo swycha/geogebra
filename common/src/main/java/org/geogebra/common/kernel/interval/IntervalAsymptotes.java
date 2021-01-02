@@ -20,15 +20,13 @@ public class IntervalAsymptotes {
 	private void fixAt(int index) {
 		Interval right = rightValue(index);
 		Interval left = leftValue(index);
-		Interval value = value(index);
-		 if (isCutOffPoint(index)) {
+		if (isCutOffPoint(index)) {
 			connect(left, right);
 		}
 	}
 
 	private boolean isCutOffPoint(int index) {
-		return samples.get(index) == null
-				&& hasBothNeighbours(index);
+		return samples.get(index).y().isWhole();
 	}
 
 	private boolean hasBothNeighbours(int index) {
@@ -59,6 +57,19 @@ public class IntervalAsymptotes {
 				&& value(index).hasInfinity();
 	}
 
+	private boolean isLeftValueEmpty(int index) {
+		Interval left = leftValue(index);
+		return left == null || left.isEmpty();
+	}
+
+	private boolean isRightCutOff(int index) {
+		return isRightValueEmpty(index) && isValueInfinite(index);
+	}
+
+	private boolean isRightValueEmpty(int index) {
+		Interval right = rightValue(index);
+		return right == null || right.isEmpty();
+	}
 
 	private Interval value(int index) {
 		IntervalTuple point = point(index);

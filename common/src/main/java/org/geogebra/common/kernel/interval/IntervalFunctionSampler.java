@@ -73,11 +73,8 @@ public class IntervalFunctionSampler {
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
 			Interval y = function.evaluate(x);
-			if (!y.isEmpty() && !y.isWhole()) {
+			if (!y.isEmpty()) {
 				samples.add(new IntervalTuple(x, y));
-			}
-			if (y.isWhole()) {
-				samples.add(null);
 			}
 		}
 
