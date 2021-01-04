@@ -34,4 +34,10 @@ public interface KeyboardManagerInterface {
 	 * Update keyboard layout
 	 */
 	void clearAndUpdateKeyboard();
+
+	/**
+	 * @return keyboard height
+	 */
+	int estimateHiddenKeyboardHeight();
+
 }
