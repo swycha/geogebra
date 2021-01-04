@@ -414,13 +414,6 @@ public class GGWToolBar extends Composite
 		SvgPerspectiveResources pr = SvgPerspectiveResources.INSTANCE;
 		StandardButton openSearchButton = new StandardButton(pr.menu_header_open_search(),
 				null, 32, 32);
-<<<<<<< HEAD
-=======
-		openSearchButton.getUpFace()
-				.setImage(getImage(pr.menu_header_open_search(), 32));
-		openSearchButton.getUpHoveringFace()
-				.setImage(getImage(pr.menu_header_open_search_hover(), 32));
->>>>>>> d426704cbb20d6e7171ebef7fd9f0071a33e79dd
 
 		openSearchButton.addFastClickHandler(new FastClickHandler() {
 			@Override
