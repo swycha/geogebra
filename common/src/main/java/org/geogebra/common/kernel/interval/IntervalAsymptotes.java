@@ -20,8 +20,9 @@ public class IntervalAsymptotes {
 	private void fixAt(int index) {
 		Interval right = rightValue(index);
 		Interval left = leftValue(index);
-		if (isCutOffPoint(index)) {
+		if (isCutOffPoint(index) && !right.isWhole()) {
 			connect(left, right);
+			value(index).setEmpty();
 		}
 	}
 
