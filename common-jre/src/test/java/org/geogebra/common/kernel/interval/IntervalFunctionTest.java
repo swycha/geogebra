@@ -158,7 +158,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 	public void evaluateTangentXInverse() throws Exception {
 		GeoFunction geo = add("tan(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
-		Interval actual = function.evaluate(interval(-0.02, 0.02));
+		Interval actual = function.evaluate(interval(Double.NEGATIVE_INFINITY, 0));
 		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
