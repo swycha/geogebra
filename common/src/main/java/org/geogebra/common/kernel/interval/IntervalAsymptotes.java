@@ -30,8 +30,8 @@ public class IntervalAsymptotes {
 		return samples.get(index).y().isWhole();
 	}
 
-	private boolean hasBothNeighbours(int index) {
-		return prev(index) != null && next(index) != null;
+	private IntervalTuple point(int index) {
+		return samples.get(index);
 	}
 
 	private void connect(Interval left, Interval right) {
@@ -47,43 +47,7 @@ public class IntervalAsymptotes {
 			}
 		}
 	}
-	private boolean isLeftCutOff(int index) {
-		return leftValue(index).isEmpty()  &&
-				!rightValue(index).isWhole()
-				&& !rightValue(index).isEmpty();
-	}
 
-	private boolean isValueInfinite(int index) {
-		return point(index) != null
-				&& value(index).hasInfinity();
-	}
-
-	private boolean isLeftValueEmpty(int index) {
-		Interval left = leftValue(index);
-		return left == null || left.isEmpty();
-	}
-
-	private boolean isRightCutOff(int index) {
-		return isRightValueEmpty(index) && isValueInfinite(index);
-	}
-
-	private boolean isRightValueEmpty(int index) {
-		Interval right = rightValue(index);
-		return right == null || right.isEmpty();
-	}
-
-	private Interval value(int index) {
-		IntervalTuple point = point(index);
-		if (point == null) {
-			return IntervalConstants.empty();
-		}
-
- 		return point.y();
-	}
-
-	private IntervalTuple point(int index) {
-		return samples.get(index);
-	}
 
 	private void log(String message) {
 		Log.debug("[ASYM] " + message);

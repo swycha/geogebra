@@ -38,17 +38,23 @@ public class IntervalPath {
 		if (pointCount == 1) {
 			return;
 		}
-		IntervalTuple last = model.getPoints().get(0);
-		for (int i = 1; i < pointCount; i++) {
+		IntervalTuple last = new IntervalTuple();
+		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple tuple =  model.getPoints().get(i);
 			if (last != null && tuple != null && !tuple.y().isEmpty()
-				&& last.x().getHigh() == tuple.x().getLow()) {
+				&& (last.isEmpty() || last.x().getHigh() == tuple.x().getLow())) {
 				plotInterval(lastY, tuple);
 			} else {
 				moveTo = true;
 			}
 			last = tuple;
 		}
+	}
+
+	private void moveTo(IntervalTuple point) {
+		Interval x = view.toScreenIntervalX(point.x());
+		Interval y = view.toScreenIntervalY(point.y());
+		gp.moveTo(x.getLow(), y.getLow());
 	}
 
 	/**

@@ -77,4 +77,24 @@ public class IntervalTuple {
 	public boolean isYNaN() {
 		return y == null || y.isEmpty();
 	}
+
+	/**
+	 *
+	 * @return true if value (y) interval is increasing
+	 */
+	public boolean isValueIncreasing() {
+		return y.getLow() < y.getHigh();
+	}
+
+	public boolean follows(IntervalTuple last) {
+		return x.getLow() == last.x.getHigh();
+	}
+
+	/**
+	 *
+	 * @return if tuple is an empty one
+	 */
+	public boolean isEmpty() {
+		return x.isEmpty() && y.isEmpty();
+	}
 }

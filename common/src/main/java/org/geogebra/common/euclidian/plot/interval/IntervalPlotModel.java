@@ -134,26 +134,28 @@ public class IntervalPlotModel {
 		extendMax();
 	}
 
-	private int extendMin() {
+	private void extendMin() {
 		IntervalTupleList newPoints = sampler.extendMin(view.getXmin());
 		points.prepend(newPoints);
-		return newPoints.count();
 	}
 
 	private void shrinkMin() {
 		int removeCount = sampler.shrinkMin(view.getXmin());
-		points.removeFromHead(removeCount);
+		if (removeCount < points.count()) {
+			points.removeFromHead(removeCount);
+		}
 	}
 
 	private void shrinkMax() {
 		int removeCount = sampler.shrinkMax(view.getXmax());
-		points.removeFromTail(removeCount);
+		if (removeCount < points.count()) {
+			points.removeFromTail(removeCount);
+		}
 	}
 
-	private int extendMax() {
+	private void extendMax() {
 		IntervalTupleList newPoints = sampler.extendMax(view.getXmax());
 		points.append(newPoints);
-		return newPoints.count();
 	}
 
 	private void moveDomain(double difference) {
