@@ -8,7 +8,6 @@ import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.exam.ExamLogAndExitDialog;
 import org.geogebra.web.full.gui.menubar.FileMenuW;
 import org.geogebra.web.html5.gui.util.AriaHelper;
-import org.geogebra.web.html5.gui.util.ClickStartHandler;
 import org.geogebra.web.html5.gui.util.NoDragImage;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.gui.zoompanel.FocusableWidget;
@@ -63,7 +62,6 @@ class NavigationRail extends FlowPanel {
 		imgMenu = new NoDragImage(MaterialDesignResources.INSTANCE.toolbar_menu_black(), 24);
 		createCenter();
 		setLabels();
-		ClickStartHandler.initDefaults(this, true, true);
 		setTabIndexes();
 		lastOrientation = app.isPortrait();
 		setStyleName("header");
