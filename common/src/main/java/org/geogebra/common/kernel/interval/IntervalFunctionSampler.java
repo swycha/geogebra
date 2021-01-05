@@ -103,7 +103,7 @@ public class IntervalFunctionSampler {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return new IntervalTupleList();
 	}
 
 	public IntervalTupleList extendMin(double min) {
