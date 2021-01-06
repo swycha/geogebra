@@ -145,4 +145,5 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	public void clear() {
 		list.clear();
 	}
+
 }

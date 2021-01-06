@@ -140,9 +140,18 @@ public class IntervalPlotModel {
 	}
 
 	private void shrinkMin() {
+
 		int removeCount = sampler.shrinkMin(view.getXmin());
-		if (removeCount < points.count()) {
-			points.removeFromHead(removeCount);
+		int count = 0;
+		for (int i = 0; i < removeCount; i++) {
+			if (points.get(i).x().getLow() > view.getXmin()) {
+				count++;
+			}
+		}
+
+		int toRemove = removeCount - count;
+		if (toRemove > 0 && toRemove < points.count()) {
+			points.removeFromHead(toRemove);
 		}
 	}
 
