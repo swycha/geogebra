@@ -57,7 +57,6 @@ public class IntervalPlotModel {
 		updateRanges();
 		updateSampler();
 		updatePath();
-		logDomain();
 		updateLabelPosition();
 	}
 
@@ -76,7 +75,6 @@ public class IntervalPlotModel {
 	private void updateRanges() {
 		range.set(view.domain(), view.range());
 		oldDomain = view.domain();
-		logDomain();
 	}
 
 	void updateSampler() {
@@ -112,19 +110,13 @@ public class IntervalPlotModel {
 		} else {
 			moveDomain(oldMax - max);
 		}
-
-		logDomain();
-
-	}
-
-	private void logDomain() {
-		if (points == null) {
-			return;
-		}
-//		Log.debug("points: " + points.count());
 	}
 
 	private void shrinkDomain() {
+		if (isEmpty()) {
+			return;
+		}
+
 		shrinkMin();
 		shrinkMax();
 	}
@@ -157,7 +149,15 @@ public class IntervalPlotModel {
 
 	private void shrinkMax() {
 		int removeCount = sampler.shrinkMax(view.getXmax());
-		if (removeCount < points.count()) {
+		int count = 0;
+		for (int i = points.count() - 1; i > points.count() - 1 - removeCount; i--) {
+			if (points.get(i).x().getHigh() < view.getXmax()) {
+				count++;
+			}
+		}
+
+		int toRemove = removeCount - count;
+		if (toRemove > 0 && toRemove < points.count()) {
 			points.removeFromTail(removeCount);
 		}
 	}
