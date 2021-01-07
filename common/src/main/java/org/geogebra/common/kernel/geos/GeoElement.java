@@ -2737,13 +2737,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	public static void addAddAllGreekLowerCaseNoPi(ArrayList<String> list) {
 		for (Greek greek : Greek.values()) {
 			if (!greek.upperCase && greek.unicode != Unicode.pi) {
-
-				// \u03d5 in place of \u03c6
-				if (greek.unicode == Unicode.phi) {
-					list.add(Unicode.phi_symbol + "");
-				} else {
-					list.add(greek.unicode + "");
-				}
+				list.add(greek.getUnicodeNonCurly() + "");
 			}
 		}
 	}
@@ -2761,11 +2755,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 			if (!greek.upperCase && greek.unicode != Unicode.pi) {
 
 				// \u03d5 in place of \u03c6
-				if (greek.unicode == Unicode.phi) {
-					listener.addAxisLabelItem(Unicode.phi_symbol + "");
-				} else {
-					listener.addAxisLabelItem(greek.unicode + "");
-				}
+				listener.addAxisLabelItem(greek.getUnicodeNonCurly() + "");
 			}
 		}
 
