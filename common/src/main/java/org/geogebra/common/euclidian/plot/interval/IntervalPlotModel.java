@@ -132,18 +132,24 @@ public class IntervalPlotModel {
 	}
 
 	private void shrinkMin() {
-		int removeCount = sampler.shrinkMin(view.getXmin());
-		int count = 0;
-		for (int i = 0; i < removeCount; i++) {
-			if (i < points.count() && points.get(i).x().getLow() > view.getXmin()) {
-				count++;
-			}
-		}
+		int offscreenCount = sampler.shrinkMin(view.getXmin());
+		int maxPointsToRemove = Math.min(points.count(), offscreenCount);
+		int keepPointCount = countVisibleFrom(maxPointsToRemove);
 
-		int toRemove = removeCount - count;
+		int toRemove = maxPointsToRemove - keepPointCount;
 		if (toRemove > 0 && toRemove < points.count()) {
 			points.removeFromHead(toRemove);
 		}
+	}
+
+	private int countVisibleFrom(int maxPointsToRemove) {
+		int count = 0;
+		for (int i = 0; i < maxPointsToRemove; i++) {
+			if (points.get(i).x().getLow() > view.getXmin()) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	private void shrinkMax() {
