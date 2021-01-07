@@ -45,7 +45,7 @@ public class IntervalPath {
 				&& (last.isEmpty() || last.x().getHigh() == tuple.x().getLow())) {
 				plotInterval(lastY, tuple);
 			} else {
-				moveInterval(lastY, tuple);
+				moveTo = true;
 			}
 			last = tuple;
 		}
