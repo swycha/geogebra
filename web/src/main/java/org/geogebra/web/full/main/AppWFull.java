@@ -1,6 +1,7 @@
 package org.geogebra.web.full.main;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -213,6 +214,7 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	private SuiteHeaderAppPicker suiteAppPickerButton;
 	private InputBoxType inputBoxType;
 	private String functionVars = "";
+	private HashMap<String, Material> constructionJson = new HashMap<>();
 
 	/**
 	 * @param geoGebraElement GeoGebra element
@@ -864,14 +866,9 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	 */
 	public final OpenFileListener getUpdateTitleCallback(
 			final Material material) {
-		return new OpenFileListener() {
-
-			@Override
-			public boolean onOpenFile() {
-				AppWFull.this.updateMaterialURL(material.getId(),
-						material.getSharingKey(), material.getTitle());
-				return true;
-			}
+		return () -> {
+			this.updateMaterialURL(material);
+			return true;
 		};
 	}
 
@@ -2181,6 +2178,7 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	 * @param subAppCode "graphing", "3d", "cas" or "geometry"
 	 */
 	public void switchToSubapp(String subAppCode) {
+		storeCurrentMaterial();
 		activity = new SuiteActivity(subAppCode);
 		activity.start(this);
 
@@ -2190,6 +2188,34 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 		updateSymbolicFlag(subAppCode, perspective);
 		reinitSettings();
 		updatePerspective(perspective);
+		restoreMaterial(subAppCode);
+	}
+
+	private void storeCurrentMaterial() {
+		Material material = getActiveMaterial();
+		if (material == null) {
+			material = new Material(-1, Material.MaterialType.ggb);
+		}
+		material.setContent(getGgbApi().getFileJSON(false));
+		constructionJson.put(getConfig().getSubAppCode(), material);
+		setActiveMaterial(null);
+	}
+
+	private void restoreMaterial(String subAppCode) {
+		Material material = constructionJson.get(subAppCode);
+		if (material != null) {
+			Object oldConstruction = material.getContent();
+			if (oldConstruction != null) {
+				getGgbApi().setFileJSON(oldConstruction);
+			}
+			if (material.getId() != -1) {
+				setActiveMaterial(material);
+				updateMaterialURL(material);
+				return;
+			}
+		}
+		resetUrl();
+		setTitle();
 	}
 
 	private void updateSymbolicFlag(String subAppCode, Perspective perspective) {
