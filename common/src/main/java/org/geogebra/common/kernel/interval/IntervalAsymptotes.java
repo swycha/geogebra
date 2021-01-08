@@ -51,14 +51,14 @@ public class IntervalAsymptotes {
 			connect(left, right);
 			value(index).setEmpty();
 		}
-		if (right.isWhole()) {
-//			connectFromRight(index);
+		if ((isCutOffPoint(index) && right.isWhole())) {
+			connectFromRight(index);
 		}
 	}
 
 	private boolean isCutOffPoint(int index) {
 		return samples.get(index).y().isWhole();
-	}
+	} 
 
 	private void connectFromRight(int index) {
 		Interval value = value(index);
@@ -71,7 +71,7 @@ public class IntervalAsymptotes {
 		if (isAscending(index - 1)) {
 			right.set(value.getHigh(), Double.POSITIVE_INFINITY);
 		} else {
-			right.set(value.getLow(), Double.NEGATIVE_INFINITY);
+			right.set(Double.NEGATIVE_INFINITY, value.getLow());
 		}
 	}
 
