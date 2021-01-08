@@ -800,8 +800,8 @@ public class ExpressionNode extends ValidExpression
 				&& ((ExpressionNode) left).operation == multiplicativeOperation
 				&& !((ExpressionNode) left).hasBrackets()) {
 			right = new ExpressionNode(kernel,
-					((ExpressionNode) left).getRight(), operation, right);
-			left = ((ExpressionNode) left).getLeft();
+					((ExpressionNode) left).getLeft(), operation, right);
+			left = ((ExpressionNode) left).getRight();
 			operation = Operation.MULTIPLY;
 		}
 	}
