@@ -8,14 +8,14 @@
 
 		var computedStyle = getComputedStyle(origElem);
 
-		if(supportsCSSText) {
+		if (supportsCSSText) {
 			elem.style.cssText = computedStyle.cssText; //.replace(/font:(.*)([0-9.]*px)\/([0-9.]*px)/,"font-size:$2;font:$1");
 
 		} else {
-
-			// Really, Firefox?
-			for(var prop in computedStyle) {
-				if(isNaN(parseInt(prop, 10)) && typeof computedStyle[prop] !== 'function' && !(/^(cssText|length|parentRule)$/).test(prop)) {
+ 			// Really, Firefox?
+			for (var prop in computedStyle) {
+				if (isNaN(parseInt(prop, 10)) && typeof computedStyle[prop] !== 'function'
+						&& !(/^(cssText|length|parentRule|all|inset)$/).test(prop)) {
 					elem.style[prop] = computedStyle[prop];
 				}
 			}
