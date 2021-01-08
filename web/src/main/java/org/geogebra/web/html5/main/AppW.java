@@ -3397,7 +3397,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public void copyGraphicsViewToClipboard() {
-		EuclidianViewW ev = (EuclidianViewW) getActiveEuclidianView();
+		EuclidianViewWInterface ev = (EuclidianViewWInterface) getActiveEuclidianView();
 		copyImageToClipboard(ev.getExportImageDataUrl(3, false, false));
 	}
 
