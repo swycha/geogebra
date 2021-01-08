@@ -35,7 +35,7 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 	 * @return the tuple on the given index.
 	 */
 	public IntervalTuple get(int index) {
-		return list.get(index);
+		return index > -1 && index < list.size() ? list.get(index) : null;
 	}
 
 	@Nonnull

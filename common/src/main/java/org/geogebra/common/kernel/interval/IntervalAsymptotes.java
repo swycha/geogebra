@@ -31,7 +31,7 @@ public class IntervalAsymptotes {
 		if (isDescending(index + 1)) {
 			value.set(value.getHigh(), Double.POSITIVE_INFINITY);
 		} else {
-			value.set(value.getLow(), Double.NEGATIVE_INFINITY);
+			value.set(Double.NEGATIVE_INFINITY, value.getLow());
 
 		}
 	}
