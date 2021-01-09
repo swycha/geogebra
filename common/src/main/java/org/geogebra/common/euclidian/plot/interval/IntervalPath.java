@@ -38,16 +38,12 @@ public class IntervalPath {
 		if (pointCount == 1) {
 			return;
 		}
-		IntervalTuple last = new IntervalTuple();
 		for (int i = 0; i < pointCount; i++) {
-			IntervalTuple tuple =  model.getPoints().get(i);
-			if (tuple != null && !tuple.y().isEmpty()
-				&& (last.isEmpty() || last.x().getHigh() == tuple.x().getLow())) {
-				plotInterval(lastY, tuple);
+			if (model.noGapFromRight(i)) {
+				plotInterval(lastY, model.pointAt(i));
 			} else {
 				moveTo = true;
 			}
-			last = tuple;
 		}
 	}
 

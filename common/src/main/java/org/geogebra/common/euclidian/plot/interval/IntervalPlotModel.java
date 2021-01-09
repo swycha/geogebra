@@ -191,4 +191,17 @@ public class IntervalPlotModel {
 	GPoint getLabelPoint() {
 		return labelPoint;
 	}
+
+	public boolean noGapFromRight(int index) {
+		if (index == 0) {
+			return true;
+		}
+		IntervalTuple left = pointAt(index - 1);
+		IntervalTuple right = pointAt(index);
+		return right.follows(left);
+	}
+
+	public IntervalTuple pointAt(int index) {
+		return points.get(index);
+	}
 }

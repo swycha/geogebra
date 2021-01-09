@@ -450,7 +450,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return true if infinite.
 	 */
 	public boolean isOnlyInfinity() {
-		return isLowInfinite() && DoubleUtil.isEqual(high, low);
+		return (isLowInfinite() || isHighInfinite()) && DoubleUtil.isEqual(high, low);
 	}
 
 	/**

@@ -86,8 +86,18 @@ public class IntervalTuple {
 		return y.getLow() < y.getHigh();
 	}
 
-	public boolean follows(IntervalTuple last) {
-		return x.getLow() == last.x.getHigh();
+	/**
+	 *
+	 * @param previous tuple
+	 * @return if this tuple is right after the previous one (no gap)
+	 */
+	public boolean follows(IntervalTuple previous) {
+		return hasValue() && previous.hasValue()
+			&& DoubleUtil.isEqual(x.getLow(), previous.x.getHigh());
+	}
+
+	private boolean hasValue() {
+		return !y.isEmpty();
 	}
 
 	/**

@@ -39,6 +39,7 @@ public class SupportedOperatorChecker implements Inspecting {
 		case ACOSH:
 		case LOG10:
 		case LOG2:
+//		case IF_ELSE:
 			return true;
 		default:
 			return false;

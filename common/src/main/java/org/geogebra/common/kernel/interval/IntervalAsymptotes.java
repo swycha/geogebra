@@ -52,7 +52,7 @@ public class IntervalAsymptotes {
 			value(index).setEmpty();
 		}
 		if ((isCutOffPoint(index) && right.isWhole())) {
-			connectFromRight(index);
+				connectFromRight(index);
 		}
 	}
 
