@@ -39,8 +39,9 @@ public class IntervalPath {
 			return;
 		}
 		for (int i = 0; i < pointCount; i++) {
-			if (model.noGapFromRight(i)) {
-				plotInterval(lastY, model.pointAt(i));
+			IntervalTuple point = model.pointAt(i);
+			if (!point.y().isEmpty()) {
+				plotInterval(lastY, point);
 			} else {
 				moveTo = true;
 			}
