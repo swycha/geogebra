@@ -154,12 +154,6 @@ public class Dummy {
 		return el instanceof SpaceAtom;
 	}
 
-	// only for Row-elements
-	public void setPreviousAtom(Dummy prev) {
-		if (el instanceof Row)
-			((Row) el).setPreviousAtom(prev);
-	}
-
 	@Override
 	public String toString() {
 		return "Dummy: " + el.toString();

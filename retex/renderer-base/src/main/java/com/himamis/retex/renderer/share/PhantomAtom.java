@@ -49,7 +49,7 @@ package com.himamis.retex.renderer.share;
 /**
  * An atom representing another atom that should be drawn invisibly.
  */
-public class PhantomAtom extends Atom implements Row {
+public class PhantomAtom extends Atom {
 
 	// RowAtom to be drawn invisibly
 	private RowAtom elements;
@@ -89,8 +89,4 @@ public class PhantomAtom extends Atom implements Row {
 		return elements.getRightType();
 	}
 
-	@Override
-	public void setPreviousAtom(Dummy prev) {
-		elements.setPreviousAtom(prev);
-	}
 }

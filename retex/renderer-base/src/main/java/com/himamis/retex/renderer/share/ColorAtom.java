@@ -51,7 +51,7 @@ import com.himamis.retex.renderer.share.platform.graphics.Color;
 /**
  * An atom representing the foreground and background color of an other atom.
  */
-public class ColorAtom extends Atom implements Row {
+public class ColorAtom extends Atom {
 
 	// background color
 	private final Color background;
@@ -98,11 +98,6 @@ public class ColorAtom extends Atom implements Row {
 	@Override
 	public int getRightType() {
 		return elements.getRightType();
-	}
-
-	@Override
-	public void setPreviousAtom(Dummy prev) {
-		elements.setPreviousAtom(prev);
 	}
 
 	protected Color getColor() {

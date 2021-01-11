@@ -60,15 +60,12 @@ import com.himamis.retex.renderer.share.platform.FactoryProvider;
  * An atom representing a horizontal row of other atoms, to be seperated by
  * glue. It's also responsible for inserting kerns and ligatures.
  */
-public class RowAtom extends Atom implements Row {
+public class RowAtom extends Atom {
 
 	// atoms to be displayed horizontally next to eachother
 	protected ArrayList<Atom> elements;
 
 	public boolean lookAtLastAtom = false;
-
-	// previous atom (for nested Row atoms)
-	private Dummy previousAtom = null;
 
 	private boolean shape = false;
 
@@ -358,11 +355,6 @@ public class RowAtom extends Atom implements Row {
 		}
 
 		return hBox.peek();
-	}
-
-	@Override
-	public void setPreviousAtom(Dummy prev) {
-		previousAtom = prev;
 	}
 
 	public boolean lookAtLast() {
