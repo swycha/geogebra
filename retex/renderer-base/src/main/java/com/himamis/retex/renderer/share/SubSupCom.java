@@ -199,10 +199,18 @@ public class SubSupCom implements AtomConsumer {
 	}
 
 	public static Atom getBase(TeXParser tp) {
-		final Atom a = tp.getLastAtom();
-		if (a != null) {
-			return a;
+		final Atom previous = tp.getLastAtom();
+		if (previous instanceof CursorAtom) {
+			final Atom beforeCursor = tp.getLastAtom();
+			if (beforeCursor != null) {
+				return new RowAtom(beforeCursor, previous);
+			}
 		}
+
+		if (previous != null) {
+			return previous;
+		}
+
 		return MHeightAtom.get();
 	}
 
