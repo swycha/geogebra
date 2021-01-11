@@ -25,17 +25,29 @@ public class IntervalAsymptotes {
 		Interval left = leftValue(index);
 		if (isCutOffPoint(index) && !right.isWhole()) {
 			if (left.isEmpty() && !right.isEmpty())  {
-				log("Hey! Left is empty, right is not!");
-				if (right.getLow() > value(index + 2).getLow()) {
-					right.setHigh(range.y().getHigh());
-				} else {
-					right.setLow(range.y().getLow());
-
-				}
+				connectFromRight(index, right);
+			} else if (!left.isEmpty() && right.isEmpty())  {
+				connectFromLeft(index, left);
 			} else {
 				connect(left, right);
 			}
 			value(index).setEmpty();
+		}
+	}
+
+	private void connectFromLeft(int index, Interval left) {
+		if (value(index -2 ).getLow() < left.getLow()) {
+			left.setHigh(range.y().getHigh());
+		}  else {
+			left.setLow(range.y().getLow());
+		}
+	}
+
+	private void connectFromRight(int index, Interval right) {
+		if (right.getLow() > value(index + 2).getLow()) {
+			right.setHigh(range.y().getHigh());
+		} else {
+			right.setLow(range.y().getLow());
 		}
 	}
 
