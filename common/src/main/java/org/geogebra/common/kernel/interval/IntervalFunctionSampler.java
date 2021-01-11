@@ -63,11 +63,15 @@ public class IntervalFunctionSampler {
 	private IntervalTupleList evaluateOnSpace(LinearSpace space) throws Exception {
 		List<Double> xCoords = space.values();
 		IntervalTupleList samples = new IntervalTupleList();
-
+		boolean addEmpty = true;
 		for (int i = 0; i < xCoords.size() - 1; i += 1) {
 			Interval x = new Interval(xCoords.get(i), xCoords.get(i + 1));
 			Interval y = function.evaluate(x);
-			samples.add(new IntervalTuple(x, y));
+			if (!y.isEmpty() || addEmpty) {
+				samples.add(new IntervalTuple(x, y));
+			}
+
+			addEmpty = !y.isEmpty();
 		}
 
 		IntervalAsymptotes asymtotes = new IntervalAsymptotes(samples, range);

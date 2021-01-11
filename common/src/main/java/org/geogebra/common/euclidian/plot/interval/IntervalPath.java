@@ -40,6 +40,7 @@ public class IntervalPath {
 		}
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple point = model.pointAt(i);
+//			Log.debug(point);
 			if (!point.y().isEmpty()) {
 				plotInterval(lastY, point);
 			} else {
@@ -63,18 +64,6 @@ public class IntervalPath {
 			plotHigh(x, y);
 		} else {
 			plotLow(x, y);
-		}
-
-		lastY.set(y);
-	}
-
-	private void moveInterval(Interval lastY, IntervalTuple point) {
-		Interval x = view.toScreenIntervalX(point.x());
-		Interval y = view.toScreenIntervalY(point.y());
-		if (y.isGreaterThan(lastY)) {
-			gp.moveTo(x.getLow(), y.getLow());
-		} else {
-			gp.moveTo(x.getLow(), y.getHigh());
 		}
 
 		lastY.set(y);
