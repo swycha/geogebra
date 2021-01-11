@@ -12,37 +12,13 @@ public class IntervalAsymptotes {
 	}
 
 	public void process() {
-		if (value(0).isWhole()) {
-			connectFromLeft(0);
-		}
-
 		for (int i = 1; i < samples.count() - 1; i++) {
-			fixAt(i);
-		}
-
-		if (value(samples.count() - 1).isWhole()) {
-			connectFromRight(samples.count() - 2);
+			if (value(i).isWhole()) {
+				fixAt(i);
+			}
 		}
 	}
 
-	private void connectFromLeft(int index) {
-		Interval value = value(index);
-
-		if (isDescending(index + 1)) {
-			value.set(value.getHigh(), Double.POSITIVE_INFINITY);
-		} else {
-			value.set(Double.NEGATIVE_INFINITY, value.getLow());
-
-		}
-	}
-
-	private boolean isDescending(int index) {
-		if (samples.count() < index) {
-			return false;
-		}
-
-		return value(index).getHigh() > value(index + 1).getHigh();
-	}
 
 	private void fixAt(int index) {
 		Interval right = rightValue(index);
@@ -51,40 +27,11 @@ public class IntervalAsymptotes {
 			connect(left, right);
 			value(index).setEmpty();
 		}
-		if ((isCutOffPoint(index) && right.isWhole())) {
-				connectFromRight(index);
-		}
 	}
 
 	private boolean isCutOffPoint(int index) {
 		return samples.get(index).y().isWhole();
 	} 
-
-	private void connectFromRight(int index) {
-		Interval value = value(index);
-		Interval left = leftValue(index);
-		Interval right = rightValue(index);
-		if (left.isWhole()) {
-			return;
-		}
-
-		if (isAscending(index - 1)) {
-			right.set(value.getHigh(), Double.POSITIVE_INFINITY);
-		} else {
-			right.set(Double.NEGATIVE_INFINITY, value.getLow());
-		}
-	}
-
-	private boolean isAscending(int index) {
-		if (index - 1 < 0) {
-			return false;
-		}
-		return value(index - 1).getHigh() < value(index).getHigh();
-	}
-
-	private IntervalTuple point(int index) {
-		return samples.get(index);
-	}
 
 	private void connect(Interval left, Interval right) {
 		if (!left.isOverlap(right)) {
