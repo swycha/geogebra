@@ -12,7 +12,7 @@ public class IntervalAsymptotes {
 	}
 
 	public void process() {
-		for (int i = 1; i < samples.count() - 1; i++) {
+		for (int i = 0; i < samples.count() - 1; i++) {
 			if (value(i).isWhole()) {
 				fixAt(i);
 			}
@@ -24,7 +24,17 @@ public class IntervalAsymptotes {
 		Interval right = rightValue(index);
 		Interval left = leftValue(index);
 		if (isCutOffPoint(index) && !right.isWhole()) {
-			connect(left, right);
+			if (left.isEmpty() && !right.isEmpty())  {
+				log("Hey! Left is empty, right is not!");
+				if (right.getLow() > value(index + 2).getLow()) {
+					right.setHigh(range.y().getHigh());
+				} else {
+					right.setLow(range.y().getLow());
+
+				}
+			} else {
+				connect(left, right);
+			}
 			value(index).setEmpty();
 		}
 	}
