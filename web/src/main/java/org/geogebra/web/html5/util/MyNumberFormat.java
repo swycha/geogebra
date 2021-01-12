@@ -480,7 +480,15 @@ public class MyNumberFormat {
 	static int toScaledString(StringBuilder buf, double val) {
 		int startLen = buf.length();
 
-		String full = toPrecision(val, 20);
+		String full;
+		// if number is short, avoid e.g. 11.3
+		// returns 11.300000000000000711.
+		if (startLen > 20) {
+			full = toPrecision(val, 20);
+		} else {
+			full = String.valueOf(val);
+		}
+
 		Log.debugSpecial(full);
 
 		buf.append(full);
