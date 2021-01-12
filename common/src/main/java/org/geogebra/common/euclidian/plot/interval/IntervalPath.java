@@ -40,9 +40,9 @@ public class IntervalPath {
 		}
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple point = model.pointAt(i);
-//			Log.debug(point);
 			if (!point.y().isEmpty()) {
 				plotInterval(lastY, point);
+				moveTo = false;
 			} else {
 				moveTo = true;
 			}

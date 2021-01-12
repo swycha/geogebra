@@ -54,4 +54,15 @@ public class IntervalPlotterTest extends BaseUnitTest {
 		plotter.enableFor(function);
 		assertEquals(EMPTY_PATH, gp.getLog());
 	}
+
+	@Test
+	public void testSecLnXInverse() {
+		EuclidianView view = getApp().getActiveEuclidianView();
+		view.setRealWorldCoordSystem(0, 1, -7, 7);
+		IntervalPathPlotterMock gp = new IntervalPathPlotterMock();
+		IntervalPlotter plotter = new IntervalPlotter(view, gp, 20);
+		GeoFunction function = add("(-8)/sec(ln(x))");
+		plotter.enableFor(function);
+		assertEquals(EMPTY_PATH, gp.getLog());
+	}
 }
