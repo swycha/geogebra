@@ -336,4 +336,5 @@ public class AppConfigDefault extends AbstractAppConfig {
 	public boolean sendKeyboardEvents() {
 		return false;
 	}
+
 }

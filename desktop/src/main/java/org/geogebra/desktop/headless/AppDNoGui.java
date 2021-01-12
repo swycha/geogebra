@@ -9,7 +9,6 @@ import org.geogebra.common.awt.MyImage;
 import org.geogebra.common.euclidian.DrawEquation;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
-import org.geogebra.common.factories.CASFactory;
 import org.geogebra.common.factories.UtilFactory;
 import org.geogebra.common.io.MyXMLio;
 import org.geogebra.common.jre.gui.MyImageJre;
@@ -78,6 +77,7 @@ public class AppDNoGui extends AppCommon implements AppDI {
 
 		UtilFactory.setPrototypeIfNull(new UtilFactoryD());
 		loginOperation = new LoginOperationD(this);
+		setCASFactory(new LoggingCASFactoryD());
 	}
 
 	public void addExternalImage(String name, MyImageJre img) {
@@ -172,11 +172,6 @@ public class AppDNoGui extends AppCommon implements AppDI {
 			drawEquation = new DrawEquationD();
 		}
 		return drawEquation;
-	}
-
-	@Override
-	public CASFactory getCASFactory() {
-		return new LoggingCASFactoryD();
 	}
 
 	@Override

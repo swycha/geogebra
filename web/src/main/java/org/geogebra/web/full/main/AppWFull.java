@@ -213,9 +213,9 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	private String autosavedMaterial = null;
 	private MaskWidgetList maskWidgets;
 	private SuiteHeaderAppPicker suiteAppPickerButton;
+	private HashMap<String, Material> constructionJson = new HashMap<>();
 	private InputBoxType inputBoxType;
 	private String functionVars = "";
-	private HashMap<String, Material> constructionJson = new HashMap<>();
 
 	/**
 	 * @param geoGebraElement GeoGebra element
