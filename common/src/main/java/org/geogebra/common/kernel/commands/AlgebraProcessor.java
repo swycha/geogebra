@@ -639,14 +639,17 @@ public class AlgebraProcessor {
 				n.setForceInequality();
 				n.setWasInterval();
 			} else if (geo instanceof GeoFunction) {
-				if (((GeoFunction) geo).forceInequality()
-					&& n.toString(StringTemplate.noLocalDefault).contains("?")) {
+				if (((GeoFunction) geo).isForceInequality()) {
 					n.setForceInequality();
 				} else {
 					n.setForceFunction();
 				}
 			} else if (geo.isGeoSurfaceCartesian()) {
 				n.setForceSurfaceCartesian();
+			} else if (geo instanceof GeoFunctionNVar) {
+				if (((GeoFunctionNVar) geo).isForceInequality()) {
+					n.setForceInequality();
+				}
 			}
 		}
 		if (newValue.unwrap() instanceof Equation) {
@@ -1076,6 +1079,9 @@ public class AlgebraProcessor {
 			extracted = symbolicProcessor.extractAssignment(equation, info);
 			ve.setLabel(extracted.getLabel());
 		}
+		if (ve.isRootNode()) {
+			extracted.setAsRootNode();
+		}
 		GeoElement sym = symbolicProcessor.evalSymbolicNoLabel(extracted, info);
 		String label = extracted.getLabel();
 		if (label != null && kernel.lookupLabel(label) != null
@@ -1294,7 +1300,7 @@ public class AlgebraProcessor {
 			ErrorHandler handler, ValidExpression ve, EvalInfo info) {
 		GeoElement[] geoElements = null;
 		try {
-
+			ve.setAsRootNode();
 			geoElements = processValidExpression(ve, info);
 			if (storeUndo && geoElements != null) {
 				app.storeUndoInfo();
@@ -2182,7 +2188,7 @@ public class AlgebraProcessor {
 	private static boolean isFunctionIneq(GeoElement geo) {
 		return geo instanceof GeoFunction
 				&& (((GeoFunction) geo).isInequality()
-				|| ((GeoFunction) geo).forceInequality());
+				|| ((GeoFunction) geo).isForceInequality());
 	}
 
 	private boolean compatibleFunctions(GeoElement replaceableGeo, GeoElement returnGeo) {
@@ -2422,7 +2428,7 @@ public class AlgebraProcessor {
 			f = new GeoFunction(cons, fun, info.isSimplifyingIntegers());
 			f.getIneqs();
 			f.setForceInequality(f.isInequality()
-					|| (en.isForceInequality() && !en.wasInterval()));
+					|| (fun.isForceInequality() && !en.wasInterval()));
 		} else {
 			f = kernel.getAlgoDispatcher().dependentFunction(fun, info);
 			if (label == null) {
@@ -2699,6 +2705,8 @@ public class AlgebraProcessor {
 
 		if (isIndependent) {
 			gf = new GeoFunctionNVar(cons, fun, info.isSimplifyingIntegers());
+			gf.getIneqs();
+			gf.setForceInequality(gf.isInequality() || fun.isForceInequality());
 		} else {
 			gf = dependentFunctionNVar(fun);
 		}
@@ -3146,10 +3154,12 @@ public class AlgebraProcessor {
 					return getParamProcessor().complexSurface(fun.getExpression(),
 							fun.getFunctionVariable(), fun.getLabel());
 				}
+				fun.setForceInequality(node.isForceInequality());
 				return processFunction(fun, info);
 			} else if (leaf instanceof FunctionNVar) {
 				FunctionNVar fun = (FunctionNVar) leaf;
 				fun.setLabels(n.getLabels());
+				fun.setForceInequality(node.isForceInequality());
 				return processFunctionNVar(fun, info);
 			}
 
@@ -3316,7 +3326,9 @@ public class AlgebraProcessor {
 
 		if (isIndependent) {
 			if (isAngle) {
-				ret = new GeoAngle(cons, value, AngleStyle.UNBOUNDED);
+				boolean keepDegrees = n.getOperation().equals(Operation.ARCSIND)
+						&& !app.getConfig().isAngleUnitSettingEnabled();
+				ret = new GeoAngle(cons, value, AngleStyle.UNBOUNDED, keepDegrees);
 			} else {
 				ret = new GeoNumeric(cons, value);
 			}

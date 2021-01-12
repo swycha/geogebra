@@ -154,9 +154,12 @@ public class SymbolicProcessor {
 	protected GeoElement evalSymbolicNoLabel(ExpressionValue ve, EvalInfo info) {
 		ve.resolveVariables(
 				new EvalInfo(false).withSymbolicMode(SymbolicMode.SYMBOLIC_AV));
-		if (ve.unwrap() instanceof Command
-				&& "Sequence".equals(((Command) ve.unwrap()).getName())) {
-			return doEvalSymbolicNoLabel(ve.wrap(), info);
+		if (ve.unwrap() instanceof Command) {
+			String cmdName = ((Command) ve.unwrap()).getName();
+			if (Commands.Sequence.name().equals(cmdName)
+					|| Commands.Assume.name().equals(cmdName)) {
+				return doEvalSymbolicNoLabel(ve.wrap(), info);
+			}
 		}
 		EvalInfo subInfo = new EvalInfo().withArbitraryConstant(info.getArbitraryConstant());
 		ExpressionNode replaced = ve
@@ -167,7 +170,9 @@ public class SymbolicProcessor {
 					.wrap();
 			ve.wrap().setLabel(null);
 		}
-
+		if (ve instanceof ValidExpression && ((ValidExpression) ve).isRootNode()) {
+			replaced.setAsRootNode();
+		}
 		return doEvalSymbolicNoLabel(replaced, info);
 	}
 
