@@ -20,6 +20,7 @@ public class BaseSymbolicTest {
     protected AlgebraProcessor ap;
     protected Kernel kernel;
     private UndoManager undoManager;
+    protected String rounding;
 
     /**
      * Create the app
@@ -29,10 +30,11 @@ public class BaseSymbolicTest {
         app = AlgebraTest.createApp(new AppConfigCas());
         kernel = app.getKernel();
         ap = kernel.getAlgebraProcessor();
+        rounding = "10";
 
         kernel.setSymbolicMode(SymbolicMode.SYMBOLIC_AV);
         kernel.getParser().setHighPrecisionParsing(true);
-        app.setRounding("10");
+        resetRounding();
         kernel.getGeoGebraCAS().evaluateGeoGebraCAS("1+1", null,
                 StringTemplate.defaultTemplate, app.getKernel());
         undoManager = kernel.getConstruction().getUndoManager();
@@ -68,5 +70,9 @@ public class BaseSymbolicTest {
 
     protected GeoElement lookup(String label) {
         return app.getKernel().lookupLabel(label);
+    }
+
+    protected void resetRounding() {
+        app.setRounding(rounding);
     }
 }
