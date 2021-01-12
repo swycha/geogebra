@@ -213,11 +213,11 @@ public class GeoGebraFrameFull
 	@Override
 	public void setSize(int width, int height) {
 		MyHeaderPanel currentPanel = panelTransitioner.getCurrentPanel();
+		super.setSize(width, height);
 		if (currentPanel != null) {
 			currentPanel.setPixelSize(width, height);
 			currentPanel.resizeTo(width, height);
 		} else {
-			super.setSize(width, height);
 			app.adjustViews(true, height > width
 					|| getGuiManager().isVerticalSplit(false));
 		}
@@ -237,6 +237,7 @@ public class GeoGebraFrameFull
 		}
 
 		if (this.isKeyboardShowing() == show) {
+			getKeyboardManager().clearAndUpdateKeyboard();
 			getKeyboardManager().setOnScreenKeyboardTextField(textField);
 			return;
 		}
@@ -725,8 +726,7 @@ public class GeoGebraFrameFull
 
 	private void attachMowMainMenu(final AppW app) {
 		StandardButton openMenuButton = new StandardButton(
-				MaterialDesignResources.INSTANCE.menu_black_whiteBorder(), null,
-				24, app);
+				MaterialDesignResources.INSTANCE.menu_black_whiteBorder(), null, 24);
 
 		openMenuButton.addFastClickHandler(source -> {
 			onMenuButtonPressed();

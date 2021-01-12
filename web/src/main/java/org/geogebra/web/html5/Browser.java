@@ -16,8 +16,10 @@ import com.google.gwt.http.client.URL;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.Window.Navigator;
 
+import elemental2.core.Function;
 import elemental2.core.Global;
 import elemental2.dom.DomGlobal;
+import jsinterop.base.JsPropertyMap;
 
 public class Browser {
 	public static final String ACTION_RESET_URL = "{\"action\": \"resetUrl\"}";
@@ -78,35 +80,6 @@ public class Browser {
 	 */
 	public static native boolean isSafariByVendor() /*-{
 		return "Apple Computer, Inc." === $wnd.navigator.vendor;
-	}-*/;
-
-	/**
-	 * https://github.com/cheton/is-electron/blob/master/index.js MIT
-	 *
-	 * @return true if running in Electron
-	 */
-	public static native boolean isElectron() /*-{
-		// Renderer process
-		if (typeof $wnd !== 'undefined' && typeof $wnd.process === 'object'
-				&& $wnd.process.type === 'renderer') {
-			return true;
-		}
-
-		// Main process
-		if (typeof $wnd.process !== 'undefined'
-				&& typeof $wnd.process.versions === 'object'
-				&& !!$wndprocess.versions.electron) {
-			return true;
-		}
-
-		// Detect the user agent when the `nodeIntegration` option is set to true
-		if (typeof $wnd.navigator === 'object'
-				&& typeof $wnd.navigator.userAgent === 'string'
-				&& $wnd.navigator.userAgent.indexOf('Electron') >= 0) {
-			return true;
-		}
-
-		return false;
 	}-*/;
 
 	public native static boolean externalCAS() /*-{
@@ -553,19 +526,26 @@ public class Browser {
 				&& !Location.getPath().contains(".html");
 	}
 
-	public static native void changeMetaTitle(String title) /*-{
-		$wnd.changeMetaTitle && $wnd.changeMetaTitle(title);
-	}-*/;
+	/**
+	 * Change title and OpenGraph title using a global function from app.html
+	 * @param title document title
+	 */
+	public static void changeMetaTitle(String title) {
+		Function changeTitle = GeoGebraGlobal.getChangeMetaTitle();
+		if (changeTitle != null) {
+			changeTitle.call(DomGlobal.window, title);
+		}
+	}
 
-	private static native void nativeChangeUrl(String name) /*-{
-		if (name && $wnd.history && $wnd.history.pushState) {
+	private static void nativeChangeUrl(String name) {
+		if (!StringUtil.empty(name)) {
 			try {
-				$wnd.history.pushState({}, "GeoGebra", name);
-			} catch (e) {
+				DomGlobal.history.pushState(JsPropertyMap.of(), "GeoGebra", name);
+			} catch (Exception e) {
 				// on dev server trying to push production URL
 			}
 		}
-	}-*/;
+	}
 
 	/**
 	 * resets url to base: no materials or query string.
@@ -580,9 +560,9 @@ public class Browser {
 	 * @param url
 	 *            GeoGebraTube url
 	 */
-	public native static void openWindow(String url)/*-{
-		$wnd.open(url, '_blank');
-	}-*/;
+	public static void openWindow(String url) {
+		DomGlobal.window.open(url, "_blank");
+	}
 
 	/**
 	 * Returns a string based on base 64 encoded value
@@ -618,10 +598,6 @@ public class Browser {
 				allow ? e.stopPropagation() : e.preventDefault();
 			}, false);
 		}
-	}-*/;
-
-	public static native boolean isXWALK() /*-{
-		return !!$wnd.ggbExamXWalkExtension;
 	}-*/;
 
 	public native static boolean isAndroid()/*-{
