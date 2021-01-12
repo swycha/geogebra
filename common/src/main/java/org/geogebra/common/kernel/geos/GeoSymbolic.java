@@ -317,7 +317,11 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	 * @return geo for drawing
 	 */
 	public GeoElementND getTwinGeo() {
-		if (isTwinUpToDate) {
+		return getTwinGeo(!isTwinUpToDate);
+	}
+
+	public GeoElementND getTwinGeo(Boolean needUpdate) {
+		if (!needUpdate) {
 			return twinGeo;
 		}
 		GeoElementND newTwin = createTwinGeo();
@@ -364,10 +368,18 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 	}
 
 	private ExpressionNode getTwinInput() throws ParseException {
+		ExpressionNode symbolicTwin;
 		if (useOutputAsMainTwin()) {
-			return getNodeFromOutput();
+			symbolicTwin = getNodeFromOutput();
+		} else {
+			symbolicTwin = getNodeFromInput();
 		}
-		return getNodeFromInput();
+		if (!isSymbolicMode()) {
+			Command num = new Command(kernel, "Numeric", false);
+			num.addArgument(symbolicTwin);
+			return num.wrap();
+		}
+		return symbolicTwin;
 	}
 
 	private ExpressionNode getTwinFallbackInput() throws ParseException {
@@ -575,7 +587,11 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 
 	@Override
 	public void setSymbolicMode(boolean mode, boolean updateParent) {
+		boolean hasChanged = this.symbolicMode != mode;
 		this.symbolicMode = mode;
+		if (hasChanged) {
+			getTwinGeo(true);
+		}
 	}
 
 	@Override
