@@ -31,14 +31,21 @@ public class IntervalAsymptotes {
 				connectFromLeft(index, left);
 				value(index).setEmpty();
 			} else {
-				if (Math.abs(left.getLow() - right.getLow()) >= range.y().getLow()) {
+				if (isVerticalAsimtote(right, left)) {
 					value(index).setEmpty();
 				} else {
 					connect(left, right);
-					value(index).set(left);
+					//value(index).set(left);
 				}
 			}
 		}
+	}
+
+	private boolean isVerticalAsimtote(Interval right, Interval left) {
+		if (left.isEmpty() || right.isEmpty()) {
+			return true;
+		}
+		return Math.abs(left.getLow() - right.getLow()) >= range.y().getLow();
 	}
 
 	private void connectFromLeft(int index, Interval left) {
