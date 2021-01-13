@@ -2,7 +2,6 @@ package org.geogebra.common.kernel.interval;
 
 import static org.geogebra.common.kernel.arithmetic.MyDouble.isFinite;
 import static org.geogebra.common.kernel.interval.IntervalConstants.empty;
-import static org.geogebra.common.kernel.interval.IntervalConstants.zero;
 
 import java.util.Objects;
 
@@ -262,10 +261,10 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		if (isEmpty()) {
 			return empty();
 		}
-
-		if (isWhole()) {
-			return zero();
-		}
+//
+//		if (isWhole()) {
+//			return zero();
+//		}
 
 		if (hasZero()) {
 			if (low != 0) {

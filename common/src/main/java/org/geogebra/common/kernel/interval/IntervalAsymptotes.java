@@ -26,12 +26,18 @@ public class IntervalAsymptotes {
 		if (isCutOffPoint(index) && !right.isWhole()) {
 			if (left.isEmpty() && !right.isEmpty())  {
 				connectFromRight(index, right);
+				value(index).setEmpty();
 			} else if (!left.isEmpty() && right.isEmpty())  {
 				connectFromLeft(index, left);
+				value(index).setEmpty();
 			} else {
-				connect(left, right);
+				if (Math.abs(left.getLow() - right.getLow()) >= range.y().getLow()) {
+					value(index).setEmpty();
+				} else {
+					connect(left, right);
+					value(index).set(left);
+				}
 			}
-			value(index).setEmpty();
 		}
 	}
 
