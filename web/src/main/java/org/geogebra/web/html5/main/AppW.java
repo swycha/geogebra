@@ -147,7 +147,6 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ResizeEvent;
@@ -161,6 +160,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import elemental2.dom.File;
+import elemental2.dom.HTMLImageElement;
 import jsinterop.base.JsPropertyMap;
 
 public abstract class AppW extends App implements SetLabels, HasLanguage {
@@ -992,14 +992,14 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	@Override
 	public final MyImage getExternalImageAdapter(String fileName, int width,
 			int height) {
-		ImageElement im = getImageManager().getExternalImage(fileName, this,
+		HTMLImageElement im = getImageManager().getExternalImage(fileName, this,
 				true);
 		if (im == null) {
 			return null;
 		}
 		if (width != 0 && height != 0) {
-			im.setWidth(width);
-			im.setHeight(height);
+			im.width = width;
+			im.height = height;
 		}
 		return new MyImageW(im, fileName.toLowerCase().endsWith(".svg"));
 	}
@@ -2052,24 +2052,24 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	/**
 	 * @return refresh applet image
 	 */
-	public ImageElement getRefreshViewImage() {
-		ImageElement imgE = ImageManagerW
+	public HTMLImageElement getRefreshViewImage() {
+		HTMLImageElement imgE = ImageManagerW
 				.getInternalImage(GuiResourcesSimple.INSTANCE.viewRefresh());
-		attachNativeLoadHandler(imgE);
+		imgE.addEventListener("load", (event) -> getActiveEuclidianView().updateBackground());
 		return imgE;
 	}
 
 	/**
 	 * @return play image
 	 */
-	public ImageElement getPlayImage() {
+	public HTMLImageElement getPlayImage() {
 		return ImageManagerW.getInternalImage(GuiResourcesSimple.INSTANCE.play_black());
 	}
 
 	/**
 	 * @return pause image
 	 */
-	public ImageElement getPauseImage() {
+	public HTMLImageElement getPauseImage() {
 		return ImageManagerW.getInternalImage(
 				GuiResourcesSimple.INSTANCE.pause_black());
 	}
@@ -2077,7 +2077,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	/**
 	 * @return play image with hover effect
 	 */
-	public ImageElement getPlayImageHover() {
+	public HTMLImageElement getPlayImageHover() {
 		return ImageManagerW.getInternalImage(
 				GuiResourcesSimple.INSTANCE.play_purple());
 	}
@@ -2085,7 +2085,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	/**
 	 * @return pause image with hover effect
 	 */
-	public ImageElement getPauseImageHover() {
+	public HTMLImageElement getPauseImageHover() {
 		return ImageManagerW.getInternalImage(
 				GuiResourcesSimple.INSTANCE.pause_purple());
 	}
@@ -2595,20 +2595,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		}
 		JsEval.evalScriptNative(script, ggbApplet);
 	}
-
-	public void attachNativeLoadHandler(ImageElement img) {
-		addNativeLoadHandler(img, getActiveEuclidianView());
-	}
-
-	private native void addNativeLoadHandler(ImageElement img,
-			EuclidianView view) /*-{
-		img
-				.addEventListener(
-						"load",
-						function() {
-							view.@org.geogebra.web.html5.euclidian.EuclidianViewW::updateBackground()();
-						});
-	}-*/;
 
 	// ============================================
 	// LAYOUT & GUI UPDATES

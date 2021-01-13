@@ -15,9 +15,6 @@ import org.geogebra.common.geogebra3D.main.VertexShader;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.html5.gawt.GBufferedImageW;
 
-import com.google.gwt.canvas.dom.client.ImageData;
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.dom.client.ImageElement;
 import com.googlecode.gwtgl.array.Uint8Array;
 import com.googlecode.gwtgl.binding.WebGLBuffer;
 import com.googlecode.gwtgl.binding.WebGLFramebuffer;
@@ -27,6 +24,10 @@ import com.googlecode.gwtgl.binding.WebGLRenderingContext;
 import com.googlecode.gwtgl.binding.WebGLShader;
 import com.googlecode.gwtgl.binding.WebGLTexture;
 import com.googlecode.gwtgl.binding.WebGLUniformLocation;
+
+import elemental2.dom.HTMLImageElement;
+import elemental2.dom.ImageData;
+import jsinterop.base.Js;
 
 /**
  * Renderer using shaders
@@ -422,7 +423,7 @@ public class RendererImplShadersW extends RendererImplShaders {
 	 * @param bimg
 	 *            buffered image
 	 */
-	public void createAlphaTexture(DrawLabel3D label, ImageElement image,
+	public void createAlphaTexture(DrawLabel3D label, HTMLImageElement image,
 			GBufferedImageW bimg) {
 
 		if (label.isPickable()) {
@@ -446,7 +447,7 @@ public class RendererImplShadersW extends RendererImplShaders {
 	 *            buffered image
 	 * @return new index if needed
 	 */
-	public int createAlphaTexture(int index, ImageElement image, GBufferedImageW bimg) {
+	public int createAlphaTexture(int index, HTMLImageElement image, GBufferedImageW bimg) {
 
 		// create texture
 		WebGLTexture texture;
@@ -461,11 +462,11 @@ public class RendererImplShadersW extends RendererImplShaders {
 		}
 
 		glContext.bindTexture(WebGLRenderingContext.TEXTURE_2D, texture);
-		JavaScriptObject data = image == null
+		Object data = image == null
 				? bimg.getCanvas().getCanvasElement() : image;
 		glContext.texImage2D(WebGLRenderingContext.TEXTURE_2D, 0,
 				WebGLRenderingContext.RGBA, WebGLRenderingContext.RGBA,
-				WebGLRenderingContext.UNSIGNED_BYTE, data);
+				WebGLRenderingContext.UNSIGNED_BYTE, Js.uncheckedCast(data));
 
 		glContext.generateMipmap(WebGLRenderingContext.TEXTURE_2D);
 
@@ -517,8 +518,8 @@ public class RendererImplShadersW extends RendererImplShaders {
 				ymax = 0;
 		for (int y = 0; y < label.getHeight(); y++) {
 			for (int x = 0; x < label.getWidth(); x++) {
-				int alpha = data.getAlphaAt(x, y);
-				if (alpha != 0) {
+				Double alpha = data.data.getAt(4 * (x + y * data.width) + 3);
+				if (alpha != null && alpha != 0) {
 					if (x < xmin) {
 						xmin = x;
 					}
