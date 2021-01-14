@@ -1,5 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
+import org.geogebra.common.util.DoubleUtil;
+
 public class IntervalAsymptotes {
 	private final IntervalTupleList samples;
 	private final IntervalTuple range;
@@ -18,9 +20,16 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixGraph(Interval left, Interval value, Interval right) {
-		if (isVerticalAsymptote(left, right)) {
+		if (isZero(left, right)) {
+			value.setZero();
+		} else if (isVerticalAsymptote(left, right)) {
 			fixVerticalAsymptote(left, value, right);
 		}
+	}
+
+	private boolean isZero(Interval left, Interval right) {
+		return DoubleUtil.isEqual(Math.abs(right.getLow() - left.getHigh())
+				, 0, 1E-1);
 	}
 
 	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
