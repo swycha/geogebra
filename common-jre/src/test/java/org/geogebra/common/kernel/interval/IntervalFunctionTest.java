@@ -110,15 +110,15 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
 	@Test
 	public void evaluateReciprocalReciprocalX() throws Exception {
 		GeoFunction geo = add("1/(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
-		Interval actual = function.evaluate(interval(0, 1E-7));
-		shouldEqual(IntervalConstants.zero(), actual);
+		Interval actual = function.evaluate(interval(-1E-7, 1E-7));
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
 	@Test
@@ -126,7 +126,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/(0/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-5, 5));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/(0/x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-15, 15));
-		shouldEqual(IntervalConstants.empty(), actual);
+		shouldEqual(IntervalConstants.whole(), actual);
 	}
 
 	@Test

@@ -12,7 +12,7 @@ public class IntervalAsymptotes {
 	}
 
 	public void process() {
-		for (int index = 0; index < samples.count() - 1; index++) {
+		for (int index = 1; index < samples.count() - 1; index++) {
 			if (value(index).isWhole()) {
 				fixGraph(leftValue(index), value(index), rightValue(index));
 			}
