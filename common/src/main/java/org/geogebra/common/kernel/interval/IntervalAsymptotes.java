@@ -12,10 +12,30 @@ public class IntervalAsymptotes {
 	}
 
 	public void process() {
-		for (int i = 0; i < samples.count() - 1; i++) {
-			if (value(i).isWhole()) {
-				fixAt(i);
+		for (int index = 0; index < samples.count() - 1; index++) {
+			if (value(index).isWhole()) {
+				fixGraph(leftValue(index), value(index), rightValue(index));
 			}
+		}
+	}
+
+	private void fixGraph(Interval left, Interval value, Interval right) {
+		if (isVerticalAsymptote(left, right)) {
+			fixVerticalAsymptote(left, value, right);
+		}
+	}
+
+	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
+		extendToInfinite(left);
+		extendToInfinite(right);
+		value.setEmpty();
+	}
+
+	private void extendToInfinite(Interval value) {
+		if (value.getHigh() > 0) {
+			value.setHigh(Double.POSITIVE_INFINITY);
+		} else if (value.getLow() < 0){
+			value.setLow(Double.NEGATIVE_INFINITY);
 		}
 	}
 
@@ -23,7 +43,7 @@ public class IntervalAsymptotes {
 	private void fixAt(int index) {
 		Interval right = rightValue(index);
 		Interval left = leftValue(index);
-		if (isCutOffPoint(index) && !right.isWhole()) {
+		if (!left.isWhole() && isCutOffPoint(index) && !right.isWhole()) {
 			if (left.isEmpty() && !right.isEmpty())  {
 				connectFromRight(index, right);
 				value(index).setEmpty();
@@ -31,20 +51,21 @@ public class IntervalAsymptotes {
 				connectFromLeft(index, left);
 				value(index).setEmpty();
 			} else {
-				if (isVerticalAsimtote(right, left)) {
+				if (isVerticalAsymptote(right, left)) {
+					connect(left, right);
 					value(index).setEmpty();
 				} else {
-					connect(left, right);
-					//value(index).set(left);
+					value(index).set(left);
 				}
 			}
 		}
 	}
 
-	private boolean isVerticalAsimtote(Interval right, Interval left) {
+	private boolean isVerticalAsymptote(Interval right, Interval left) {
 		if (left.isEmpty() || right.isEmpty()) {
 			return true;
 		}
+
 		return Math.abs(left.getLow() - right.getLow()) >= range.y().getLow();
 	}
 
