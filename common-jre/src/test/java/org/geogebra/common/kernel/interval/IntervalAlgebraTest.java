@@ -63,7 +63,7 @@ public class IntervalAlgebraTest {
 
 	@Test
 	public void testMultiplicativeInverseZero() {
-		assertTrue(IntervalConstants.zero().multiplicativeInverse().isEmpty());
+		assertTrue(IntervalConstants.zero().multiplicativeInverse().isWhole());
 	}
 
 	@Test
@@ -223,6 +223,6 @@ public class IntervalAlgebraTest {
 	@Test
 	public void testNegativeDividedZero() {
 		assertEquals(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
-				interval(-7, 0).divide(IntervalConstants.zero()));
+				interval(-7, -3).divide(IntervalConstants.zero()));
 	}
 }

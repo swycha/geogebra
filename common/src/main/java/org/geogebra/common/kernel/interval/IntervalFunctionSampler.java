@@ -15,7 +15,7 @@ public class IntervalFunctionSampler {
 	private final IntervalFunction function;
 	private final int numberOfSamples;
 	private final LinearSpace space;
-	private final IntervalTuple range;
+	private IntervalTuple range;
 
 	/**
 	 *
@@ -87,6 +87,7 @@ public class IntervalFunctionSampler {
 	 */
 	public void update(IntervalTuple range) {
 		space.update(range.x(), numberOfSamples);
+		this.range = range;
 	}
 
 	public IntervalTupleList extendMax(double max) {

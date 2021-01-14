@@ -12,11 +12,37 @@ public class IntervalAsymptotes {
 	}
 
 	public void process() {
+		if (isVerticalAsymptoteFromLeft()) {
+			value(0).setEmpty();
+		}
+
 		for (int index = 1; index < samples.count() - 1; index++) {
 			if (value(index).isWhole()) {
 				fixGraph(leftValue(index), value(index), rightValue(index));
 			}
 		}
+
+		if (isVerticalAsymptoteFromRight()) {
+			value(samples.count() - 1).setEmpty();
+		}
+	}
+
+	private boolean isVerticalAsymptoteFromLeft() {
+		Interval value = value(0);
+		if (!value.isWhole() || samples.count() < 2) {
+			return false;
+		}
+		Interval right = value(1);
+		return right.getLow() < range.y().getLow() || right.getHigh() > range.y().getHigh();
+	}
+
+	private boolean isVerticalAsymptoteFromRight() {
+		Interval value = value(samples.count() - 1);
+		if (!value.isWhole() || samples.count() < 2) {
+			return false;
+		}
+		Interval left = value(samples.count() - 2);
+		return left.getLow() < range.y().getLow() || left.getHigh() > range.y().getHigh();
 	}
 
 	private void fixGraph(Interval left, Interval value, Interval right) {
@@ -46,7 +72,7 @@ public class IntervalAsymptotes {
 		}
 	}
 
-	private boolean isVerticalAsymptote(Interval right, Interval left) {
+	private boolean isVerticalAsymptote(Interval left, Interval right) {
 		if (left.isEmpty() || right.isEmpty()) {
 			return true;
 		}
