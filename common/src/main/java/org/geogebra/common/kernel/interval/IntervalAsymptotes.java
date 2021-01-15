@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 import org.geogebra.common.util.DoubleUtil;
+import org.geogebra.common.util.debug.Log;
 
 public class IntervalAsymptotes {
 	private final IntervalTupleList samples;
@@ -46,16 +47,44 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixGraph(Interval left, Interval value, Interval right) {
-		if (isZero(left, right)) {
-			value.setZero();
+		if (isCloseTo(left, right)) {
+			connect(left, value, right);
 		} else if (isVerticalAsymptote(left, right)) {
 			fixVerticalAsymptote(left, value, right);
 		}
 	}
 
+	private void debug(String message) {
+		Log.debug("[ASYM] " + message);
+	}
+
+	private void connect(Interval left, Interval value, Interval right) {
+		double diffLow = right.getLow() - left.getLow();
+		double diffHigh = right.getHigh() - left.getHigh();
+		value.set(left.getLow() + diffLow /2, left.getHigh() + diffHigh / 2);
+	}
+
+	private boolean isCloseTo(Interval left, Interval right) {
+		double diffLow = Math.abs(right.getLow() - left.getLow());
+		double diffHigh = Math.abs(right.getHigh() - left.getHigh());
+		if (diffLow == Double.POSITIVE_INFINITY || diffHigh == Double.POSITIVE_INFINITY) {
+			return false;
+		}
+		return left.isFinite() && right.isFinite()
+				&& (diffHigh < 2 && diffLow < 2);
+	}
+
 	private boolean isZero(Interval left, Interval right) {
+		if (isHalfConvergesToZero(left, right) || isHalfConvergesToZero(right, left)) {
+			return true;
+		}
+
 		return DoubleUtil.isEqual(Math.abs(right.getLow() - left.getHigh())
 				, 0, 1E-1);
+	}
+
+	private boolean isHalfConvergesToZero(Interval interval1, Interval interval2) {
+		return interval1.isEmpty() && DoubleUtil.isEqual(interval2.getLow(), 0, 1);
 	}
 
 	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
