@@ -18,6 +18,7 @@ import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.images.SvgPerspectiveResources;
 import org.geogebra.web.full.gui.util.Domvas;
 import org.geogebra.web.full.main.AppWFull;
+import org.geogebra.web.html5.Browser;
 import org.geogebra.web.html5.css.GuiResourcesSimple;
 import org.geogebra.web.html5.gui.util.MathKeyboardListener;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
@@ -528,20 +529,18 @@ public abstract class DockPanelW extends ResizeComposite
 	public void paintToCanvas(CanvasRenderingContext2D context2d,
 			Runnable callback, int left, int top) {
 		getElement().addClassName("ggbScreenshot");
-		if (component == null) {
+		if (component == null || Browser.isIE()) {
 			callback.run();
 			return;
 		}
 		Domvas.get().toImage(component.getElement(), (image) -> {
-		// component may not cover the whole panel, paint the rest white
-		context2d.fillStyle = BaseRenderingContext2D.FillStyleUnionType.of("rgb(255,255,255)");
-		context2d.fillRect(left, top, left + getOffsetWidth(), top + getOffsetHeight());
-		context2d.drawImage(
-						image, left, top);
+			// component may not cover the whole panel, paint the rest white
+			context2d.fillStyle = BaseRenderingContext2D.FillStyleUnionType.of("rgb(255,255,255)");
+			context2d.fillRect(left, top, left + getOffsetWidth(), top + getOffsetHeight());
+			context2d.drawImage(image, left, top);
 			getElement().removeClassName("ggbScreenshot");
 			callback.run();
 		});
-
 	}
 
 	/**

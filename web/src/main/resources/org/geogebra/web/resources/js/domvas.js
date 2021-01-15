@@ -10,7 +10,6 @@
 
 		if (supportsCSSText) {
 			elem.style.cssText = computedStyle.cssText; //.replace(/font:(.*)([0-9.]*px)\/([0-9.]*px)/,"font-size:$2;font:$1");
-
 		} else {
  			// Really, Firefox?
 			for (var prop in computedStyle) {
@@ -36,12 +35,16 @@
 		Array.prototype.forEach.call(children, function(child, i) {
 			if(child.tagName == 'CANVAS'){
 				window.div = document.createElement('div');
+				var origStyle = getComputedStyle(origChildren[i]);
 				child.parentElement.replaceChild(div,child);
-				div.style.height=origChildren[i].offsetHeight+"px";
-				div.style.width=origChildren[i].offsetWidth+"px";
+				div.style.height = origStyle.height || (origChildren[i].offsetHeight + "px");
+				div.style.width = origStyle.width || (origChildren[i].offsetHeight + "px");
 				var url = origChildren[i].toDataURL();
 				div.style.backgroundImage="url("+url+")";
 				div.style.backgroundSize=div.style.width+" "+div.style.height;
+				if (origStyle.display == "inline") {
+					div.style.display = "inline-block";
+				}
 			}else{
 				copyCSS(child, origChildren[i]);
 			}

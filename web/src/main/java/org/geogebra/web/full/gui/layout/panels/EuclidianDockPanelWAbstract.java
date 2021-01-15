@@ -438,7 +438,10 @@ public abstract class EuclidianDockPanelWAbstract extends DockPanelW
 			HTMLCanvasElement evCanvas =
 					Js.uncheckedCast(((EuclidianViewWInterface) getEuclidianView())
 							.getExportCanvas());
-			context2d.drawImage(evCanvas, left, top);
+			double pixelRatio = app.getPixelRatio();
+			context2d.scale(1 / pixelRatio, 1 / pixelRatio);
+			context2d.drawImage(evCanvas, pixelRatio * left, pixelRatio * top);
+			context2d.scale(pixelRatio, pixelRatio);
 		}
 		callback.run();
 	}

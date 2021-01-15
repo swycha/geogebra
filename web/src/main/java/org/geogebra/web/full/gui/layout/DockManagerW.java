@@ -1819,9 +1819,13 @@ public class DockManagerW extends DockManager {
 		context2d.fillStyle = BaseRenderingContext2D.FillStyleUnionType.of("rgb(200,200,200)");
 		context2d.fillRect(0, 0, rootPane.getOffsetWidth(), rootPane.getOffsetHeight());
 		for (DockPanelW panel: dockPanels) {
-			panel.paintToCanvas(context2d, counter,
-					panel.getAbsoluteLeft() - rootPane.getAbsoluteLeft(),
-					panel.getAbsoluteTop() - rootPane.getAbsoluteTop());
+			if (panel.isAttached() && panel.isVisible()) {
+				panel.paintToCanvas(context2d, counter,
+						panel.getAbsoluteLeft() - rootPane.getAbsoluteLeft(),
+						panel.getAbsoluteTop() - rootPane.getAbsoluteTop());
+			} else {
+				counter.run();
+			}
 		}
 	}
 }
