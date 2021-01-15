@@ -70,16 +70,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		}
 	}
 
-	@Test
-	public void cosCotX() {
-		GeoFunction function = add("cos(cot(x))");
-		IntervalTuple range = newRange(1, 2, -8, 8);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 100);
-		IntervalTupleList result = sampler.result();
-		assertTrue(false);
-	}
-
 	private IntervalTuple newRange(double xMin, double xMax, int yMin, int yMax) {
 		return new IntervalTuple(new Interval(xMin, xMax), new Interval(yMin, yMax));
 	}
