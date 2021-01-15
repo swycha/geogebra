@@ -908,6 +908,11 @@ public abstract class DockPanelW extends ResizeComposite
 	}
 
 	@Override
+	public String toString() {
+		return "view: "+getViewId();
+	}
+
+	@Override
 	public boolean updateResizeWeight() {
 		return false;
 	}
