@@ -64,6 +64,19 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
+		Interval fill = new Interval(-1, 1);
+		for (int i = 39; i < 60; i++) {
+			assertTrue(result.get(i).y().almostEqual(fill));
+		}
+	}
+
+	@Test
+	public void cosCotX() {
+		GeoFunction function = add("cos(cot(x))");
+		IntervalTuple range = newRange(1, 2, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
 		assertTrue(false);
 	}
 

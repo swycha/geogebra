@@ -169,4 +169,12 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
 		shouldEqual(IntervalConstants.whole(), actual);
 	}
+
+	@Test
+	public void evaluateCosCotX() throws Exception {
+		GeoFunction geo = add("cos(cot(x))");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(1.57, 1.58));
+		shouldEqual(IntervalConstants.whole(), actual);
+	}
 }

@@ -35,6 +35,7 @@ public class IntervalAsymptotes {
 		if (!value.isFinite()) {
 			return;
 		}
+
 		if (value.getLow() < extremum.getLow()) {
 			extremum.setLow(value.getLow());
 		}
@@ -66,7 +67,7 @@ public class IntervalAsymptotes {
 		if (isCloseTo(left, right)) {
 			connect(left, value, right);
 		} else if (isVerticalAsymptote(left, right)) {
-			fixVerticalAsymptote(left, value, right);
+//			fixVerticalAsymptote(left, value, right);
 		} else if (right.isWhole()) {
 			value.set(extremum);
 		}

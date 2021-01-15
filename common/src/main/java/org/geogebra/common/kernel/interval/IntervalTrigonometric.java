@@ -18,6 +18,10 @@ class IntervalTrigonometric {
 			return IntervalConstants.empty();
 		}
 
+		if (interval.isWhole()) {
+			return IntervalConstants.whole();
+		}
+
 		Interval cache = new Interval(interval);
 		handleNegative(cache);
 
