@@ -1,9 +1,14 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.kernel.geos.GeoFunction;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class IntervalAsymtotesTest extends BaseUnitTest {
@@ -28,6 +33,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		assertTrue(result.get(0).y().isEmpty() && result.get(99).y().isEmpty());
 	}
 
+	@Ignore
 	@Test
 	public void cscLnXInverseTimesMinusTen() {
 		GeoFunction tanX = add("(-10)/csc(ln(x))");
@@ -36,6 +42,19 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 				new IntervalFunctionSampler(tanX, range, 100);
 		IntervalTupleList result = sampler.result();
 		assertTrue(false);
+	}
+
+	@Test
+	public void secCscXInverse() {
+		GeoFunction function = add("1/sec(csc(x))");
+		IntervalTuple range = newRange(-2.9, 2.9, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		List<Integer> cutOffIndexes = Arrays.asList(7, 38, 61, 92);
+		for (int index: cutOffIndexes) {
+			assertFalse(result.get(index).y().isWhole());
+		}
 	}
 
 	private IntervalTuple newRange(double xMin, double xMax, int yMin, int yMax) {
