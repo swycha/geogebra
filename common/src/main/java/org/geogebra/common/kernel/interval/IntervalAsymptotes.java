@@ -1,15 +1,16 @@
 package org.geogebra.common.kernel.interval;
 
-import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.debug.Log;
 
 public class IntervalAsymptotes {
 	private final IntervalTupleList samples;
 	private final IntervalTuple range;
+	private final Interval extremum;
 
 	public IntervalAsymptotes(IntervalTupleList samples, IntervalTuple range) {
 		this.samples = samples;
 		this.range = range;
+		extremum = IntervalConstants.empty();
 	}
 
 	public void process() {
@@ -18,13 +19,28 @@ public class IntervalAsymptotes {
 		}
 
 		for (int index = 1; index < samples.count() - 1; index++) {
-			if (value(index).isWhole()) {
-				fixGraph(leftValue(index), value(index), rightValue(index));
+			Interval value = value(index);
+			updateExtremum(value);
+			if (value.isWhole()) {
+					fixGraph(leftValue(index), value, rightValue(index));
+				}
 			}
-		}
 
 		if (isVerticalAsymptoteFromRight()) {
 			value(samples.count() - 1).setEmpty();
+		}
+	}
+
+	private void updateExtremum(Interval value) {
+		if (!value.isFinite()) {
+			return;
+		}
+		if (value.getLow() < extremum.getLow()) {
+			extremum.setLow(value.getLow());
+		}
+
+		if (extremum.getHigh() < value.getHigh()) {
+			extremum.setHigh(value.getHigh());
 		}
 	}
 
@@ -51,6 +67,8 @@ public class IntervalAsymptotes {
 			connect(left, value, right);
 		} else if (isVerticalAsymptote(left, right)) {
 			fixVerticalAsymptote(left, value, right);
+		} else if (right.isWhole()) {
+			value.set(extremum);
 		}
 	}
 
@@ -74,19 +92,6 @@ public class IntervalAsymptotes {
 				&& (diffHigh < 2 && diffLow < 2);
 	}
 
-	private boolean isZero(Interval left, Interval right) {
-		if (isHalfConvergesToZero(left, right) || isHalfConvergesToZero(right, left)) {
-			return true;
-		}
-
-		return DoubleUtil.isEqual(Math.abs(right.getLow() - left.getHigh())
-				, 0, 1E-1);
-	}
-
-	private boolean isHalfConvergesToZero(Interval interval1, Interval interval2) {
-		return interval1.isEmpty() && DoubleUtil.isEqual(interval2.getLow(), 0, 1);
-	}
-
 	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
 		extendToInfinite(left);
 		extendToInfinite(right);
@@ -104,6 +109,10 @@ public class IntervalAsymptotes {
 	private boolean isVerticalAsymptote(Interval left, Interval right) {
 		if (left.isEmpty() || right.isEmpty()) {
 			return true;
+		}
+
+		if (right.isWhole()) {
+			return false;
 		}
 
 		return Math.abs(left.getLow() - right.getLow()) >= range.y().getLow();

@@ -45,7 +45,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void secCscXInverse() {
+	public void secCscXInverseCutOff() {
 		GeoFunction function = add("1/sec(csc(x))");
 		IntervalTuple range = newRange(-2.9, 2.9, -8, 8);
 		IntervalFunctionSampler sampler =
@@ -55,6 +55,16 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		for (int index: cutOffIndexes) {
 			assertFalse(result.get(index).y().isWhole());
 		}
+	}
+
+	@Test
+	public void secCscXInverseMiddle() {
+		GeoFunction function = add("1/sec(csc(x))");
+		IntervalTuple range = newRange(-0.2, 0.2, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		assertTrue(false);
 	}
 
 	private IntervalTuple newRange(double xMin, double xMax, int yMin, int yMax) {
