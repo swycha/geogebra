@@ -4274,6 +4274,14 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	}
 
 	/**
+	 * @param subApp subapp code
+	 * @param p perspective
+	 */
+	public void updateAppCodeSuite(String subApp, Perspective p) {
+		// only in Web
+	}
+
+	/**
 	 * When multiple slides are present give ID of the current one, otherwise
 	 * give default slide ID when slides supported or empty string if not.
 	 *
@@ -4281,14 +4289,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public String getSlideID() {
 		return "";
-	}
-
-	/**
-	 * @param subApp subapp code
-	 * @param p perspective
-	 */
-	public void updateAppCodeSuite(String subApp, Perspective p) {
-		// only in Web
 	}
 
 	/**
@@ -5229,6 +5229,25 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		// nothing here
 	}
 
+
+	/**
+	 * Updates the objects that depend on the command dispatcher.
+	 *
+	 * @param commandDispatcher command dispatcher
+	 */
+	public void onCommandDispatcherSet(CommandDispatcher commandDispatcher) {
+		ExamEnvironment examEnvironment = getExam();
+		if (examEnvironment != null) {
+			examEnvironment.setCommandDispatcher(commandDispatcher);
+			updateExam(examEnvironment);
+		}
+	}
+
+	protected void updateExam(@Nonnull ExamEnvironment examEnvironment) {
+		examEnvironment.setIncludingSettingsInLog(!isUnbundled());
+		examEnvironment.setCopyPaste(getCopyPaste());
+	}
+
 	@Override
 	public void setXML(String xml, boolean clearAll) {
 		if (xml == null) {
@@ -5251,23 +5270,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		}
 	}
 
-	/**
-	 * Updates the objects that depend on the command dispatcher.
-	 *
-	 * @param commandDispatcher command dispatcher
-	 */
-	public void onCommandDispatcherSet(CommandDispatcher commandDispatcher) {
-		ExamEnvironment examEnvironment = getExam();
-		if (examEnvironment != null) {
-			examEnvironment.setCommandDispatcher(commandDispatcher);
-			updateExam(examEnvironment);
-		}
-	}
-
-	protected void updateExam(@Nonnull ExamEnvironment examEnvironment) {
-		examEnvironment.setIncludingSettingsInLog(!isUnbundled());
-		examEnvironment.setCopyPaste(getCopyPaste());
-	}
 
 	public String getThreadId() {
 		return "[main thread]";
