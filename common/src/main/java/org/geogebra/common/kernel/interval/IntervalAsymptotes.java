@@ -88,13 +88,8 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
-		if (!right.isEmpty()) {
-			extendToInfinite(left);
-		}
-
-		if (!left.isEmpty()) {
-			extendToInfinite(right);
-		}
+		extendToInfinite(left);
+		extendToInfinite(right);
 		value.setEmpty();
 	}
 
