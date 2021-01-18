@@ -318,6 +318,14 @@ public class ArithmeticTest extends Assert {
 				"{0, 1, 2, 2, 0, -4, -8, -8, 0}", StringTemplate.editTemplate);
 	}
 
+	@Test
+	public void powerWithNegativeFractionAsExponent() {
+		t("(-8)^(-(1/3))", "-0.5");
+		t("-8^(-1/3)", "-0.5");
+		t("-8^(-2/3)", "-0.25");
+		t("32^(-1/5)", "0.5");
+	}
+
 	private GeoElement lookup(String g) {
 		return app.getKernel().lookupLabel(g);
 	}
