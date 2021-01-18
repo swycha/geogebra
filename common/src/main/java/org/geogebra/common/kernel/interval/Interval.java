@@ -717,4 +717,13 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean isFinite() {
 		return MyDouble.isFinite(low) && MyDouble.isFinite(high);
 	}
+
+	/**
+	 *
+	 * @return true if any of the bounds is infinite but not both.
+	 */
+	public boolean isHalfInfinite() {
+		return (isLowInfinite() && !isHighInfinite())
+				|| (!isLowInfinite() && isHighInfinite());
+	}
 }

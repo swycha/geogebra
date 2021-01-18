@@ -70,6 +70,38 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		}
 	}
 
+	@Test
+	public void cotInverseMiddle() {
+		GeoFunction function = add("-9*(cot(-3/x))");
+		IntervalTuple range = newRange(-0.45, -0.25, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		IntervalTupleList tanResult = tangent();
+		assertTrue(false);
+	}
+
+	@Test
+	public void squareRootOfTanInverse() {
+		GeoFunction function = add("1/sqrt(tan(x))");
+		IntervalTuple range = newRange(0, 5, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		for (IntervalTuple tuple: result) {
+			assertFalse(tuple.y().isHalfNegativeInfinity());
+		}
+
+	}
+
+	private IntervalTupleList tangent() {
+		GeoFunction function = add("tan(x)");
+		IntervalTuple range = newRange(-Math.PI, Math.PI, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		return sampler.result();
+	}
+
 	private IntervalTuple newRange(double xMin, double xMax, int yMin, int yMax) {
 		return new IntervalTuple(new Interval(xMin, xMax), new Interval(yMin, yMax));
 	}

@@ -1,7 +1,5 @@
 package org.geogebra.common.kernel.interval;
 
-import org.geogebra.common.util.debug.Log;
-
 public class IntervalAsymptotes {
 	private final IntervalTupleList samples;
 	private final IntervalTuple range;
@@ -21,10 +19,10 @@ public class IntervalAsymptotes {
 		for (int index = 1; index < samples.count() - 1; index++) {
 			Interval value = value(index);
 			updateExtremum(value);
-			if (value.isWhole()) {
-					fixGraph(leftValue(index), value, rightValue(index));
-				}
+			 if (value.isWhole()) {
+				fixGraph(leftValue(index), value, rightValue(index));
 			}
+		}
 
 		if (isVerticalAsymptoteFromRight()) {
 			value(samples.count() - 1).setEmpty();
@@ -73,10 +71,6 @@ public class IntervalAsymptotes {
 		}
 	}
 
-	private void debug(String message) {
-		Log.debug("[ASYM] " + message);
-	}
-
 	private void connect(Interval left, Interval value, Interval right) {
 		double diffLow = right.getLow() - left.getLow();
 		double diffHigh = right.getHigh() - left.getHigh();
@@ -94,8 +88,13 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
-		extendToInfinite(left);
-		extendToInfinite(right);
+		if (!right.isEmpty()) {
+			extendToInfinite(left);
+		}
+
+		if (!left.isEmpty()) {
+			extendToInfinite(right);
+		}
 		value.setEmpty();
 	}
 
@@ -112,7 +111,7 @@ public class IntervalAsymptotes {
 			return true;
 		}
 
-		if (right.isWhole()) {
+		if (left.isWhole()||right.isWhole()) {
 			return false;
 		}
 
