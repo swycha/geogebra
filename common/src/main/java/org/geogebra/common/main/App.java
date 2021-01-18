@@ -5229,7 +5229,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 		// nothing here
 	}
 
-
 	/**
 	 * Updates the objects that depend on the command dispatcher.
 	 *
@@ -5269,7 +5268,6 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 			showError(Errors.LoadFileFailed);
 		}
 	}
-
 
 	public String getThreadId() {
 		return "[main thread]";
