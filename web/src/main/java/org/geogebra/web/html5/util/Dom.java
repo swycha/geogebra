@@ -10,6 +10,9 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.UIObject;
 
+import elemental2.dom.DomGlobal;
+import elemental2.dom.HTMLImageElement;
+
 /**
  * Helper methods for finding DOM elements
  */
@@ -159,5 +162,9 @@ public final class Dom {
 			Log.warn(ex.getMessage());
 		}
 		return 0;
+	}
+
+	public static HTMLImageElement createImage() {
+		return (HTMLImageElement) DomGlobal.document.createElement("img");
 	}
 }

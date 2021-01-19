@@ -12,6 +12,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwtmockito.impl.StubGenerator;
+import com.himamis.retex.renderer.web.graphics.JLMContext2d;
+import com.himamis.retex.renderer.web.graphics.JLMContextHelper;
 
 import elemental2.dom.DomGlobal;
 import jsinterop.base.Js;
@@ -35,6 +37,8 @@ public class GgbMockitoTestRunner extends GwtMockitoTestRunner {
                 Double.class);
         StubGenerator.replaceMethodWithMock(FileDropHandlerW.class, "registerDropHandler",
                 Void.class);
+        StubGenerator.replaceMethodWithMock(JLMContextHelper.class, "as",
+                JLMContext2d.class);
     }
 
     @Override
