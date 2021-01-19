@@ -320,7 +320,7 @@ public class GeoSymbolic extends GeoElement implements GeoSymbolicI, VarString,
 		return getTwinGeo(!isTwinUpToDate);
 	}
 
-	public GeoElementND getTwinGeo(Boolean needUpdate) {
+	private GeoElementND getTwinGeo(Boolean needUpdate) {
 		if (!needUpdate) {
 			return twinGeo;
 		}
