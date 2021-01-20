@@ -2120,7 +2120,7 @@ public class StringTemplate implements ExpressionNodeConstants {
 	/**
 	 * @return space denoting multiplication
 	 */
-	protected String multiplicationSpace() {
+	public String multiplicationSpace() {
 		// wide space for multiplication space in LaTeX
 		return (stringType.equals(StringType.LATEX)) ? " \\; " : " ";
 	}

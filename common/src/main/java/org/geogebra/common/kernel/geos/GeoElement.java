@@ -4001,12 +4001,11 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	final public String getAlgebraDescriptionRHS() {
 		String algDesc;
 		if (!isDefined()) {
-			algDesc = getLoc().getMenu("Undefined");
+			algDesc = "?";
 		} else {
 			algDesc = toValueString(StringTemplate.algebraTemplate);
 		}
 		return algDesc;
-
 	}
 
 	/**
@@ -4051,7 +4050,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 			return toString(tpl);
 		}
 
-		return getAssignmentLHS(tpl) + tpl.getEqualsWithSpace() + "?";
+		return getAssignmentLHS(tpl) + getLabelDelimiterWithSpace(tpl) + "?";
 	}
 
 	/**
@@ -4085,14 +4084,6 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	 * @return  algebraic representation (e.g. coordinates, equation)
 	 */
 	public String getAlgebraDescriptionPublic(StringTemplate tpl) {
-		if (isDefined()) {
-			return getAlgebraDescriptionForDefined(tpl);
-		} else {
-			return getAlgebraDescriptionForUndefined(tpl);
-		}
-	}
-
-	private String getAlgebraDescriptionForDefined(StringTemplate tpl) {
 		if (!LabelManager.isShowableLabel(label)) {
 			return toValueString(tpl);
 		} else {
@@ -4100,19 +4091,11 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 		}
 	}
 
-	private String getAlgebraDescriptionForUndefined(StringTemplate tpl) {
-		return label + ' ' + tpl.getUndefined(getLoc());
-	}
-
 	/**
 	 * @return LaTeX description
 	 */
 	public String getAlgebraDescriptionLaTeX() {
-		if (isDefined()) {
-			return toString(StringTemplate.latexTemplate);
-		}
-
-		return label + "\\;" + getLoc().getMenu("Undefined");
+		return toString(StringTemplate.latexTemplate);
 	}
 
 	/**
@@ -4254,19 +4237,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 			return null;
 		}
 		// handle undefined
-		if (!geo.isDefinitionValid()) {
-			// we need to keep the string simple (no \mbox) so that
-			// isLatexNeeded may return true
-			if (includeLHS) {
-				sb.append(label);
-				sb.append("\\, ");
-			}
-			sb.append("\\text{");
-			sb.append(getLoc().getMenu("Undefined"));
-			sb.append("} ");
-
-			// handle non-GeoText prefixed with ":", e.g. "a: x = 3"
-		} else if (algebraDesc.contains(":") && !geo.isGeoText()) {
+		if (algebraDesc.contains(":") && !geo.isGeoText()) {
 			if (includeLHS) {
 				sb.append(getAssignmentLHS(tpl)).append(": \\,");
 			}
@@ -6853,7 +6824,7 @@ public abstract class GeoElement extends ConstructionElement implements GeoEleme
 	        return DescriptionMode.DEFINITION;
         }
 		String def0 = getDefinition(StringTemplate.defaultTemplate);
-		if ("".equals(def0)) {
+		if ("".equals(def0) || (!isDefined() && isIndependent())) {
 			return DescriptionMode.VALUE;
 		}
 		if (getPackedIndex() > 0) {
