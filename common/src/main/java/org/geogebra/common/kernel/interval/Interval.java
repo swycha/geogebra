@@ -101,7 +101,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 
 	/** Empty interval is represented by [∞, -∞]
 	 * as in the original lib. */
-	void setEmpty() {
+	public void setEmpty() {
 		set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
 	}
 

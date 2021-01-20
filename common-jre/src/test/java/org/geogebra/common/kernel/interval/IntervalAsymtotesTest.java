@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.geogebra.common.BaseUnitTest;
+import org.geogebra.common.euclidian.plot.interval.PlotterUtils;
 import org.geogebra.common.kernel.geos.GeoFunction;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,7 +17,8 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void tanX() {
 		GeoFunction tanX = add("tan(x)");
-		IntervalTuple range = newRange(-Math.PI/4, (3*Math.PI)/4, 8, 8);
+		double xMin = -Math.PI/4;
+		IntervalTuple range = PlotterUtils.newRange(xMin, (3 * Math.PI) / 4, 8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(tanX, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -26,7 +28,8 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void tanXLeftRangeBorder() {
 		GeoFunction tanX = add("tan(x)");
-		IntervalTuple range = newRange(-Math.PI/2, Math.PI/2, 8, 8);
+		double xMin = -Math.PI/2;
+		IntervalTuple range = PlotterUtils.newRange(xMin, Math.PI / 2, 8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(tanX, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -37,7 +40,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void cscLnXInverseTimesMinusTen() {
 		GeoFunction tanX = add("(-10)/csc(ln(x))");
-		IntervalTuple range = newRange(0, 2, -10, 10);
+		IntervalTuple range = PlotterUtils.newRange(0, 2, -10, 10);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(tanX, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -47,7 +50,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void secCscXInverseCutOff() {
 		GeoFunction function = add("1/sec(csc(x))");
-		IntervalTuple range = newRange(-2.9, 2.9, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(-2.9, 2.9, -8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -60,7 +63,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void secCscXInverseMiddle() {
 		GeoFunction function = add("1/sec(csc(x))");
-		IntervalTuple range = newRange(-0.2, 0.2, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(-0.2, 0.2, -8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -73,18 +76,17 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void cotInverseMiddle() {
 		GeoFunction function = add("-9*(cot(-3/x))");
-		IntervalTuple range = newRange(-0.45, -0.25, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(-0.45, -0.25, -8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
-		IntervalTupleList tanResult = tangent();
 		assertTrue(false);
 	}
 
 	@Test
 	public void squareRootOfTanInverse() {
 		GeoFunction function = add("1/sqrt(tan(x))");
-		IntervalTuple range = newRange(0, 5, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(0, 5, -8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
@@ -94,15 +96,19 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 
 	}
 
-	private IntervalTupleList tangent() {
-		GeoFunction function = add("tan(x)");
-		IntervalTuple range = newRange(-Math.PI, Math.PI, -8, 8);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 100);
+	@Test
+	public void testExtendValuesToInfinity() {
+		IntervalTupleList sec = functionValues("sec(x)", -2, 2, -7, 7);
+		IntervalTupleList lnln = functionValues("ln(ln(sec(x)))", -2, 2, -7, 7);
+		assertFalse(true);
+	}
+
+	private IntervalTupleList functionValues(String functionDescription,
+			double xmin, double xmax, double ymin, double ymax) {
+		GeoFunction function = add(functionDescription);
+		IntervalTuple range = PlotterUtils.newRange(-Math.PI, Math.PI, -8, 8);
+		IntervalFunctionSampler sampler = PlotterUtils.newSampler(function, range, 100);
 		return sampler.result();
 	}
 
-	private IntervalTuple newRange(double xMin, double xMax, int yMin, int yMax) {
-		return new IntervalTuple(new Interval(xMin, xMax), new Interval(yMin, yMax));
-	}
 }

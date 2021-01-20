@@ -38,17 +38,34 @@ public class IntervalPath {
 		if (pointCount == 1) {
 			return;
 		}
+
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple point = model.pointAt(i);
-			if (!point.y().isEmpty()) {
-				plotInterval(lastY, point);
-				moveTo = false;
-			} else {
-				moveTo = true;
+			boolean moveNeeded = point.y().isEmpty();
+			if (!moveNeeded) {
+				if (lastY.isEmpty()) {
+					moveToCurveBegin(point);
+				} else {
+					plotInterval(lastY, point);
+				}
 			}
+			moveTo = moveNeeded;
+
+			lastY.set(point.y());
 		}
 	}
 
+	private void moveToCurveBegin(IntervalTuple point) {
+		Interval x = view.toScreenIntervalX(point.x());
+		Interval y = view.toScreenIntervalY(point.y());
+		if (model.isAscending(point)) {
+			gp.moveTo(x.getLow(), y.getHigh());
+			gp.lineTo(x.getHigh(), y.getLow());
+		} else {
+			gp.moveTo(x.getLow(), y.getLow());
+			gp.lineTo(x.getHigh(), y.getHigh());
+		}
+	}
 
 	/**
 	 * Resets path
@@ -60,13 +77,11 @@ public class IntervalPath {
 	private void plotInterval(Interval lastY, IntervalTuple point) {
 		Interval x = view.toScreenIntervalX(point.x());
 		Interval y = view.toScreenIntervalY(point.y());
-		if (y.isGreaterThan(lastY)) {
+		if (y.isGreaterThan(view.toScreenIntervalY(lastY))) {
 			plotHigh(x, y);
 		} else {
 			plotLow(x, y);
 		}
-
-		lastY.set(y);
 	}
 
 	private void plotHigh(Interval x, Interval y) {

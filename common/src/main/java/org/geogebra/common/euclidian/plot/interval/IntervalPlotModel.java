@@ -204,4 +204,13 @@ public class IntervalPlotModel {
 	public IntervalTuple pointAt(int index) {
 		return points.get(index);
 	}
+
+	public boolean isAscending(IntervalTuple point) {
+		if (point.index() > points.count() - 1) {
+			return false;
+		}
+
+		IntervalTuple next = pointAt(point.index() + 1);
+		return next != null && next.y().isGreaterThan(point.y());
+	}
 }

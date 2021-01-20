@@ -20,7 +20,7 @@ public class IntervalAsymptotes {
 			Interval value = value(index);
 			updateExtremum(value);
 			 if (value.isWhole()) {
-				fixGraph(leftValue(index), value, rightValue(index));
+				fixGraph(index);
 			}
 		}
 
@@ -61,13 +61,15 @@ public class IntervalAsymptotes {
 		return left.getLow() < range.y().getLow() || left.getHigh() > range.y().getHigh();
 	}
 
-	private void fixGraph(Interval left, Interval value, Interval right) {
+	private void fixGraph(int index) {
+		Interval left = leftValue(index);
+		Interval right = rightValue(index);
 		if (isCloseTo(left, right)) {
-			connect(left, value, right);
+			connect(left, value(index), right);
 		} else if (isVerticalAsymptote(left, right)) {
-			fixVerticalAsymptote(left, value, right);
+			fixVerticalAsymptote(index);
 		} else if (right.isWhole()) {
-			value.set(extremum);
+			value(index).set(extremum);
 		}
 	}
 
@@ -87,13 +89,19 @@ public class IntervalAsymptotes {
 				&& (diffHigh < 2 && diffLow < 2);
 	}
 
-	private void fixVerticalAsymptote(Interval left, Interval value, Interval right) {
-		extendToInfinite(left);
-		extendToInfinite(right);
-		value.setEmpty();
+	private void fixVerticalAsymptote(int index) {
+		if (index+1 <samples.count() && !next(index+1).isEmpty()) {
+			extendToInfinite(leftValue(index));
+		}
+		extendToInfinite(rightValue(index));
+		value(index).setEmpty();
 	}
 
 	private void extendToInfinite(Interval value) {
+		if (value.isEmpty()) {
+			return;
+		}
+
 		if (value.getHigh() > 0) {
 			value.setHigh(Double.POSITIVE_INFINITY);
 		} else if (value.getLow() < 0){

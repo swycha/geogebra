@@ -12,13 +12,13 @@ public class PlotterUtils {
 		return new IntervalPlotModel(range, sampler, view);
 	}
 
-	static IntervalTuple createRange(double lowX, double highX, double lowY, double highY) {
+	public static IntervalTuple newRange(double lowX, double highX, double lowY, double highY) {
 		Interval x = new Interval(lowX, highX);
 		Interval y = new Interval(lowY, highY);
 		return new IntervalTuple(x, y);
 	}
 
-	static IntervalFunctionSampler newSampler(GeoFunction function, IntervalTuple range,
+	public static IntervalFunctionSampler newSampler(GeoFunction function, IntervalTuple range,
 			int numberOfSamples) {
 		return new IntervalFunctionSampler(function, range, numberOfSamples);
 	}

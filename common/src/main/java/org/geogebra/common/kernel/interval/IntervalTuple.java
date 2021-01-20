@@ -10,6 +10,7 @@ import org.geogebra.common.util.DoubleUtil;
 public class IntervalTuple {
 	private final Interval x;
 	private final Interval y;
+	private int index = -1;
 
 	/**
 	 *
@@ -80,14 +81,6 @@ public class IntervalTuple {
 
 	/**
 	 *
-	 * @return true if value (y) interval is increasing
-	 */
-	public boolean isValueIncreasing() {
-		return y.getLow() < y.getHigh();
-	}
-
-	/**
-	 *
 	 * @param previous tuple
 	 * @return if this tuple is right after the previous one (no gap)
 	 */
@@ -106,5 +99,13 @@ public class IntervalTuple {
 	 */
 	public boolean isEmpty() {
 		return x.isEmpty() && y.isEmpty();
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int index() {
+		return index;
 	}
 }
