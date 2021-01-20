@@ -63,8 +63,13 @@ public class GeoPieChart extends GeoElement {
 	}
 
 	@Override
+	public String toString(StringTemplate tpl) {
+		return getLabelSimple() + tpl.getEqualsWithSpace() + getDefinition(tpl);
+	}
+
+	@Override
 	public String toValueString(StringTemplate tpl) {
-		return "";
+		return getDefinition(tpl);
 	}
 
 	@Override
@@ -125,6 +130,12 @@ public class GeoPieChart extends GeoElement {
 	@Override
 	public boolean isFixable() {
 		return false; // consistent with barcharts
+	}
+
+	@Override
+	protected void getXMLtags(final StringBuilder sb) {
+		super.getXMLtags(sb);
+		getLineStyleXML(sb);
 	}
 
 }
