@@ -3523,19 +3523,6 @@ public class StringTemplate implements ExpressionNodeConstants {
 	}
 
 	/**
-	 * Get the undefined string equivalent
-	 *
-	 * @param localization localization if needed
-	 * @return undefined string
-	 */
-	public String getUndefined(Localization localization) {
-		if (localizeCmds) {
-			return localization.getMenu("Undefined");
-		}
-		return "Undefined";
-	}
-
-	/**
 	 * Appends brackets to log argument if necessary
 	 *
 	 * @param sb
