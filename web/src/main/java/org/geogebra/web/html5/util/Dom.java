@@ -150,6 +150,17 @@ public final class Dom {
 	}-*/;
 
 	/**
+	 * Element.addEventListener extracted to static method for safe cast in tests.
+	 * @param element element
+	 * @param name event name
+	 * @param listener listener
+	 */
+	public static void addEventListener(Element element, String name, EventListener listener) {
+		elemental2.dom.Element el = Js.uncheckedCast(element);
+		el.addEventListener(name, listener);
+	}
+
+	/**
 	 * @param element element
 	 * @param width CSS property name
 	 * @return value, if it was a number in px; otherwise 0
@@ -162,16 +173,5 @@ public final class Dom {
 			Log.warn(ex.getMessage());
 		}
 		return 0;
-	}
-
-	/**
-	 * Element.addEventListener extracted to static method for safe cast in tests.
-	 * @param element element
-	 * @param name event name
-	 * @param listener listener
-	 */
-	public static void addEventListener(Element element, String name, EventListener listener) {
-		elemental2.dom.Element el = Js.uncheckedCast(element);
-		el.addEventListener(name, listener);
 	}
 }
