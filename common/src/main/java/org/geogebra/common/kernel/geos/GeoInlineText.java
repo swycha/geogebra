@@ -3,6 +3,7 @@ package org.geogebra.common.kernel.geos;
 import org.geogebra.common.awt.GColor;
 import org.geogebra.common.awt.GFont;
 import org.geogebra.common.awt.GPoint2D;
+import org.geogebra.common.euclidian.draw.DrawInline;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.HasTextFormat;
 import org.geogebra.common.kernel.Construction;
@@ -168,13 +169,6 @@ public class GeoInlineText extends GeoInline implements TextStyle, HasTextFormat
 		}
 
 		return GFont.PLAIN;
-	}
-
-	@Override
-	public HasTextFormat getFormatter() {
-		DrawInlineText drawable = (DrawInlineText) kernel.getApplication()
-				.getActiveEuclidianView().getDrawableFor(this);
-		return drawable == null ? null : drawable.getTextController();
 	}
 
 	/**

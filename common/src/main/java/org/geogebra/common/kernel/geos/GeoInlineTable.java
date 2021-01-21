@@ -75,7 +75,7 @@ public class GeoInlineTable extends GeoInline implements TextStyle, HasTextForma
 
 	@Override
 	public void setBackgroundColor(GColor backgroundColor) {
-		getFormatter().setBackgroundColor(backgroundColor);
+		((InlineTableController) getFormatter()).setBackgroundColor(backgroundColor);
 	}
 
 	@Override
@@ -86,13 +86,6 @@ public class GeoInlineTable extends GeoInline implements TextStyle, HasTextForma
 	@Override
 	public int getFontStyle() {
 		return GeoInlineText.getFontStyle(getFormatter());
-	}
-
-	@Override
-	public InlineTableController getFormatter() {
-		DrawInlineTable drawable = (DrawInlineTable) kernel.getApplication()
-				.getActiveEuclidianView().getDrawableFor(this);
-		return drawable == null ? null : drawable.getTableController();
 	}
 
 	@Override

@@ -34,6 +34,7 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.euclidian.inline.InlineTableController;
 import org.geogebra.common.euclidian.inline.InlineTextController;
+import org.geogebra.common.euclidian.inline.MindMapController;
 import org.geogebra.common.euclidian.smallscreen.AdjustScreen;
 import org.geogebra.common.euclidian.smallscreen.AdjustViews;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
@@ -84,6 +85,7 @@ import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
 import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoList;
+import org.geogebra.common.kernel.geos.GeoMindMap;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPriorityComparator;
 import org.geogebra.common.kernel.geos.NotesPriorityComparator;
@@ -5199,6 +5201,11 @@ public abstract class App implements UpdateSelection, AppInterface, EuclidianHos
 	 */
 	public InlineTextController createInlineTextController(EuclidianView view,
 		   GeoInlineText geo) {
+		return null;
+	}
+
+	public MindMapController createMindMapController(EuclidianView view,
+			GeoMindMap geo) {
 		return null;
 	}
 

@@ -13,6 +13,7 @@ import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.kernel.geos.GeoFormula;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
+import org.geogebra.common.kernel.geos.GeoMindMap;
 import org.geogebra.common.kernel.geos.GeoSymbolic;
 import org.geogebra.common.kernel.geos.GeoVideo;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
@@ -52,7 +53,8 @@ public class DrawablesTest {
 				"Surface[(u,v,u+v),u,0,1,v,0,1]", "x^3=z^3",
 				"Cone[(0,0,0),(0,0,1),1]", "Side[Cone[(0,0,0),(0,0,1),1]]",
 				"IntersectRegion(x+y+0z=0,Cone[(0,0,0),(0,0,1),1])", "toolPic",
-				"audio", "video", "embed", "symbolic", "inlinetext", "formula", "table" };
+				"audio", "video", "embed", "symbolic", "inlinetext",
+				"formula", "table", "mindMap" };
 		AlgebraProcessor ap = app.getKernel().getAlgebraProcessor();
 		ap.processAlgebraCommand("toolPic=ToolImage[2]", false);
 		Construction construction = app.getKernel().getConstruction();
@@ -71,6 +73,8 @@ public class DrawablesTest {
 		text.setLabel("inlinetext");
 		GeoInlineTable table = new GeoInlineTable(construction, new GPoint2D());
 		table.setLabel("table");
+		GeoMindMap mindMap = new GeoMindMap(construction, new GPoint2D());
+		mindMap.setLabel("mindMap");
 		TreeSet<GeoClass> types = new TreeSet<>();
 		for (int i = 0; i < def.length; i++) {
 			GeoElementND geo = ap.processAlgebraCommand(def[i], false)[0];

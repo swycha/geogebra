@@ -20,6 +20,9 @@ public class Carota {
 	@JsProperty
 	public native CarotaTableFactory getTable();
 
+	@JsProperty(name = "mindmap")
+	public native CarotaMindMapFactory getMindMap();
+
 	@JsProperty
 	public native CarotaText getText();
 

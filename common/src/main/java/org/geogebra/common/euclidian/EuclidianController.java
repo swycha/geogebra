@@ -106,6 +106,7 @@ import org.geogebra.common.kernel.geos.GeoInputBox;
 import org.geogebra.common.kernel.geos.GeoLine;
 import org.geogebra.common.kernel.geos.GeoList;
 import org.geogebra.common.kernel.geos.GeoLocusStroke;
+import org.geogebra.common.kernel.geos.GeoMindMap;
 import org.geogebra.common.kernel.geos.GeoNumberValue;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.kernel.geos.GeoPoint;
@@ -165,6 +166,7 @@ import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.common.util.GPredicate;
 import org.geogebra.common.util.MyMath;
 import org.geogebra.common.util.StringUtil;
+import org.geogebra.common.util.debug.Log;
 
 import com.google.j2objc.annotations.Weak;
 
@@ -5256,6 +5258,15 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			});
 			break;
 
+		case EuclidianConstants.MODE_MIND_MAP:
+			changedKernel = createInlineObject(selectionPreview, new GeoInlineFactory() {
+				@Override
+				public GeoInline newInlineObject(Construction cons, GPoint2D location) {
+					return new GeoMindMap(cons, location);
+				}
+			});
+			break;
+
 		case EuclidianConstants.MODE_EQUATION:
 			changedKernel = createInlineObject(selectionPreview, new GeoInlineFactory() {
 				@Override
@@ -6312,7 +6323,6 @@ public abstract class EuclidianController implements SpecialPointsListener {
 			GPoint2D initPoint = new GPoint2D(xRW, yRW);
 			inlineObject = factory.newInlineObject(kernel.getConstruction(), initPoint);
 		}
-
 		inlineObject.setLabel(null);
 		selectAndShowSelectionUI(inlineObject);
 		final DrawableND drawable = view.getDrawableFor(inlineObject);

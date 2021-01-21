@@ -9,6 +9,7 @@ import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianStyleBarStatic;
 import org.geogebra.common.euclidian.EuclidianView;
 import org.geogebra.common.euclidian.Hits;
+import org.geogebra.common.euclidian.draw.DrawInline;
 import org.geogebra.common.euclidian.draw.DrawInlineTable;
 import org.geogebra.common.euclidian.draw.DrawInlineText;
 import org.geogebra.common.euclidian.draw.HasTextFormat;
@@ -756,11 +757,8 @@ public abstract class ContextMenuGeoElement {
 		if (selection.getSelectedGeos().size() == 1) {
 			DrawableND drawable = app.getActiveEuclidianView()
 					.getDrawableFor(selection.getSelectedGeos().get(0));
-			if (drawable instanceof DrawInlineText) {
-				return ((DrawInlineText) drawable).getTextController();
-			}
-			if (drawable instanceof DrawInlineTable) {
-				return ((DrawInlineTable) drawable).getTableController();
+			if (drawable instanceof DrawInline) {
+				return ((DrawInline) drawable).getController();
 			}
 		}
 		return null;

@@ -146,7 +146,8 @@ public class DrawInlineTable extends Drawable implements DrawInline {
 		}
 	}
 
-	public InlineTableController getTableController() {
+	@Override
+	public InlineTableController getController() {
 		return tableController;
 	}
 
