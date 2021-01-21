@@ -77,11 +77,7 @@ public class OptionsGlobalW implements OptionPanelW, SetLabels {
 			optionsMenu = new OptionsMenu(app.getLocalization());
 			createGUI();
 			updateGUI();
-			if (app.isUnbundledOrWhiteboard()) {
-				setStyleName("propMaterialTab");
-			} else {
-				setStyleName("propertiesTab");
-			}
+			setStyleName("propertiesTab");
 			add(optionsPanel);
 		}
 

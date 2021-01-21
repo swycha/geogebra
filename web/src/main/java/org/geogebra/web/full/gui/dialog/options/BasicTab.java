@@ -85,7 +85,7 @@ public class BasicTab extends OptionsEuclidianW.EuclidianTab {
 	 *            euclidian options panel
 	 */
 	public BasicTab(OptionsEuclidianW optionsEuclidianW) {
-		super(optionsEuclidianW.app);
+		super();
 		this.optionsEuclidianW = optionsEuclidianW;
 		this.model = optionsEuclidianW.model;
 		addDimensionPanel();

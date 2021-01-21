@@ -308,243 +308,243 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 			.listBoxPanel {
 				margin-bottom: 0px;
 			}
+		}
+	}
 
-			.propMaterialTab {
-				overflow: auto;
-				padding-right: 8px;
-				padding-left: 16px;
-				box-sizing: border-box;
+	.propertiesTab {
+		overflow: auto;
+		padding-right: 8px;
+		padding-left: 16px;
+		box-sizing: border-box;
 
-				.panelIndent {
-					padding-left: 25px;
+		.panelIndent {
+			padding-left: 25px;
+		}
+
+		.coloredLabel {
+			cursor: default;
+			font-size: 80%;
+			color: $teal-default;
+		}
+
+		input[type="range"] {
+			cursor: pointer;
+		}
+
+		.gwt-CheckBox, .checkBoxPanel {
+			input[type="checkbox"] {
+				cursor: pointer;
+			}
+
+			label {
+				cursor: default;
+				font-size: 90%;
+				margin-left: 8px;
+				margin-right: 16px;
+			}
+		}
+
+		.MyCanvasButton {
+			border-radius: 2px;
+			transition: border 0.3s ease-out;
+
+			&:hover {
+				border: 1px solid $teal-default;
+			}
+		}
+
+		.checkBoxPanel {
+			margin-bottom: 8px;
+		}
+
+		.checkBoxPanel-disabled {
+			opacity: 0.42;
+			color: initial;
+
+			input[type="checkbox"] {
+				cursor: default;
+			}
+		}
+
+		.gwt-ListBox {
+			cursor: pointer;
+			border-radius: 0px;
+			box-shadow: none;
+			border: none;
+			border-bottom: 1px solid $tool-border;
+			padding: 8px;
+			font-size: 90%;
+			transition: border-bottom 0.3s ease-out;
+
+			&:hover {
+				border-bottom: 1px solid $teal-default !important;
+			}
+		}
+
+		.panelRowIndent, .optionsPanel, .sliderIntervalPanel,
+		.panelRow, .listBoxPanel, .sliderWidthPanel,
+		.optionsInput, .optionsPanelCell {
+			padding-left: 0px;
+
+			.gwt-ToggleButton {
+				cursor: pointer;
+				padding: 4px;
+				margin: 0px;
+
+				img {
+					opacity: 0.54;
 				}
 
-				.coloredLabel {
-					cursor: default;
-					font-size: 80%;
-					color: $teal-default;
-				}
-
-				input[type="range"] {
-					cursor: pointer;
-				}
-
-				.gwt-CheckBox, .checkBoxPanel {
-					input[type="checkbox"] {
-						cursor: pointer;
+				&:hover {
+					img {
+						opacity: 1;
 					}
-
-					label {
-						cursor: default;
-						font-size: 90%;
-						margin-left: 8px;
-						margin-right: 16px;
-					}
 				}
+			}
 
-				.MyCanvasButton {
-					border-radius: 2px;
-					transition: border 0.3s ease-out;
+			.advanced-TextButtonPanel {
+				.choice-button {
+					top: 2px !important;
+
+					img {
+						opacity: 0.54;
+					}
 
 					&:hover {
-						border: 1px solid $teal-default;
+						img {
+							opacity: 1;
+						}
 					}
-				}
 
-				.checkBoxPanel {
-					margin-bottom: 8px;
-				}
-
-				.checkBoxPanel-disabled {
-					opacity: 0.42;
-					color: initial;
-
-					input[type="checkbox"] {
+					&.choice-button-up-disabled {
 						cursor: default;
-					}
-				}
-
-				.gwt-ListBox {
-					cursor: pointer;
-					border-radius: 0px;
-					box-shadow: none;
-					border: none;
-					border-bottom: 1px solid $tool-border;
-					padding: 8px;
-					font-size: 90%;
-					transition: border-bottom 0.3s ease-out;
-
-					&:hover {
-						border-bottom: 1px solid $teal-default !important;
-					}
-				}
-
-				.panelRowIndent, .optionsPanel, .sliderIntervalPanel,
-				.panelRow, .listBoxPanel, .sliderWidthPanel,
-				.optionsInput, .optionsPanelCell {
-					padding-left: 0px;
-
-					.gwt-ToggleButton {
-						cursor: pointer;
-						padding: 4px;
-						margin: 0px;
 
 						img {
-							opacity: 0.54;
-						}
-
-						&:hover {
-							img {
-								opacity: 1;
-							}
+							opacity: 0.3;
 						}
 					}
+				}
+			}
 
-					.advanced-TextButtonPanel {
-						.choice-button {
-							top: 2px !important;
+			input[type="text"] {
+				width: 100%;
+				font-size: 90%;
+				border-radius: 0px;
+				border: none;
+				box-shadow: none;
+				border-bottom: 1px solid $tool-border;
+				padding: 0px;
+				padding-left: 8px;
+				margin-bottom: 2px;
+				transition: border-bottom 0.3s ease-out;
 
-							img {
-								opacity: 0.54;
-							}
+				&:hover, :focus {
+					border-bottom: 1px solid $teal-default;
+				}
 
-							&:hover {
-								img {
-									opacity: 1;
-								}
-							}
+				&:disabled {
+					background-color: $transparent;
+					opacity: 0.42;
 
-							&.choice-button-up-disabled {
-								cursor: default;
-
-								img {
-									opacity: 0.3;
-								}
-							}
-						}
-					}
-
-					input[type="text"] {
-						width: 100%;
-						font-size: 90%;
-						border-radius: 0px;
-						border: none;
-						box-shadow: none;
+					&:hover {
 						border-bottom: 1px solid $tool-border;
-						padding: 0px;
-						padding-left: 8px;
-						margin-bottom: 2px;
-						transition: border-bottom 0.3s ease-out;
-
-						&:hover, :focus {
-							border-bottom: 1px solid $teal-default;
-						}
-
-						&:disabled {
-							background-color: $transparent;
-							opacity: 0.42;
-
-							&:hover {
-								border-bottom: 1px solid $tool-border;
-							}
-						}
 					}
 				}
+			}
+		}
 
-				.AutoCompleteTextFieldW {
-					.SymbolToggleButton {
-						top: 0%;
-						right: 20px;
+		.AutoCompleteTextFieldW {
+			.SymbolToggleButton {
+				top: 0%;
+				right: 20px;
 
-						&.shown:hover {
-							color: $teal-default;
-						}
-					}
-
-					.gwt-SuggestBox.TextField {
-						padding: 4px !important;
-					}
+				&.shown:hover {
+					color: $teal-default;
 				}
+			}
 
-				.optionsPanelCell {
-					.gwt-Label {
-						font-size: 90%;
-						min-width: 64px;
-					}
+			.gwt-SuggestBox.TextField {
+				padding: 4px !important;
+			}
+		}
 
-					.AutoCompleteTextFieldW {
-						.SymbolToggleButton {
-							right: -8px;
-						}
-					}
+		.optionsPanelCell {
+			.gwt-Label {
+				font-size: 90%;
+				min-width: 64px;
+			}
+
+			.AutoCompleteTextFieldW {
+				.SymbolToggleButton {
+					right: -8px;
 				}
+			}
+		}
 
-				.optionsInput, .sliderIntervalPanel {
-					margin-bottom: 10px;
+		.optionsInput, .sliderIntervalPanel {
+			margin-bottom: 10px;
 
-					.gwt-Label {
-						cursor: default;
-						font-size: 80%;
-						color: $teal-default;
-					}
+			.gwt-Label {
+				cursor: default;
+				font-size: 80%;
+				color: $teal-default;
+			}
 
-					.AutoCompleteTextFieldW {
-						.SymbolToggleButton {
-							position: relative;
-						}
-					}
-
-					input[type="text"].gwt-SuggestBox {
-						width: 80%;
-					}
+			.AutoCompleteTextFieldW {
+				.SymbolToggleButton {
+					position: relative;
 				}
+			}
 
-				.sliderWidthPanel {
-					.AutoCompleteTextFieldW {
-						display: flex;
+			input[type="text"].gwt-SuggestBox {
+				width: 80%;
+			}
+		}
 
-						.unitLabel {
-							font-size: 90%;
-						}
-					}
+		.sliderWidthPanel {
+			.AutoCompleteTextFieldW {
+				display: flex;
+
+				.unitLabel {
+					font-size: 90%;
 				}
+			}
+		}
 
-				.optionsPanel, .optionsPanelIndent {
-					display: flex;
+		.optionsPanel, .optionsPanelIndent {
+			display: flex;
 
-					.optionsSlider {
-						display: flex;
-					}
+			.optionsSlider {
+				display: flex;
+			}
 
-					.gwt-Label {
-						vertical-align: middle;
-						line-height: 250%;
-					}
+			.gwt-Label {
+				vertical-align: middle;
+				line-height: 250%;
+			}
 
-					.gwt-CheckBox {
-						margin-top: 11px !important;
-					}
+			.gwt-CheckBox {
+				margin-top: 11px !important;
+			}
 
-					input[type="range"] {
-						padding-top: 0px !important;
-					}
+			input[type="range"] {
+				padding-top: 0px !important;
+			}
 
-					.optionsSlider {
-						.gwt-Label {
-							margin-bottom: 3px;
-						}
-					}
+			.optionsSlider {
+				.gwt-Label {
+					margin-bottom: 3px;
 				}
+			}
+		}
 
-				.listBoxPanel {
-					.gwt-Label {
-						min-width: 64px;
-					}
+		.listBoxPanel {
+			.gwt-Label {
+				min-width: 64px;
+			}
 
-					.imageCorner {
-						font-size: 90%;
-					}
-				}
+			.imageCorner {
+				font-size: 90%;
 			}
 		}
 	}
