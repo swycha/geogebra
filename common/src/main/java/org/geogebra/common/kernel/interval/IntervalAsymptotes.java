@@ -28,7 +28,11 @@ public class IntervalAsymptotes {
 		if (isVerticalAsymptoteFromRight()) {
 			extendToInfinite(value(lastIndex -2));
 			value(lastIndex - 1).setEmpty();
+		} else if (value(lastIndex).isWhole()) {
+			value(lastIndex).setEmpty();
 		}
+
+
 
 	}
 

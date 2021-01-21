@@ -86,22 +86,12 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void sqrtMinusXInverse() {
 		GeoFunction function = add("sqrt(1/-x)");
-		IntervalTuple range = PlotterUtils.newRange(-10, 0, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(-22.98, 22.98, -15.405, 15.405);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
-		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(99).y()));
-		assertTrue(result.get(100).y().isEmpty());
-	}
-
-	@Test
-	public void sqrtMinusXInverseWildX() {
-		GeoFunction function = add("sqrt(1/-x)");
-		IntervalTuple range = PlotterUtils.newRange(-22.98, 22.98, -15.405, 15.405);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 1132);
-		IntervalTupleList result = sampler.result();
-		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(99).y()));assertTrue(result.get(100).y().isEmpty());
+		assertTrue(new Interval(1.043025658, Double.POSITIVE_INFINITY).almostEqual(result.get(48).y()));
+		assertTrue(result.get(49).y().isEmpty());
 	}
 
 	@Test
