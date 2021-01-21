@@ -29,6 +29,7 @@ import org.geogebra.common.scientific.LabelController;
 import org.geogebra.common.util.DoubleUtil;
 import org.geogebra.test.TestErrorHandler;
 import org.geogebra.test.TestStringUtil;
+import org.geogebra.test.UndoRedoTester;
 import org.geogebra.test.commands.AlgebraTestHelper;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
@@ -1388,5 +1389,19 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 				"{(2 / (3 * k), (-1) / (3 * k))}");
 		t("Assume(k>0, InflectionPoint(0.25 k x^3 - 0.5x^2 + k))",
 				"{(2 / (3 * k), (27 * k^(3) - 4) / (27 * k^(2)))}");
+	}
+
+	@Test
+	public void testVariableAfterUndo() {
+		UndoRedoTester undoRedo = new UndoRedoTester(app);
+		undoRedo.setupUndoRedo();
+
+		GeoSymbolic a = add("a = 3");
+		app.storeUndoInfo();
+		assertThat(a.getDefinitionForInputBar(), is("a = 3"));
+		add("b = 3");
+		app.storeUndoInfo();
+		a = undoRedo.getAfterUndo("a");
+		assertThat(a.getDefinitionForInputBar(), is("a = 3"));
 	}
 }
