@@ -146,4 +146,9 @@ public class IntervalTupleList implements Iterable<IntervalTuple> {
 		list.clear();
 	}
 
+	public void trim() {
+		if (list.get(list.size() - 1).y().isEmpty()) {
+			list.remove(list.size() - 1);
+		}
+	}
 }

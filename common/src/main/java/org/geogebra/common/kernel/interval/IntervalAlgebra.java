@@ -134,6 +134,7 @@ class IntervalAlgebra {
 			interval.setEmpty();
 			return interval;
 		}
+
 		if (interval.isWhole()) {
 			return IntervalConstants.whole();
 		}

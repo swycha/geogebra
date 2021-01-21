@@ -78,6 +78,8 @@ public class IntervalFunctionSampler {
 			addEmpty = !y.isEmpty();
 		}
 
+//		samples.trim();
+
 		IntervalAsymptotes asymtotes = new IntervalAsymptotes(samples, range);
 		asymtotes.process();
 		return samples;

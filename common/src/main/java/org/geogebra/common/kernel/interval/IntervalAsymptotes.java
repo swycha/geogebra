@@ -15,8 +15,9 @@ public class IntervalAsymptotes {
 		if (isVerticalAsymptoteFromLeft()) {
 			value(0).setEmpty();
 		}
+		int lastIndex = samples.count() - 1;
 
-		for (int index = 1; index < samples.count() - 1; index++) {
+		for (int index = 1; index < lastIndex; index++) {
 			Interval value = value(index);
 			updateExtremum(value);
 			 if (value.isWhole()) {
@@ -25,8 +26,10 @@ public class IntervalAsymptotes {
 		}
 
 		if (isVerticalAsymptoteFromRight()) {
-			value(samples.count() - 1).setEmpty();
+			extendToInfinite(value(lastIndex -2));
+			value(lastIndex - 1).setEmpty();
 		}
+
 	}
 
 	private void updateExtremum(Interval value) {
@@ -53,17 +56,16 @@ public class IntervalAsymptotes {
 	}
 
 	private boolean isVerticalAsymptoteFromRight() {
-		Interval value = value(samples.count() - 1);
-		if (!value.isWhole() || samples.count() < 2) {
-			return false;
-		}
-		Interval left = value(samples.count() - 2);
-		return left.getLow() < range.y().getLow() || left.getHigh() > range.y().getHigh();
+		int lastIndex = samples.count() - 1;
+		return value(lastIndex).isEmpty() && value(lastIndex -1).isWhole();
 	}
 
 	private void fixGraph(int index) {
 		Interval left = leftValue(index);
 		Interval right = rightValue(index);
+		if (right.isEmpty()) {
+			return;
+		}
 		if (isCloseTo(left, right)) {
 			connect(left, value(index), right);
 		} else if (isVerticalAsymptote(left, right)) {
@@ -90,9 +92,10 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixVerticalAsymptote(int index) {
-		if (index+1 <samples.count() && !next(index+1).isEmpty()) {
+		if (index <samples.count() - 2 && !next(index+1).isEmpty()) {
 			extendToInfinite(leftValue(index));
 		}
+
 		extendToInfinite(rightValue(index));
 		value(index).setEmpty();
 	}
@@ -102,6 +105,14 @@ public class IntervalAsymptotes {
 			return;
 		}
 
+		if (value.getHigh() > 0) {
+			value.setHigh(Double.POSITIVE_INFINITY);
+		} else if (value.getLow() < 0){
+			value.setLow(Double.NEGATIVE_INFINITY);
+		}
+	}
+
+	private void doExtendToInfinite(Interval value) {
 		if (value.getHigh() > 0) {
 			value.setHigh(Double.POSITIVE_INFINITY);
 		} else if (value.getLow() < 0){

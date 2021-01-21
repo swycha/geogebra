@@ -74,6 +74,47 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void sqrtXInverse() {
+		GeoFunction function = add("sqrt(1/x)");
+		IntervalTuple range = PlotterUtils.newRange(0, 10, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(0).y()));
+	}
+
+	@Test
+	public void sqrtMinusXInverse() {
+		GeoFunction function = add("sqrt(1/-x)");
+		IntervalTuple range = PlotterUtils.newRange(-10, 0, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(99).y()));
+		assertTrue(result.get(100).y().isEmpty());
+	}
+
+	@Test
+	public void sqrtMinusXInverseWildX() {
+		GeoFunction function = add("sqrt(1/-x)");
+		IntervalTuple range = PlotterUtils.newRange(-22.98, 22.98, -15.405, 15.405);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 1132);
+		IntervalTupleList result = sampler.result();
+		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(99).y()));assertTrue(result.get(100).y().isEmpty());
+	}
+
+	@Test
+	public void minusSqrtXInverse() {
+		GeoFunction function = add("-sqrt(1/x)");
+		IntervalTuple range = PlotterUtils.newRange(0, 10, -8, 8);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(function, range, 100);
+		IntervalTupleList result = sampler.result();
+		assertTrue(new Interval(Double.NEGATIVE_INFINITY, -3.1622776016).almostEqual(result.get(0).y()));
+	}
+
+	@Test
 	public void cotInverseMiddle() {
 		GeoFunction function = add("-9*(cot(-3/x))");
 		IntervalTuple range = PlotterUtils.newRange(-0.45, -0.25, -8, 8);
