@@ -17,225 +17,6 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 		height: 100%;
 		width: 500px;
 		overflow-y: auto;
-
-		select:focus, select:hover, textarea:focus:not([readonly]) {
-			border: 1px $teal-default solid;
-		}
-
-		.closeButton {
-			opacity: 0.54;
-
-			&:hover {
-				opacity: 1;
-			}
-		}
-
-		.settingsBtn, .textButton, .openFileBtn,
-		.okBtn, .cancelBtn {
-			height: 36px !important;
-			width: 136px !important;
-			padding: 0px 16px;
-			text-align: center;
-			text-transform: uppercase;
-			border: none;
-			margin-top: 16px;
-			margin-right: 16px;
-			border-radius: 2px;
-			line-height: 38px;
-			cursor: pointer;
-			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-			transition: box-shadow 0.3s ease-out;
-
-			.gwt-Label {
-				text-align: center;
-				height: 36px;
-			}
-
-			&:hover {
-				box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
-				border: none !important;
-			}
-		}
-
-		.textButton, .okBtn, .cancelBtn {
-			width: 100% !important;
-			min-width: 64px;
-			max-width: 128px;
-			color: $black;
-			margin-top: 0px;
-			margin-left: 16px;
-
-			&:hover {
-				background-color: $white;
-				text-decoration: none;
-			}
-		}
-
-		.openFileBtn {
-			width: 150px !important;
-			color: $black;
-			margin-top: 0px;
-			margin-left: 16px;
-
-			&:hover {
-				text-decoration: none;
-				background-color: $white;
-			}
-		}
-
-		.settingsBtn {
-			width: 100% !important;
-			max-width: 256px;
-			min-width: 136px;
-		}
-
-		.clearImgBtn {
-			padding: 4px;
-
-			img {
-				opacity: 0.54;
-			}
-
-			img:hover {
-				opacity: 1;
-			}
-		}
-
-		.btnBold, .btnItalic, .btnUnderline, .btnLatex {
-			border-radius: 2px;
-			margin-left: 0px;
-			margin-right: 8px;
-
-			img {
-				opacity: 0.7;
-			}
-
-			&:hover {
-				border: $teal-default solid 1px;
-			}
-
-			&.gwt-ToggleButton-down {
-				border: $teal-default solid 1px;
-			}
-		}
-
-		.CustomColorButton:hover {
-			border: 2px solid $teal-default !important;
-			background-color: $white !important;
-		}
-
-		.gwt-ToggleButton {
-			cursor: pointer;
-			padding: 4px;
-			margin: 0px;
-
-			img {
-				opacity: 0.54;
-			}
-
-			&:hover {
-				img {
-					opacity: 1;
-				}
-			}
-		}
-
-		.BackgroundColorPanel {
-			.gwt-RadioButton {
-				input[type="radio"] {
-					margin-right: 10px;
-				}
-
-				label {
-					font-size: 90%;
-				}
-			}
-
-			.ClearBackgroundButton {
-				cursor: pointer;
-				padding: 4px;
-				margin: 0px;
-
-				img {
-					opacity: 0.54;
-				}
-
-				&:hover {
-					img {
-						opacity: 1;
-					}
-				}
-			}
-		}
-
-		.panelTitle:first-child {
-			margin-top: 8px !important;
-		}
-
-		iframe.objectPropertiesTextEditor {
-			border: #dcdcdc solid 1px;
-			background: $white;
-			padding: 4px 5px;
-			color: #666;
-			border-radius: 2px;
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			font-size: 90%;
-			box-shadow: none;
-		}
-
-		.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab, .gwt-TabBar .gwt-TabBarItem {
-			margin-right: 4px;
-			padding: 8px;
-			height: 36px;
-			cursor: pointer;
-			font-size: 100%;
-			cursor: hand;
-			font-weight: normal;
-			text-align: center;
-			background: $white;
-			border-radius: 3px 3px 0 0;
-			border: 1px solid $tool-border;
-			box-sizing: border-box;
-
-			&:hover {
-				color: $teal-light;
-			}
-		}
-
-		.gwt-DisclosurePanel
-		.gwt-TabLayoutPanelTab
-		.com-google-gwt-resources-client-CommonResources-InlineBlockStyle-inlineBlock {
-			height: 28px;
-		}
-
-		.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected,
-		.gwt-TabBar .gwt-TabBarItem-selected {
-			color: $teal-default;
-		}
-
-		.propertiesStyleBar {
-			overflow: visible;
-
-			.selected,
-			.gwt-MenuItem.selected:hover {
-				background-image: -webkit-linear-gradient(right, #dcdcdc, #f8f8f8);
-			}
-
-			.menuProperties {
-				position: relative;
-				width: 40px;
-				right: 6px;
-
-				.gwt-MenuItem {
-					padding: 0px;
-
-					img {
-						padding: 8px;
-					}
-				}
-			}
-		}
 	}
 
 	.propertiesTabPanel {
@@ -268,13 +49,6 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 		.numberInput {
 			border: none;
 			box-shadow: none;
-		}
-
-		.gwt-TabBar .gwt-TabBarItem-selected {
-			cursor: default;
-			background: white;
-			color: $teal-default;
-			border-bottom: 1px solid white;
 		}
 
 		.panelRowIndent,
@@ -542,6 +316,202 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 
 			.imageCorner {
 				font-size: 90%;
+			}
+		}
+
+
+		select:focus, select:hover, textarea:focus:not([readonly]) {
+			border: 1px $teal-default solid;
+		}
+
+		.closeButton {
+			opacity: 0.54;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+
+		.settingsBtn, .textButton, .openFileBtn,
+		.okBtn, .cancelBtn {
+			height: 36px !important;
+			width: 136px !important;
+			padding: 0px 16px;
+			text-align: center;
+			text-transform: uppercase;
+			border: none;
+			margin-top: 16px;
+			margin-right: 16px;
+			border-radius: 2px;
+			line-height: 38px;
+			cursor: pointer;
+			box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+			transition: box-shadow 0.3s ease-out;
+
+			.gwt-Label {
+				text-align: center;
+				height: 36px;
+			}
+
+			&:hover {
+				box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+				border: none !important;
+			}
+		}
+
+		.textButton, .okBtn, .cancelBtn {
+			width: 100% !important;
+			min-width: 64px;
+			max-width: 128px;
+			color: $black;
+			margin-top: 0px;
+			margin-left: 16px;
+
+			&:hover {
+				background-color: $white;
+				text-decoration: none;
+			}
+		}
+
+		.openFileBtn {
+			width: 150px !important;
+			color: $black;
+			margin-top: 0px;
+			margin-left: 16px;
+
+			&:hover {
+				text-decoration: none;
+				background-color: $white;
+			}
+		}
+
+		.settingsBtn {
+			width: 100% !important;
+			max-width: 256px;
+			min-width: 136px;
+		}
+
+		.clearImgBtn {
+			padding: 4px;
+
+			img {
+				opacity: 0.54;
+			}
+
+			img:hover {
+				opacity: 1;
+			}
+		}
+
+		.btnBold, .btnItalic, .btnUnderline, .btnLatex {
+			border-radius: 2px;
+			margin-left: 0px;
+			margin-right: 8px;
+
+			img {
+				opacity: 0.7;
+			}
+
+			&:hover {
+				border: $teal-default solid 1px;
+			}
+
+			&.gwt-ToggleButton-down {
+				border: $teal-default solid 1px;
+			}
+		}
+
+		.CustomColorButton:hover {
+			border: 2px solid $teal-default !important;
+			background-color: $white !important;
+		}
+
+		.gwt-ToggleButton {
+			cursor: pointer;
+			padding: 4px;
+			margin: 0px;
+
+			img {
+				opacity: 0.54;
+			}
+
+			&:hover {
+				img {
+					opacity: 1;
+				}
+			}
+		}
+
+		.BackgroundColorPanel {
+			.gwt-RadioButton {
+				input[type="radio"] {
+					margin-right: 10px;
+				}
+
+				label {
+					font-size: 90%;
+				}
+			}
+
+			.ClearBackgroundButton {
+				cursor: pointer;
+				padding: 4px;
+				margin: 0px;
+
+				img {
+					opacity: 0.54;
+				}
+
+				&:hover {
+					img {
+						opacity: 1;
+					}
+				}
+			}
+		}
+
+		.panelTitle:first-child {
+			margin-top: 8px !important;
+		}
+
+		iframe.objectPropertiesTextEditor {
+			border: #dcdcdc solid 1px;
+			background: $white;
+			padding: 4px 5px;
+			color: #666;
+			border-radius: 2px;
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			font-size: 90%;
+			box-shadow: none;
+		}
+
+		.gwt-DisclosurePanel
+		.gwt-TabLayoutPanelTab
+		.com-google-gwt-resources-client-CommonResources-InlineBlockStyle-inlineBlock {
+			height: 28px;
+		}
+
+		.propertiesStyleBar {
+			overflow: visible;
+
+			.selected,
+			.gwt-MenuItem.selected:hover {
+				background-image: -webkit-linear-gradient(right, #dcdcdc, #f8f8f8);
+			}
+
+			.menuProperties {
+				position: relative;
+				width: 40px;
+				right: 6px;
+
+				.gwt-MenuItem {
+					padding: 0px;
+
+					img {
+						padding: 8px;
+					}
+				}
 			}
 		}
 	}

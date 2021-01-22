@@ -282,11 +282,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			}
 		}
 
-		.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected,
-			 .GeoGebraFrame .gwt-TabBar .gwt-TabBarItem-selected {
-			color: $teal-default;
-		}
-
 		.gwt-TabLayoutPanelTabInner:hover {
 			color: $teal-light;
 		}
@@ -408,10 +403,6 @@ $shadow-card-hover: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,
 			.gwt-Label {
 				font-size: 100% !important;
 			}
-		}
-
-		.gwt-TabBar .gwt-TabBarItem-selected {
-			color: $teal-default;
 		}
 
 		.gwt-TabPanelBottom {

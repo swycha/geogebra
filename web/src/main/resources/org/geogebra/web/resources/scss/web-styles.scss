@@ -516,19 +516,21 @@
 	.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab, .gwt-TabBar .gwt-TabBarItem {
 		position: relative;
 		bottom: -1px;
-	}
-
-	.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab, .gwt-TabBar .gwt-TabBarItem {
 		margin-right: 4px;
-		padding: 4px 8px;
-		height: 30px;
+		padding: 8px;
+		height: 36px;
 		cursor: pointer;
+		font-size: 100%;
 		font-weight: normal;
 		text-align: center;
-		background: #FFFFFF;
+		background: $white;
 		border-radius: 3px 3px 0 0;
-		border: 1px solid #DCDCDC;
+		border: 1px solid $tool-border;
 		box-sizing: border-box;
+
+		&:hover {
+			color: $teal-light;
+		}
 	}
 
 	.gwt-TabBarItem div.gwt-Label {
@@ -542,7 +544,7 @@
 	.gwt-TabLayoutPanel .gwt-TabLayoutPanelTab-selected, .gwt-TabBar .gwt-TabBarItem-selected {
 		cursor: default;
 		background: white;
-		color: #6666FF;
+		color: $teal-default;
 		border-bottom: 1px solid white;
 	}
 
