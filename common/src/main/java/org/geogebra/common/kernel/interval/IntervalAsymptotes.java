@@ -68,6 +68,7 @@ public class IntervalAsymptotes {
 		Interval left = leftValue(index);
 		Interval right = rightValue(index);
 		if (right.isEmpty()) {
+			value(index).setEmpty();
 			return;
 		}
 		if (isCloseTo(left, right)) {

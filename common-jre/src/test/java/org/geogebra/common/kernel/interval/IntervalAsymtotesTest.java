@@ -129,15 +129,14 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 
 	@Test
 	public void testExtendValuesToInfinity() {
-		IntervalTupleList sec = functionValues("sec(x)", -2, 2, -7, 7);
-		IntervalTupleList lnln = functionValues("ln(ln(sec(x)))", -2, 2, -7, 7);
-		assertFalse(true);
-	}
+		IntervalTupleList tuples = functionValues("sqrt(cot(x))", 0, 2, -7, 7);
+		assertTrue(false);
+}
 
 	private IntervalTupleList functionValues(String functionDescription,
 			double xmin, double xmax, double ymin, double ymax) {
 		GeoFunction function = add(functionDescription);
-		IntervalTuple range = PlotterUtils.newRange(-Math.PI, Math.PI, -8, 8);
+		IntervalTuple range = PlotterUtils.newRange(xmin, xmax, ymin, ymax);
 		IntervalFunctionSampler sampler = PlotterUtils.newSampler(function, range, 100);
 		return sampler.result();
 	}
