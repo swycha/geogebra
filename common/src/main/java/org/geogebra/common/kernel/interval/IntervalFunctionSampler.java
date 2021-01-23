@@ -13,19 +13,21 @@ import org.geogebra.common.kernel.geos.GeoFunction;
 public class IntervalFunctionSampler {
 
 	private final IntervalFunction function;
+	private GeoFunction geoFunction;
 	private final int numberOfSamples;
 	private final LinearSpace space;
 	private IntervalTuple range;
 
 	/**
 	 *
-	 * @param geo function to get sampled
+	 * @param geoFunction function to get sampled
 	 * @param range (x, y) range.
 	 * @param numberOfSamples the sample rate.
 	 */
-	public IntervalFunctionSampler(GeoFunction geo, IntervalTuple range,
+	public IntervalFunctionSampler(GeoFunction geoFunction, IntervalTuple range,
 			int numberOfSamples) {
-		this.function = new IntervalFunction(geo);
+		this.function = new IntervalFunction(geoFunction);
+		this.geoFunction = geoFunction;
 		this.numberOfSamples = numberOfSamples;
 		this.range = range;
 		space = new LinearSpace();
@@ -80,7 +82,7 @@ public class IntervalFunctionSampler {
 
 //		samples.trim();
 
-		IntervalAsymptotes asymtotes = new IntervalAsymptotes(samples, range);
+		IntervalAsymptotes asymtotes = new IntervalAsymptotes(geoFunction, samples, range);
 		asymtotes.process();
 		return samples;
 	}

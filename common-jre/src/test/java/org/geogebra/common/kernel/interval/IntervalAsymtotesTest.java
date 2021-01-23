@@ -129,7 +129,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 
 	@Test
 	public void testExtendValuesToInfinity() {
-		IntervalTupleList tuples = functionValues("sqrt(cot(x))", 0, 2, -7, 7);
+		IntervalTupleList tuples = functionValues("sqrt(cot(-x))", 1.5, 3.5, -7, 7);
 		assertTrue(false);
 }
 

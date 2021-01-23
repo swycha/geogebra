@@ -1,11 +1,15 @@
 package org.geogebra.common.kernel.interval;
 
+import org.geogebra.common.kernel.geos.GeoFunction;
+
 public class IntervalAsymptotes {
+	private GeoFunction function;
 	private final IntervalTupleList samples;
 	private final IntervalTuple range;
 	private final Interval extremum;
 
-	public IntervalAsymptotes(IntervalTupleList samples, IntervalTuple range) {
+	public IntervalAsymptotes(GeoFunction function, IntervalTupleList samples, IntervalTuple range) {
+		this.function = function;
 		this.samples = samples;
 		this.range = range;
 		extremum = IntervalConstants.empty();
@@ -26,7 +30,7 @@ public class IntervalAsymptotes {
 		}
 
 		if (isVerticalAsymptoteFromRight()) {
-			extendToInfinite(value(lastIndex -2));
+//			extendToLimit(value(lastIndex -2));
 			value(lastIndex - 1).setEmpty();
 		} else if (value(lastIndex).isWhole()) {
 			value(lastIndex).setEmpty();
@@ -67,17 +71,24 @@ public class IntervalAsymptotes {
 	private void fixGraph(int index) {
 		Interval left = leftValue(index);
 		Interval right = rightValue(index);
-		if (right.isEmpty()) {
-			value(index).setEmpty();
-			return;
-		}
+
+
 		if (isCloseTo(left, right)) {
 			connect(left, value(index), right);
 		} else if (isVerticalAsymptote(left, right)) {
 			fixVerticalAsymptote(index);
-		} else if (right.isWhole()) {
+		} if (right.isWhole()) {
 			value(index).set(extremum);
 		}
+	}
+
+	private boolean isVerticalAsymptote(Interval left, Interval right) {
+		if ((right.isEmpty() && left.isFinite())
+				|| (left.isEmpty() && right.isFinite())) {
+			return true;
+		}
+
+		return Math.abs(left.getLow() - right.getLow()) >= range.y().getLow();
 	}
 
 	private void connect(Interval left, Interval value, Interval right) {
@@ -97,44 +108,28 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixVerticalAsymptote(int index) {
-		if (index <samples.count() - 2 && !next(index+1).isEmpty()) {
-			extendToInfinite(leftValue(index));
-		}
-
-		extendToInfinite(rightValue(index));
-		value(index).setEmpty();
-	}
-
-	private void extendToInfinite(Interval value) {
-		if (value.isEmpty()) {
-			return;
-		}
-
-		if (value.getHigh() > 0) {
-			value.setHigh(Double.POSITIVE_INFINITY);
-		} else if (value.getLow() < 0){
-			value.setLow(Double.NEGATIVE_INFINITY);
+		Interval x = samples.get(index).x();
+		double leftLimit = function.evaluate(x.getLow() + 1E-15, 0);
+		double rightLimit = function.evaluate(x.getHigh() - 1E-15, 0);
+		if (leftValue(index).isEmpty()) {
+			extendToLimit(value(index), rightValue(index), rightLimit);
+		} else if (rightValue(index).isEmpty()) {
+			extendToLimit(value(index), leftValue(index), leftLimit);
+		} else {
+			extendToLimit(leftValue(index), leftValue(index), Double.NaN);
+			extendToLimit(rightValue(index), rightValue(index), Double.NaN);
+			value(index).setEmpty();
+//
 		}
 	}
 
-	private void doExtendToInfinite(Interval value) {
-		if (value.getHigh() > 0) {
-			value.setHigh(Double.POSITIVE_INFINITY);
-		} else if (value.getLow() < 0){
-			value.setLow(Double.NEGATIVE_INFINITY);
+	private void extendToLimit(Interval toExtend, Interval neighbour, double limit) {
+		if (neighbour.getHigh() > 0) {
+			toExtend.set(neighbour.getHigh(), Double.isNaN(limit) ? Double.POSITIVE_INFINITY : limit);
+		} else {
+			toExtend.set(Double.isNaN(limit) ? Double.NEGATIVE_INFINITY : limit,
+					neighbour.getHigh());
 		}
-	}
-
-	private boolean isVerticalAsymptote(Interval left, Interval right) {
-		if (left.isEmpty() || right.isEmpty()) {
-			return true;
-		}
-
-		if (left.isWhole()||right.isWhole()) {
-			return false;
-		}
-
-		return Math.abs(left.getLow() - right.getLow()) >= range.y().getLow();
 	}
 
 	private Interval value(int index) {
