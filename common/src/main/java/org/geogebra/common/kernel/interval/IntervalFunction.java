@@ -54,8 +54,8 @@ import org.geogebra.common.util.debug.Log;
 
 	private Interval evaluateLeaf(Interval x, ExpressionNode node, Operation operation)
 			throws Exception {
-		if (node.isConstant() ||
-				(node.unwrap().isNumberValue()) && !node.containsFunctionVariable()) {
+		if (node.isConstant()
+				|| (node.unwrap().isNumberValue()) && !node.containsFunctionVariable()) {
 			return new Interval(node.evaluateDouble());
 		}
 		return x.evaluate(operation);

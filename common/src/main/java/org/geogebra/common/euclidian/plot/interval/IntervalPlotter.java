@@ -35,7 +35,8 @@ public class IntervalPlotter {
 	/**
 	 * Creates a disabled plotter
 	 */
-	public IntervalPlotter(EuclidianView view, IntervalPathPlotter pathPlotter, int numberOfSamples) {
+	public IntervalPlotter(EuclidianView view, IntervalPathPlotter pathPlotter,
+			int numberOfSamples) {
 		this.view = view;
 		this.gp = pathPlotter;
 		this.numberOfSamples = numberOfSamples;

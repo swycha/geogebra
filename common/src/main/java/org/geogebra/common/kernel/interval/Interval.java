@@ -80,6 +80,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return new Interval(Math.max(interval.low, other.low),
 				Math.max(interval.high, other.high));
 	}
+
 	/**
 	 *
 	 * @param interval interval.
@@ -425,7 +426,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		return trigonometric.sec();
 	}
 
-
 	/**
 	 *
 	 * @return 1 / sin(x)
@@ -678,7 +678,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	}
 
 	public boolean isHalfNegativeInfinity() {
-		return low == Double.NEGATIVE_INFINITY && DoubleUtil.isEqual(high,0, 1E-5);
+		return low == Double.NEGATIVE_INFINITY && DoubleUtil.isEqual(high, 0, 1E-5);
 	}
 
 	/**
@@ -688,7 +688,6 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean hasInfinity() {
 		return !isEmpty() && isLowInfinite() || isHighInfinite();
 	}
-
 
 	/**
 	 *

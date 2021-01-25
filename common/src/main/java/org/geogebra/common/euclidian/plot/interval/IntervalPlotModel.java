@@ -192,19 +192,15 @@ public class IntervalPlotModel {
 		return labelPoint;
 	}
 
-	public boolean noGapFromRight(int index) {
-		if (index == 0) {
-			return true;
-		}
-		IntervalTuple left = pointAt(index - 1);
-		IntervalTuple right = pointAt(index);
-		return right.follows(left);
-	}
-
 	public IntervalTuple pointAt(int index) {
 		return points.get(index);
 	}
 
+	/**
+	 *
+	 * @param point to check around
+	 * @return if the function is ascending from point to the right.
+	 */
 	public boolean isAscending(IntervalTuple point) {
 		if (point.index() > points.count() - 1) {
 			return false;

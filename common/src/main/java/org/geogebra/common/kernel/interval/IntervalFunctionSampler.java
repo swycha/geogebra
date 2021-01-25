@@ -80,13 +80,10 @@ public class IntervalFunctionSampler {
 			addEmpty = !y.isEmpty();
 		}
 
-//		samples.trim();
-
 		IntervalAsymptotes asymtotes = new IntervalAsymptotes(function, samples, range);
 		asymtotes.process();
 		return samples;
 	}
-
 
 	/**
 	 * Updates the range on which sampler has to run.
