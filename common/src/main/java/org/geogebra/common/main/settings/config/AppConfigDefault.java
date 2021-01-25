@@ -337,4 +337,8 @@ public class AppConfigDefault extends AbstractAppConfig {
 		return false;
 	}
 
+	@Override
+	public boolean hasEuclidianView() {
+		return true;
+	}
 }
