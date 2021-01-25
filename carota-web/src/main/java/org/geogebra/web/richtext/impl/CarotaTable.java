@@ -9,7 +9,7 @@ import jsinterop.annotations.JsType;
 import jsinterop.base.JsPropertyMap;
 
 @JsType(isNative = true)
-public class CarotaTable implements HasContent {
+public class CarotaTable implements HasContentAndFormat {
 
 	@JsProperty
 	public native int getTotalWidth();
@@ -22,7 +22,7 @@ public class CarotaTable implements HasContent {
 		if (Carota.get() != null) {
 			Carota.get().getText().getCache().clear();
 		}
-		load(save());
+		load(save(), false);
 	}
 
 	public native void draw(Context2d ctx);
@@ -33,7 +33,7 @@ public class CarotaTable implements HasContent {
 
 	public native JavaScriptObject save();
 
-	public native void load(Object data);
+	public native void load(Object data, boolean focus);
 
 	public native void contentChanged(EditorCallback editorCallback);
 

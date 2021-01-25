@@ -85,7 +85,7 @@ public class InlineTableControllerW implements InlineTableController {
 	@Override
 	public void updateContent() {
 		if (table.getContent() != null && !table.getContent().isEmpty()) {
-			tableImpl.load(Global.JSON.parse(table.getContent()));
+			tableImpl.load(Global.JSON.parse(table.getContent()), false);
 			updateSizes();
 		}
 	}

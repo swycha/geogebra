@@ -16,6 +16,7 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.inline.InlineFormulaController;
 import org.geogebra.common.euclidian.inline.InlineTableController;
 import org.geogebra.common.euclidian.inline.InlineTextController;
+import org.geogebra.common.euclidian.inline.MindMapController;
 import org.geogebra.common.euclidian.smallscreen.AdjustScreen;
 import org.geogebra.common.factories.CASFactory;
 import org.geogebra.common.geogebra3D.euclidian3D.printer3D.FormatCollada;
@@ -36,6 +37,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoFormula;
 import org.geogebra.common.kernel.geos.GeoInlineTable;
 import org.geogebra.common.kernel.geos.GeoInlineText;
+import org.geogebra.common.kernel.geos.GeoMindMap;
 import org.geogebra.common.kernel.geos.inputbox.InputBoxType;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.AppConfig;
@@ -66,6 +68,7 @@ import org.geogebra.web.full.euclidian.EuclidianStyleBarW;
 import org.geogebra.web.full.euclidian.inline.InlineFormulaControllerW;
 import org.geogebra.web.full.euclidian.inline.InlineTableControllerW;
 import org.geogebra.web.full.euclidian.inline.InlineTextControllerW;
+import org.geogebra.web.full.euclidian.inline.MindMapControllerW;
 import org.geogebra.web.full.gui.CustomizeToolbarGUI;
 import org.geogebra.web.full.gui.GuiManagerW;
 import org.geogebra.web.full.gui.MyHeaderPanel;
@@ -2134,6 +2137,12 @@ public class AppWFull extends AppW implements HasKeyboard, MenuViewListener {
 	public InlineTextController createInlineTextController(EuclidianView view, GeoInlineText geo) {
 		Element parentElement = ((EuclidianViewW) view).getAbsolutePanel().getParent().getElement();
 		return new InlineTextControllerW(geo, view, parentElement);
+	}
+
+	@Override
+	public MindMapController createMindMapController(EuclidianView view, GeoMindMap geo) {
+		Element parentElement = ((EuclidianViewW) view).getAbsolutePanel().getParent().getElement();
+		return new MindMapControllerW(geo, view, parentElement);
 	}
 
 	@Override

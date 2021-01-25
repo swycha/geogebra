@@ -1,6 +1,8 @@
 package org.geogebra.common.kernel.geos;
 
 import org.geogebra.common.awt.GPoint2D;
+import org.geogebra.common.euclidian.draw.DrawInline;
+import org.geogebra.common.euclidian.draw.HasTextFormat;
 import org.geogebra.common.kernel.Construction;
 import org.geogebra.common.kernel.arithmetic.NumberValue;
 import org.geogebra.common.kernel.arithmetic.ValueType;
@@ -154,5 +156,11 @@ public abstract class GeoInline extends GeoElement implements Translateable, Poi
 		sb.append("\"/>\n");
 
 		XMLBuilder.appendPosition(sb, this);
+	}
+
+	public HasTextFormat getFormatter() {
+		DrawInline drawable = (DrawInline) kernel.getApplication()
+				.getActiveEuclidianView().getDrawableFor(this);
+		return drawable == null ? null : drawable.getController();
 	}
 }

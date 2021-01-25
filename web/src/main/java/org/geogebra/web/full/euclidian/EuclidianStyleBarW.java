@@ -16,6 +16,7 @@ import org.geogebra.common.euclidian.EuclidianController;
 import org.geogebra.common.euclidian.EuclidianStyleBarSelection;
 import org.geogebra.common.euclidian.EuclidianStyleBarStatic;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.euclidian.draw.HasTextFormat;
 import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.common.euclidian.inline.InlineTableController;
 import org.geogebra.common.euclidian3D.EuclidianView3DInterface;
@@ -1419,8 +1420,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 				super.setVisible(geosOK);
 
 				if (geosOK) {
-					InlineTableController formatter
-							= ((GeoInlineTable) geos.get(0)).getFormatter();
+					InlineTableController formatter = getTableFormatter(geos.get(0));
 
 					BorderType border = formatter != null ? formatter.getBorderStyle()
 							: BorderType.MIXED;
@@ -1460,7 +1460,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 
 				if (geosOK) {
 					InlineTableController formatter
-							= ((GeoInlineTable) geos.get(0)).getFormatter();
+							= getTableFormatter(geos.get(0));
 
 					HorizontalAlignment alignment = formatter != null
 							? formatter.getHorizontalAlignment() : null;
@@ -1478,6 +1478,11 @@ public class EuclidianStyleBarW extends StyleBarW2
 				MaterialDesignResources.INSTANCE.vertical_align_top(), 24));
 		btnHorizontalAlignment.addStyleName("withIcon");
 		btnHorizontalAlignment.getMyPopup().addStyleName("mowPopup");
+	}
+
+	private InlineTableController getTableFormatter(GeoElement geoElement) {
+		HasTextFormat formatter = ((GeoInlineTable) geoElement).getFormatter();
+		return formatter == null ? null : (InlineTableController) formatter;
 	}
 
 	private void createTableVerticalAlignmentBtn() {
@@ -1498,7 +1503,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 
 				if (geosOK) {
 					InlineTableController formatter
-							= ((GeoInlineTable) geos.get(0)).getFormatter();
+							= getTableFormatter(geos.get(0));
 
 					VerticalAlignment alignment = formatter != null
 							? formatter.getVerticalAlignment() : null;
@@ -1821,7 +1826,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 		boolean changed = false;
 		for (GeoElement geo : targetGeos) {
 			if (geo instanceof GeoInlineTable) {
-				InlineTableController formatter = ((GeoInlineTable) geo).getFormatter();
+				InlineTableController formatter = getTableFormatter(geo);
 				if (formatter == null) {
 					continue;
 				}
@@ -1867,7 +1872,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 		boolean changed = false;
 		for (GeoElement geo : targetGeos) {
 			if (geo instanceof GeoInlineTable) {
-				InlineTableController formatter = ((GeoInlineTable) geo).getFormatter();
+				InlineTableController formatter = getTableFormatter(geo);
 				changed = formatFn.apply(formatter) || changed;
 			}
 		}

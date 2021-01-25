@@ -174,7 +174,8 @@ public class DrawInlineText extends Drawable implements DrawInline {
 		return getBoundingBox();
 	}
 
-	public InlineTextController getTextController() {
+	@Override
+	public InlineTextController getController() {
 		return textController;
 	}
 
