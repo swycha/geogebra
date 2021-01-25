@@ -31,7 +31,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 				if (other.getHigh() != 0) {
 					return divisionByPositive(other.getHigh());
 				} else {
-					interval.setEmpty();
+					interval.setWhole();
 				}
 			}
 		} else {
