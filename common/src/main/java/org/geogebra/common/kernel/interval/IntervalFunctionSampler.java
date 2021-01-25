@@ -82,7 +82,7 @@ public class IntervalFunctionSampler {
 
 //		samples.trim();
 
-		IntervalAsymptotes asymtotes = new IntervalAsymptotes(geoFunction, samples, range);
+		IntervalAsymptotes asymtotes = new IntervalAsymptotes(function, samples, range);
 		asymtotes.process();
 		return samples;
 	}

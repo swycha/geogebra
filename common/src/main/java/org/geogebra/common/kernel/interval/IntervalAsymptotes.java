@@ -1,14 +1,14 @@
 package org.geogebra.common.kernel.interval;
 
-import org.geogebra.common.kernel.geos.GeoFunction;
+import org.geogebra.common.util.debug.Log;
 
 public class IntervalAsymptotes {
-	private GeoFunction function;
+	private IntervalFunction function;
 	private final IntervalTupleList samples;
 	private final IntervalTuple range;
 	private final Interval extremum;
 
-	public IntervalAsymptotes(GeoFunction function, IntervalTupleList samples, IntervalTuple range) {
+	public IntervalAsymptotes(IntervalFunction function, IntervalTupleList samples, IntervalTuple range) {
 		this.function = function;
 		this.samples = samples;
 		this.range = range;
@@ -108,29 +108,37 @@ public class IntervalAsymptotes {
 	}
 
 	private void fixVerticalAsymptote(int index) {
+		try {
 		Interval x = samples.get(index).x();
-		double leftLimit = function.evaluate(x.getLow() + 1E-15, 0);
-		double rightLimit = function.evaluate(x.getHigh() - 1E-15, 0);
+		Interval leftLimit;
+		Interval rightLimit;
+			leftLimit = function.evaluate(new Interval(x.getLow()));
+			rightLimit = function.evaluate(new Interval(x.getHigh()));
+			Log.debug("leftLimit: " + leftLimit + " " + "rightLimit: " + rightLimit);
 		if (leftValue(index).isEmpty()) {
 			extendToLimit(value(index), rightValue(index), rightLimit);
-		} else if (rightValue(index).isEmpty()) {
+		}
+		if (rightValue(index).isEmpty()) {
 			extendToLimit(value(index), leftValue(index), leftLimit);
-		} else {
-			extendToLimit(leftValue(index), leftValue(index), Double.NaN);
-			extendToLimit(rightValue(index), rightValue(index), Double.NaN);
+		} else if (!rightValue(index).isWhole()){
+			extendToLimit(leftValue(index), leftValue(index), leftLimit);
+			extendToLimit(rightValue(index), rightValue(index), rightLimit);
 			value(index).setEmpty();
 //
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	private void extendToLimit(Interval toExtend, Interval neighbour, double limit) {
+	private void extendToLimit(Interval toExtend, Interval neighbour, Interval limit) {
 		if (neighbour.getHigh() > 0) {
-			toExtend.set(neighbour.getHigh(), Double.isNaN(limit) ? Double.POSITIVE_INFINITY : limit);
+			toExtend.set(neighbour.getHigh(), limit.isEmpty() ? Double.POSITIVE_INFINITY : limit.getHigh());
 		} else {
-			toExtend.set(Double.isNaN(limit) ? Double.NEGATIVE_INFINITY : limit,
+			toExtend.set(limit.isEmpty() ? Double.NEGATIVE_INFINITY : limit.getLow(),
 					neighbour.getHigh());
 		}
-	}
+ 		}
 
 	private Interval value(int index) {
 		IntervalTuple tuple = samples.get(index);
