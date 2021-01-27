@@ -41,7 +41,7 @@ public class IntervalPath {
 
 		for (int i = 0; i < pointCount; i++) {
 			IntervalTuple point = model.pointAt(i);
-			boolean moveNeeded = point.y().isEmpty();
+			boolean moveNeeded = point.y().isEmpty() || point.y().isUndefined();
 			if (!moveNeeded) {
 				if (lastY.isEmpty()) {
 					moveToCurveBegin(point);
