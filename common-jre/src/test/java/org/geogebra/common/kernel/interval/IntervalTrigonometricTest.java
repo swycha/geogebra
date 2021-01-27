@@ -93,6 +93,11 @@ public class IntervalTrigonometricTest {
 	}
 
 	@Test
+	public void testTanCutOffPoint() {
+		shouldEqual(IntervalConstants.undefined(), interval(PI/2, PI/2).tan());
+	}
+
+	@Test
 	public void testTanWithInfinity() {
 		assertTrue(interval(NEGATIVE_INFINITY, POSITIVE_INFINITY).tan().isWhole());
 		assertTrue(interval(POSITIVE_INFINITY, NEGATIVE_INFINITY).tan().isEmpty());

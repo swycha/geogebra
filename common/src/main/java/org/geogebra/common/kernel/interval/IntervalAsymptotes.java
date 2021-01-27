@@ -33,25 +33,25 @@ public class IntervalAsymptotes {
 	 * Check samples for cut-off points and fix them.
 	 */
 	public void process() {
-		if (isVerticalAsymptoteFromLeft()) {
-			value(0).setEmpty();
-		}
+//		if (isVerticalAsymptoteFromLeft()) {
+//			value(0).setEmpty();
+//		}
 		int lastIndex = samples.count() - 1;
 
 		for (int index = 1; index < lastIndex; index++) {
 			Interval value = value(index);
 			updateExtremum(value);
-			 if (value.isWhole()) {
+			 if (value.isUndefined()) {
 				fixGraph(index);
 			}
 		}
 
-		if (isVerticalAsymptoteFromRight()) {
-//			extendToLimit(value(lastIndex -2));
-			value(lastIndex - 1).setEmpty();
-		} else if (value(lastIndex).isWhole()) {
-			value(lastIndex).setEmpty();
-		}
+//		if (isVerticalAsymptoteFromRight()) {
+////			extendToLimit(value(lastIndex -2));
+//			value(lastIndex - 1).setEmpty();
+//		} else if (value(lastIndex).isWhole()) {
+//			value(lastIndex).setEmpty();
+//		}
 	}
 
 	private void updateExtremum(Interval value) {
@@ -70,7 +70,7 @@ public class IntervalAsymptotes {
 
 	private boolean isVerticalAsymptoteFromLeft() {
 		Interval value = value(0);
-		if (!value.isWhole() || samples.count() < 2) {
+		if (value.isFinite() || samples.count() < 2) {
 			return false;
 		}
 		Interval right = value(1);

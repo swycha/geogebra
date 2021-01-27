@@ -31,7 +31,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 				if (other.getHigh() != 0) {
 					return divisionByPositive(other.getHigh());
 				} else {
-					interval.setWhole();
+					interval.setUndefined();
 				}
 			}
 		} else {
@@ -90,7 +90,8 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		}
 
 		if (interval.hasZero()) {
-			return IntervalConstants.whole();
+			interval.setUndefined();
+			return interval;
 		}
 
 		if (interval.getHigh() < 0) {
@@ -105,7 +106,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		if (interval.isZero()) {
 			return interval;
 		}
-		interval.setWhole();
+		interval.setUndefined();
 		return interval;
 	}
 

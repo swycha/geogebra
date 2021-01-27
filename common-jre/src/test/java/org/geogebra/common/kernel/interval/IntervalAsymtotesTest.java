@@ -26,6 +26,17 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void cotX() {
+		GeoFunction tanX = add("cot(x)");
+		IntervalTuple range = PlotterUtils.newRange(0, Math.PI, -9, 9);
+		IntervalFunctionSampler sampler =
+				new IntervalFunctionSampler(tanX, range, 100);
+		IntervalTupleList result = sampler.result();
+		assertTrue(result.get(0).y().isUndefined());
+		assertTrue(result.get(100).y().isUndefined());
+	}
+
+	@Test
 	public void tanXLeftRangeBorder() {
 		GeoFunction tanX = add("tan(x)");
 		double xMin = -Math.PI/2;

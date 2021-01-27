@@ -262,16 +262,16 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 		if (isEmpty()) {
 			return empty();
 		}
-//
-//		if (isWhole()) {
-//			return zero();
-//		}
+
+		if (isUndefined()) {
+			return this;
+		}
 
 		if (hasZero()) {
 			if (low != 0) {
 				if (high != 0) {
 					// [negative, positive]
-					setWhole();
+					setUndefined();
 				} else {
 					// [negative, zero]
 					double d = low;
@@ -285,7 +285,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 					high = Double.POSITIVE_INFINITY;
 				} else {
 					// [zero, zero]
-					setWhole();
+					setUndefined();
 				}
 			}
 		} else {
@@ -724,5 +724,20 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	public boolean isHalfInfinite() {
 		return (isLowInfinite() && !isHighInfinite())
 				|| (!isLowInfinite() && isHighInfinite());
+	}
+
+	/**
+	 *
+	 * @return true if interval is undefined (division by zero).
+	 */
+	public boolean isUndefined() {
+		return Double.isNaN(low) && Double.isNaN(high);
+	}
+
+	/**
+	 * Sets interval undefined (result of division by zero).
+	 */
+	public void setUndefined() {
+		set(Double.NaN, Double.NaN);
 	}
 }

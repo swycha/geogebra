@@ -117,6 +117,10 @@ class IntervalTrigonometric {
 			return interval;
 		}
 
+		if (interval.isUndefined()) {
+			return interval;
+		}
+
 		Interval cache = new Interval(interval);
 		handleNegative(cache);
 		cache.fmod(IntervalConstants.pi());
@@ -126,7 +130,7 @@ class IntervalTrigonometric {
 		}
 
 		if (cache.getLow() <= -PI_HALF_LOW || cache.getHigh() >= PI_HALF_LOW) {
-			interval.setWhole();
+			interval.setUndefined();
 		} else {
 			interval.set(RMath.tanLow(cache.getLow()), RMath.tanHigh(cache.getHigh()));
 		}
