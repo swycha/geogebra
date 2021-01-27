@@ -110,7 +110,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
-		shouldEqual(IntervalConstants.whole(), actual);
+		shouldEqual(interval(0, Double.POSITIVE_INFINITY), actual);
 	}
 
 	@Test
@@ -134,7 +134,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/(0/x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-15, 15));
-		shouldEqual(IntervalConstants.whole(), actual);
+		shouldEqual(interval(0, Double.POSITIVE_INFINITY), actual);
 	}
 
 	@Test
@@ -151,7 +151,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/tan(x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
-		shouldEqual(IntervalConstants.whole(), actual);
+		shouldEqual(interval(0, Double.POSITIVE_INFINITY), actual);
 	}
 
 	@Test
@@ -175,6 +175,6 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("cos(cot(x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.57, 1.58));
-		shouldEqual(IntervalConstants.whole(), actual);
+		shouldEqual(interval(-1, 1), actual);
 	}
 }

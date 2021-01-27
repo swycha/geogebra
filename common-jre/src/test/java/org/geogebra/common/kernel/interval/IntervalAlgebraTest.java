@@ -222,7 +222,7 @@ public class IntervalAlgebraTest {
 
 	@Test
 	public void testNegativeDividedZero() {
-		assertEquals(interval(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY),
+		assertEquals(IntervalConstants.whole(),
 				interval(-7, -3).divide(IntervalConstants.zero()));
 	}
 }

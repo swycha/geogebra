@@ -19,7 +19,8 @@ class IntervalTrigonometric {
 		}
 
 		if (interval.isWhole()) {
-			return IntervalConstants.whole();
+			interval.set(-1, 1);
+			return interval;
 		}
 
 		Interval cache = new Interval(interval);

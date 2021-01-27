@@ -84,17 +84,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	}
 
 	@Test
-	public void sqrtMinusXInverse() {
-		GeoFunction function = add("sqrt(1/-x)");
-		IntervalTuple range = PlotterUtils.newRange(-22.98, 22.98, -15.405, 15.405);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 100);
-		IntervalTupleList result = sampler.result();
-		assertTrue(new Interval(1.043025658, Double.POSITIVE_INFINITY).almostEqual(result.get(48).y()));
-		assertTrue(result.get(49).y().isEmpty());
-	}
-
-	@Test
 	public void minusSqrtXInverse() {
 		GeoFunction function = add("-sqrt(1/x)");
 		IntervalTuple range = PlotterUtils.newRange(0, 10, -8, 8);
@@ -102,16 +91,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
 		assertTrue(new Interval(Double.NEGATIVE_INFINITY, -3.1622776016).almostEqual(result.get(0).y()));
-	}
-
-	@Test
-	public void cotInverseMiddle() {
-		GeoFunction function = add("-9*(cot(-3/x))");
-		IntervalTuple range = PlotterUtils.newRange(-0.45, -0.25, -8, 8);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 100);
-		IntervalTupleList result = sampler.result();
-		assertTrue(false);
 	}
 
 	@Test
@@ -126,12 +105,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		}
 
 	}
-
-	@Test
-	public void testExtendValuesToInfinity() {
-		IntervalTupleList tuples = functionValues("sqrt(cot(-x))", 1.5, 3.5, -7, 7);
-		assertTrue(false);
-}
 
 	private IntervalTupleList functionValues(String functionDescription,
 			double xmin, double xmax, double ymin, double ymax) {
