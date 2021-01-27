@@ -28,6 +28,6 @@ public class AlgoLaTeXTest extends BaseUnitTest {
 		assertThat(
 				AlgebraItem.getLatexString(formulaText, 1500, true),
 				equalTo("text1 \\, = \\,"
-						+ "\u201C\\left( \\begin{align}1 \\\\ 1 \\\\ \\end{align} \\right)\u201D"));
+						+ "“\\left( \\begin{align}1 \\\\ 1 \\\\ \\end{align} \\right)”"));
 	}
 }
