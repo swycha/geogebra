@@ -150,11 +150,6 @@ class IntervalAlgebra {
 			return interval;
 		}
 
-		if (interval.isWhole()) {
-			interval.set(0, Double.POSITIVE_INFINITY);
-			return interval;
-		}
-
 		return nthRoot(other.getLow());
 	}
 
@@ -168,6 +163,12 @@ class IntervalAlgebra {
 			interval.setEmpty();
 			return interval;
 		}
+
+		if (interval.isWhole()) {
+			interval.set(0, Double.POSITIVE_INFINITY);
+			return interval;
+		}
+
 		double power = 1 / n;
 		if (interval.getHigh() < 0) {
 			if (DoubleUtil.isInteger(n) && ((int) n & 1) == 1) {
