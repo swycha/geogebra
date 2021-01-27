@@ -38,6 +38,7 @@ public class IntervalTrigonometricTest {
 		shouldEqual(interval(-1, 0), interval(PI / 2, PI).cos());
 		shouldEqual(interval(-1, 1), interval(-PI / 2, PI).cos());
 		shouldEqual(interval(-1, 0), interval(PI / 2, PI).cos());
+		shouldEqual(interval(-1, 1), IntervalConstants.whole().cos());
 	}
 
 	@Test

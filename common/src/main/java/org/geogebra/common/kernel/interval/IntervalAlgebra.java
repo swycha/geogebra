@@ -135,9 +135,6 @@ class IntervalAlgebra {
 			return interval;
 		}
 
-		if (interval.isWhole()) {
-			return IntervalConstants.whole();
-		}
 		return nthRoot(2);
 	}
 
@@ -152,6 +149,12 @@ class IntervalAlgebra {
 			interval.setEmpty();
 			return interval;
 		}
+
+		if (interval.isWhole()) {
+			interval.set(0, Double.POSITIVE_INFINITY);
+			return interval;
+		}
+
 		return nthRoot(other.getLow());
 	}
 
