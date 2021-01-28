@@ -36,17 +36,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 				&& result.get(100).y().isUndefined());
 	}
 
-	@Test
-	public void tanXLeftRangeBorder() {
-		GeoFunction tanX = add("tan(x)");
-		double xMin = -Math.PI/2;
-		IntervalTuple range = PlotterUtils.newRange(xMin, Math.PI / 2, 8, 8);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(tanX, range, 100);
-		IntervalTupleList result = sampler.result();
-		assertTrue(result.get(0).y().isEmpty() && result.get(99).y().isEmpty());
-	}
-
 	@Ignore
 	@Test
 	public void cscLnXInverseTimesMinusTen() {
@@ -68,19 +57,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		List<Integer> cutOffIndexes = Arrays.asList(7, 38, 61, 92);
 		for (int index: cutOffIndexes) {
 			assertFalse(result.get(index).y().isWhole());
-		}
-	}
-
-	@Test
-	public void secCscXInverseMiddle() {
-		GeoFunction function = add("1/sec(csc(x))");
-		IntervalTuple range = PlotterUtils.newRange(-0.2, 0.2, -8, 8);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(function, range, 100);
-		IntervalTupleList result = sampler.result();
-		Interval fill = new Interval(-1, 1);
-		for (int i = 39; i < 60; i++) {
-			assertTrue(result.get(i).y().almostEqual(fill));
 		}
 	}
 

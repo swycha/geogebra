@@ -14,6 +14,11 @@ class IntervalTrigonometric {
 	}
 
 	Interval cos() {
+		if (interval.isUndefined()) {
+			interval.setUndefined();
+			return interval;
+		}
+
 		if (interval.isEmpty() || interval.isOnlyInfinity()) {
 			return IntervalConstants.empty();
 		}
@@ -197,6 +202,10 @@ class IntervalTrigonometric {
 	 * @return hyperbolic cosine of the interval
 	 */
 	public Interval cosh() {
+		if (interval.isUndefined()) {
+			return interval;
+		}
+
 		if (!interval.isEmpty()) {
 			double low = interval.getLow();
 			double high = interval.getHigh();

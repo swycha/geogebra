@@ -37,9 +37,7 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @param high higher bound of the interval
 	 */
 	public Interval(double low, double high) {
-		if (Double.isNaN(low) && Double.isNaN(high)) {
-			setWhole();
-		} else if (high < low || Double.isNaN(high)) {
+		if (high < low) {
 			setEmpty();
 		} else {
 			set(low, high);
@@ -152,8 +150,12 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return this as result.
 	 */
 	public Interval subtract(Interval other) {
-		low -= other.high;
-		high -= other.low;
+		if (isUndefined() || other.isUndefined()) {
+			setUndefined();
+		} else {
+			low -= other.high;
+			high -= other.low;
+		}
 		return this;
 	}
 
@@ -250,6 +252,10 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return if the other interval is equal with a precision
 	 */
 	public boolean almostEqual(Interval other) {
+		if (isUndefined() && other.isUndefined()) {
+			return true;
+		}
+
 		return DoubleUtil.isEqual(low, other.low, 1E-7)
 			&& DoubleUtil.isEqual(high, other.high, 1E-7);
 	}
