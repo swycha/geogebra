@@ -11,11 +11,14 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Locale;
+
 import org.geogebra.common.AppCommonFactory;
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.io.XmlTestUtil;
 import org.geogebra.common.jre.headless.AppCommon;
 import org.geogebra.common.kernel.Kernel;
+import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.properties.HorizontalAlignment;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.main.App;
@@ -607,6 +610,15 @@ public class GeoInputBoxTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void testSingleIneqRedefinedSetValue() {
+		add("a:x<6");
+		GeoInputBox inputBox = addAvInput("ib = InputBox(a)");
+		inputBox.updateLinkedGeo("?");
+		add("SetValue(a,?)");
+		assertThat(((GeoFunction) lookup("a")).isForceInequality(), equalTo(true));
+	}
+
+	@Test
 	public void testCommandLikeImplicitMultiplicationParsesCorrectly() {
 		add("f(g, L) = ?");
 		GeoInputBox inputBox = addAvInput("ib = InputBox(f)");
@@ -622,6 +634,52 @@ public class GeoInputBoxTest extends BaseUnitTest {
 		add("f(x) = xsinx");
 		GeoInputBox inputBox = addAvInput("ib = InputBox(f)");
 		assertTrue(inputBox.isSerifContent());
+	}
+
+	@Test
+	public void testConstantNumberDontGetSimplified() {
+		add("f(θ) = 2 + 1*1*1");
+		GeoInputBox inputBox = addAvInput("ib = InputBox(f)");
+		assertEquals("2 + 1 * 1 * 1", inputBox.getText());
+
+		inputBox.updateLinkedGeo("sqrt(4)");
+		assertEquals("sqrt(4)", inputBox.getText());
+
+		inputBox.updateLinkedGeo("1+2/2");
+		assertEquals("1 + 2 / 2", inputBox.getText());
+
+		inputBox.updateLinkedGeo("5/5+1");
+		assertEquals("5 / 5 + 1", inputBox.getText());
+
+		inputBox.updateLinkedGeo("1/(10/1)");
+		assertEquals("1 / (10 / 1)", inputBox.getText());
+
+		inputBox.updateLinkedGeo("floor((1+2))");
+		assertEquals("floor(1 + 2)", inputBox.getText());
+
+		inputBox.updateLinkedGeo("floor((1+2))+3+4");
+		assertEquals("floor(1 + 2) + 3 + 4", inputBox.getText());
+
+		inputBox.updateLinkedGeo("e^36-1");
+		assertEquals(Unicode.EULER_STRING + Unicode.SUPERSCRIPT_3
+				+ Unicode.SUPERSCRIPT_6 + " - 1", inputBox.getText());
+	}
+
+	@Test
+	public void testConstantsDontGetSimplifiedInFunctions() {
+		add("f(t) = t+10^2");
+		GeoInputBox inputBox = addAvInput("ib = InputBox(f)");
+		assertEquals("t + 10²", inputBox.getText());
+
+		inputBox.updateLinkedGeo("1+1+t");
+		assertEquals("1 + 1 + t", inputBox.getText());
+
+		inputBox.updateLinkedGeo("10^10 + t");
+		assertEquals("10" + Unicode.SUPERSCRIPT_1
+				+ Unicode.SUPERSCRIPT_0 + " + t", inputBox.getText());
+
+		inputBox.updateLinkedGeo("-3/4t + 2*3/2");
+		assertEquals("-3 / 4 t + 2 * 3 / 2", inputBox.getText());
 	}
 
 	@Test
@@ -657,5 +715,37 @@ public class GeoInputBoxTest extends BaseUnitTest {
 				+ "</element>");
 		GeoInputBox inputBox = (GeoInputBox) getConstruction().lookupLabel("InputBox1");
 		assertTrue(inputBox.isSerifContent());
+	}
+
+	@Test
+	public void voidReplaceForLinesYWithFOfX() {
+		add("g: y=x");
+		GeoInputBox inputBox = addAvInput("ib = InputBox(g)");
+		inputBox.updateLinkedGeo("f(x)=x+5");
+		assertEquals("y = x + 5", inputBox.getText());
+	}
+
+	@Test
+	public void commaParsingShouldWorkInEnglish() {
+		shouldReparseAs("3,141", "3141");
+		shouldReparseAs("3,5>x", "If(5 > x, 3)");
+		shouldReparseAs("(1,2) + 1,423", "(1, 2) + 1423");
+		// merely testing that we don't throw a *wrong* exception
+		shouldReparseAs("3,", "3");
+	}
+
+	@Test
+	public void commaParsingShouldWorkInGerman() {
+		getApp().getLocalization().setLocale(Locale.GERMAN);
+		shouldReparseAs("3,141", "3.141");
+		// more cases in ParserTest, no duplication here
+	}
+
+	private void shouldReparseAs(String s, String s1) {
+		GeoElement linked = add(s);
+		GeoInputBox input = add("InputBox(" + linked.getLabelSimple() + ")");
+		input.updateLinkedGeo(s1);
+		assertEquals(s1, linked.getRedefineString(false, false,
+				StringTemplate.testTemplate));
 	}
 }

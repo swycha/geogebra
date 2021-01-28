@@ -231,10 +231,7 @@ public class EuclidianViewCompanion {
 		EuclidianSettings evs = (EuclidianSettings) settings;
 
 		view.getKernel().getConstruction().setIgnoringNewTypes(true);
-		view.setXminObject(evs.getXminObject());
-		view.setXmaxObject(evs.getXmaxObject());
-		view.setYminObject(evs.getYminObject());
-		view.setYmaxObject(evs.getYmaxObject());
+		setMinMaxObjectsInView(evs);
 		view.getKernel().getConstruction().setIgnoringNewTypes(false);
 		view.setBackground(evs.getBackground());
 		view.setAxesColor(evs.getAxesColor());
@@ -329,10 +326,7 @@ public class EuclidianViewCompanion {
 			}
 
 			view.setCoordSystem(x0, y0, evs.getXscale(), evs.getYscale(), true);
-			evs.setXminObject(view.xminObject, false);
-			evs.setXmaxObject(view.xmaxObject, false);
-			evs.setYminObject(view.yminObject, false);
-			evs.setYmaxObject(view.ymaxObject, false);
+			setMinMaxObjectsInSettings(evs);
 		} else {
 			// xmin, ... are OK; just update bounds
 			view.updateBounds(true, true);
@@ -346,6 +340,20 @@ public class EuclidianViewCompanion {
 	private static boolean isNaN(GeoNumberValue axisNumberingDistance) {
 		return axisNumberingDistance == null
 				|| Double.isNaN(axisNumberingDistance.getDouble());
+	}
+
+	protected void setMinMaxObjectsInView(EuclidianSettings evs) {
+		view.setXminObject(evs.getXminObject());
+		view.setXmaxObject(evs.getXmaxObject());
+		view.setYminObject(evs.getYminObject());
+		view.setYmaxObject(evs.getYmaxObject());
+	}
+
+	protected void setMinMaxObjectsInSettings(EuclidianSettings evs) {
+		evs.setXminObject(view.xminObject, false);
+		evs.setXmaxObject(view.xmaxObject, false);
+		evs.setYminObject(view.yminObject, false);
+		evs.setYmaxObject(view.ymaxObject, false);
 	}
 
 	/**

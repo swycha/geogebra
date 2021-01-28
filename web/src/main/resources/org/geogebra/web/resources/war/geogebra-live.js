@@ -3,6 +3,7 @@
         this.api = null;
         this.users = users || {};
         this.clientId = parentClientId;
+        this.currentAnimations = [];
         this.embeds = {};
         this.createEvent = function(type, content, label) {
             var event = {
@@ -77,7 +78,7 @@
 
                     for (let i = 0; i < tempObjects.length; i++) {
                         const label = tempObjects[i];
-                        const calculators= that.api.getEmbeddedCalculators();
+                        const calculators = that.api.getEmbeddedCalculators(true);
                         const embed = calculators && calculators[label];
 
                         if (embed && embed.controller) {
@@ -87,10 +88,15 @@
                         let commandString = that.api.getCommandString(label, false);
                         if (commandString) {
                             that.sendEvent("evalCommand", label + " = " + commandString, label);
+                            var group = that.api.getObjectsOfItsGroup(label);
+                            if (group != null) {
+                                that.sendEvent("addToGroup", label, group);
+                            }
                         } else {
                             let xml = that.api.getXML(label);
                             that.sendEvent("evalXML", xml, label);
                         }
+                        that.sendEvent("select", label, "update");
                     }
 
                     updateCallback = null;
@@ -100,11 +106,12 @@
 
         // *** UPDATE LISTENERS ***
         let updateListener = (function(label) {
-            console.log("update event for " + label);
-            this.api.showTooltip(null, label);
-            if (!objectsInWaiting.includes(label)) {
-                objectsInWaiting.push(label);
-                dispatchUpdates();
+            if (!(this.currentAnimations.includes(label))) {
+                console.log("update event for " + label);
+                if (!objectsInWaiting.includes(label)) {
+                    objectsInWaiting.push(label);
+                    dispatchUpdates();
+                }
             }
         }).bind(this);
 
@@ -130,6 +137,8 @@
             } else {
                 this.sendEvent("evalXML", xml, label);
             }
+            this.sendEvent("select", label, "");
+            this.sendEvent("deselect", "");
             window.setTimeout(function(){
                 that.initEmbed(label);
             },500); //TODO avoid timeout
@@ -141,7 +150,7 @@
             console.log(label + " is removed");
             this.sendEvent("deleteObject", label);
         }).bind(this);
-        
+
         var renameListener = (function(oldName, newName) {
             this.sendEvent("renameObject", oldName, newName);
         }).bind(this);
@@ -149,7 +158,6 @@
         // *** CLIENT LISTENERS ***
         var clientListener = (function(event) {
             var editorEventBus = this.eventCallbacks["editor"];
-            var selectionEventBus = this.eventCallbacks["selection"];
             switch (event[0]) {
                 case "updateStyle":
                     var label = event[1];
@@ -173,15 +181,11 @@
                     break;
 
                 case "deselect":
-                    if (selectionEventBus) {
-                        this.createEvent("evalCommand", "SelectObjects[]").fire(selectionEventBus);
-                    }
+                    this.sendEvent(event[0], event[2]);
                     break;
 
                 case "select":
-                    if (selectionEventBus) {
-                        this.sendEvent("evalCommand", "SelectObjects[" + event[1] + "]").fire(selectionEventBus);
-                    }
+                    this.sendEvent(event[0], event[1], event[2]);
                     break;
 
                 case "undo":
@@ -202,11 +206,34 @@
                 case "moveSlide":
                 case "selectSlide":
                 case "clearSlide":
+                case "orderingChange":
                     this.sendEvent(event[0], event[2]);
                     break;
 
                 case "pasteSlide":
                     this.sendEvent(event[0], event.cardIdx, event.ggbFile);
+                    break;
+
+                case "startAnimation":
+                    var label = event[1];
+                    console.log("animation started for " + label);
+                    this.currentAnimations.push(label);
+                    this.sendEvent(event[0], label, label);
+                    break;
+
+                case "stopAnimation":
+                    var label = event[1];
+                    console.log("animation stopped for " + label);
+                    this.currentAnimations.splice(this.currentAnimations.indexOf(label), 1);
+                    this.sendEvent(event[0], label, label);
+                    break;
+
+                case "groupObjects":
+                    this.sendEvent(event[0], event.targets);
+                    break;
+
+                case "ungroupObjects":
+                    this.sendEvent(event[0], event.targets);
                     break;
 
                 default:
@@ -230,13 +257,6 @@
             this.api.unregisterClientListener(clientListener);
             this.api.unregisterRenameListener(renameListener);
         };
-
-        this.showHint = function(event) {
-            var user = this.users[event.clientId];
-            if (user && event.label) {
-                this.api.showTooltip(user.name, event.label, user.color);
-            }
-        }
 
         this.dispatch = function(last) {
             if (last && last.clientId != this.clientId) {
@@ -274,13 +294,35 @@
                 } else if (last.type == "pasteSlide") {
                     target.api.handleSlideAction(last.type, last.content, last.label);
                 } else if (last.type == "evalGMContent") {
-                    var gmApi = target.api.getEmbeddedCalculators()[last.label];
+                    var gmApi = target.api.getEmbeddedCalculators(true)[last.label];
                     if (gmApi) {
                         gmApi.loadFromJSON(last.content);
                     }
-                }
-                if (last.type != "pasteSlide") { // for slides the label slide label => no hint
-                    target.showHint(last);
+                } else if (last.type == "startAnimation") {
+                    target.api.setAnimating(last.label, true);
+                    target.api.startAnimation();
+                } else if (last.type == "stopAnimation") {
+                    target.api.setAnimating(last.label, false);
+                } else if (last.type == "select") {
+                    let user = this.users[last.clientId];
+                    if (user && last.content) {
+                    	// user name, user color, label of geo selected, 'update' if it was called by update callback
+                        target.api.addMultiuserSelection(user.name, user.color, last.content, last.label);
+                    }
+                } else if (last.type == "deselect") {
+                    let user = this.users[last.clientId];
+                    if (user) {
+                    	// user name, 'force' if selection should be cleared
+                        target.api.removeMultiuserSelections(user.name, last.content);
+                    }
+                } else if (last.type == "orderingChange") {
+					target.api.updateOrdering(last.content);
+                } else if (last.type == "groupObjects") {
+                    target.api.groupObjects(last.content);
+                } else if (last.type == "ungroupObjects") {
+                    target.api.ungroupObjects(last.content);
+                } else if (last.type == "addToGroup") {
+                    target.api.addToGroup(last.content, last.label);
                 }
             }
         };

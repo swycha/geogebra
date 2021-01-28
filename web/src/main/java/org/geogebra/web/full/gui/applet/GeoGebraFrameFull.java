@@ -25,7 +25,7 @@ import org.geogebra.web.full.gui.layout.DockPanelW;
 import org.geogebra.web.full.gui.layout.panels.AlgebraPanelInterface;
 import org.geogebra.web.full.gui.layout.panels.EuclidianDockPanelW;
 import org.geogebra.web.full.gui.pagecontrolpanel.PageListPanel;
-import org.geogebra.web.full.gui.toolbar.mow.ToolbarMow;
+import org.geogebra.web.full.gui.toolbar.mow.NotesLayout;
 import org.geogebra.web.full.gui.toolbarpanel.ToolbarPanel;
 import org.geogebra.web.full.gui.util.VirtualKeyboardGUI;
 import org.geogebra.web.full.gui.view.algebra.AlgebraViewW;
@@ -50,10 +50,12 @@ import org.geogebra.web.html5.util.AppletParameters;
 import org.geogebra.web.html5.util.CopyPasteW;
 import org.geogebra.web.html5.util.Dom;
 import org.geogebra.web.html5.util.GeoGebraElement;
+import org.geogebra.web.html5.util.StringConsumer;
 import org.geogebra.web.html5.util.debug.LoggerW;
 import org.geogebra.web.html5.util.keyboard.VirtualKeyboardW;
 import org.gwtproject.timer.client.Timer;
 
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Element;
@@ -85,7 +87,7 @@ public class GeoGebraFrameFull
 	private boolean keyboardShowing = false;
 	private ShowKeyboardButton showKeyboardButton;
 	private int keyboardHeight;
-	private ToolbarMow toolbarMow;
+	private NotesLayout notesLayout;
 	private PageListPanel pageListPanel;
 	private PanelTransitioner panelTransitioner;
 	private HeaderResizer headerResizer;
@@ -213,11 +215,11 @@ public class GeoGebraFrameFull
 	@Override
 	public void setSize(int width, int height) {
 		MyHeaderPanel currentPanel = panelTransitioner.getCurrentPanel();
+		super.setSize(width, height);
 		if (currentPanel != null) {
 			currentPanel.setPixelSize(width, height);
 			currentPanel.resizeTo(width, height);
 		} else {
-			super.setSize(width, height);
 			app.adjustViews(true, height > width
 					|| getGuiManager().isVerticalSplit(false));
 		}
@@ -237,6 +239,7 @@ public class GeoGebraFrameFull
 		}
 
 		if (this.isKeyboardShowing() == show) {
+			getKeyboardManager().clearAndUpdateKeyboard();
 			getKeyboardManager().setOnScreenKeyboardTextField(textField);
 			return;
 		}
@@ -688,7 +691,7 @@ public class GeoGebraFrameFull
 	 */
 	public void attachToolbar(AppW app1) {
 		if (app1.isWhiteboardActive()) {
-			attachToolbarMow(app1);
+			attachNotesUI(app1);
 
 			if (app1.getVendorSettings().isMainMenuExternal()
 					&& !app1.isApplet()) {
@@ -696,7 +699,7 @@ public class GeoGebraFrameFull
 			} else if ((app1.isApplet()
 						&& app1.getAppletParameters().getDataParamShowMenuBar(false))
 					|| app1.isMebis()) {
-				toolbarMow.getUndoRedoButtons().addStyleName("undoRedoPositionMebis");
+				notesLayout.getUndoRedoButtons().addStyleName("undoRedoPositionMebis");
 				attachMowMainMenu(app1);
 			}
 			app1.getGuiManager().initShareActionInGlobalHeader();
@@ -725,8 +728,7 @@ public class GeoGebraFrameFull
 
 	private void attachMowMainMenu(final AppW app) {
 		StandardButton openMenuButton = new StandardButton(
-				MaterialDesignResources.INSTANCE.menu_black_whiteBorder(), null,
-				24, app);
+				MaterialDesignResources.INSTANCE.menu_black_whiteBorder(), null, 24);
 
 		openMenuButton.addFastClickHandler(source -> {
 			onMenuButtonPressed();
@@ -745,41 +747,50 @@ public class GeoGebraFrameFull
 		add(openMenuButton);
 	}
 
-	private void attachToolbarMow(AppW app) {
-		initToolbarMowIfNull(app);
-		if (app.getToolbarPosition() == SwingConstants.SOUTH) {
-			add(toolbarMow);
-		} else {
-			insert(toolbarMow, 0);
+	private void attachNotesUI(AppW app) {
+		initNotesLayoutIfNull(app);
+		add(notesLayout.getToolbar());
+		add(notesLayout.getUndoRedoButtons());
+		setPageControlButtonVisible(app.isMultipleSlidesOpen()
+				|| app.getAppletParameters().getParamShowSlides());
+	}
+
+	/**
+	 * @param show whether to show the button
+	 */
+	public void setPageControlButtonVisible(boolean show) {
+		if (show) {
+			add(notesLayout.getPageControlButton());
+		} else if (notesLayout != null) {
+			notesLayout.getPageControlButton().removeFromParent();
 		}
-		add(toolbarMow.getUndoRedoButtons());
-		if (!app.isApplet()) {
-			add(toolbarMow.getPageControlButton());
+		if (app.getZoomPanel() != null) {
+			app.getZoomPanel().updatePosition(show);
 		}
 	}
 
-	private void initToolbarMowIfNull(AppW app) {
-		if (toolbarMow == null) {
-			toolbarMow = new ToolbarMow(app);
+	private void initNotesLayoutIfNull(AppW app) {
+		if (notesLayout == null) {
+			notesLayout = new NotesLayout(app);
 		}
 	}
 
 	/**
 	 * @return MOW toolbar
 	 */
-	public ToolbarMow getToolbarMow() {
-		return toolbarMow;
+	public NotesLayout getNotesLayout() {
+		return notesLayout;
 	}
 
 	/**
-	 * If the toolbarMow is null then initializes it.
+	 * If the notes layout is null then initializes it.
 	 * @param app Needed for the initialization.
-	 * @return toolbarMow
+	 * @return notes layout
 	 */
 	@Nonnull
-	public ToolbarMow getToolbarMowSafe(AppW app) {
-		initToolbarMowIfNull(app);
-		return toolbarMow;
+	public NotesLayout getNotesLayoutSafe(AppW app) {
+		initNotesLayoutIfNull(app);
+		return notesLayout;
 	}
 
 	@Override
@@ -816,7 +827,8 @@ public class GeoGebraFrameFull
 		if (!Dom.eventTargetsElement(event, getMenuElement())
 				&& !Dom.eventTargetsElement(event, getToolbarMenuElement())
 				&& !getGlassPane().isDragInProgress()
-				&& !app.isUnbundled() && panelTransitioner.getCurrentPanel() == null) {
+				&& !app.isUnbundledOrWhiteboard()
+				&& panelTransitioner.getCurrentPanel() == null) {
 			app.hideMenu();
 		}
 	}
@@ -873,10 +885,10 @@ public class GeoGebraFrameFull
 	 * Update undo/redo in MOW toolbar
 	 */
 	public void updateUndoRedoMOW() {
-		if (toolbarMow == null) {
+		if (notesLayout == null) {
 			return;
 		}
-		toolbarMow.updateUndoRedoActions();
+		notesLayout.updateUndoRedoActions();
 	}
 
 	/**
@@ -893,11 +905,11 @@ public class GeoGebraFrameFull
 	 * @param mode
 	 *            new mode for MOW toolbar
 	 */
-	public void setToorbarMowMode(int mode) {
-		if (toolbarMow == null) {
+	public void setNotesMode(int mode) {
+		if (notesLayout == null) {
 			return;
 		}
-		toolbarMow.setMode(mode);
+		notesLayout.setMode(mode);
 	}
 
 	private void setKeyboardShowing(boolean keyboardShowing) {
@@ -976,5 +988,11 @@ public class GeoGebraFrameFull
 	@Override
 	protected ResourcesInjectorFull getResourcesInjector(AppletParameters appletParameters) {
 		return new ResourcesInjectorFull();
+	}
+
+	@Override
+	public void getScreenshotBase64(StringConsumer callback) {
+		Canvas c = Canvas.createIfSupported();
+		((DockManagerW) app.getGuiManager().getLayout().getDockManager()).paintPanels(c, callback);
 	}
 }

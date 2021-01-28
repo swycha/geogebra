@@ -339,6 +339,11 @@ public class AppConfigGraphing extends AbstractAppConfig {
 	}
 
 	@Override
+	public boolean hasLabelForDescription() {
+		return true;
+	}
+
+	@Override
 	public boolean hasEuclidianView() {
 		return true;
 	}

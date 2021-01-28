@@ -1,16 +1,20 @@
 package org.geogebra.common.kernel.commands;
 
 import static org.geogebra.test.TestStringUtil.unicode;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.geogebra.common.cas.CASparser;
 import org.geogebra.common.euclidian.EuclidianView;
+import org.geogebra.common.factories.CASFactory;
 import org.geogebra.common.gui.view.algebra.AlgebraItem;
+import org.geogebra.common.kernel.CASGenericInterface;
+import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.StringTemplate;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.main.App;
-import org.geogebra.common.main.Feature;
 import org.geogebra.desktop.util.GuiResourcesD;
 import org.geogebra.desktop.util.ImageManagerD;
 import org.geogebra.test.TestErrorHandler;
@@ -24,11 +28,11 @@ import com.himamis.retex.editor.share.util.Unicode;
 
 public class CommandsUsingCASTest extends AlgebraTest {
 
-	private static void add(String string) {
+	private void add(String string) {
 		ap.processAlgebraCommand(string, false);
 	}
 
-	private static void runSolveTests() {
+	private void runSolveTests() {
 		t("ss=Solve[ x^2=3 ]", "{x = (-sqrt(3)), x = sqrt(3)}");
 		Assert.assertTrue(AlgebraItem.isSymbolicDiffers(get("ss")));
 		t("sm=Solve[ {x+y=1,x-y=0} ]", "{{x = 1 / 2, y = 1 / 2}}");
@@ -43,12 +47,12 @@ public class CommandsUsingCASTest extends AlgebraTest {
 				"{{x = 60*deg, y = 60*deg}, {x = (-60*deg), y = (-60*deg)}}");
 	}
 
-	private static void deg(String def, String expect) {
+	private void deg(String def, String expect) {
 		EvalInfo evalInfo = new EvalInfo(true, true).addDegree(true);
 		checkWithEvalInfo(def, expect, evalInfo);
 	}
 
-	private static void checkWithEvalInfo(String def, String expect,
+	private void checkWithEvalInfo(String def, String expect,
 			EvalInfo evalInfo) {
 		GeoElementND[] geo = ap.processAlgebraCommandNoExceptionHandling(def,
 				false, TestErrorHandler.INSTANCE,
@@ -57,11 +61,11 @@ public class CommandsUsingCASTest extends AlgebraTest {
 		Assert.assertEquals(expect, res);
 	}
 
-	private static void tdeg(String string, String string2) {
+	private void tdeg(String string, String string2) {
 		t(string, string2.replace("deg", Unicode.DEGREE_STRING));
 	}
 
-	private static GeoElement get(String label) {
+	private GeoElement get(String label) {
 		return app.getKernel().lookupLabel(label);
 	}
 
@@ -70,6 +74,7 @@ public class CommandsUsingCASTest extends AlgebraTest {
 		CommandsTest.resetSyntaxCounter();
 		app.getKernel().clearConstruction(true);
 		app.setActiveView(App.VIEW_EUCLIDIAN);
+		app.getKernel().setPrintDecimals(2);
 	}
 
 	@After
@@ -267,6 +272,13 @@ public class CommandsUsingCASTest extends AlgebraTest {
 	}
 
 	@Test
+	public void expandShouldNotChangeWithRounding() {
+		t("Expand[ 0.5 (x+1)^2 ]", "(1 / 2 * x^(2)) + x + 1 / 2");
+		app.getKernel().setPrintDecimals(10);
+		t("Expand[ 0.5 (x+1)^2 ]", "(1 / 2 * x^(2)) + x + 1 / 2");
+	}
+
+	@Test
 	public void cmdSolutions() {
 		tRound("Solutions[ x^2=3 ]", "{-1.73205, 1.73205}");
 		t("Solutions[ 5x=4 ]", "{4 / 5}");
@@ -371,22 +383,16 @@ public class CommandsUsingCASTest extends AlgebraTest {
 
 	@Test
 	public void cmdIntegralSymbolic() {
-		// Tested in __giac.js
+		// Tested in giacTests.js
 	}
 
 	@Test
 	public void cmdRemovableDiscontinuity() {
 		t("RemovableDiscontinuity((3-x)/(2x^2-6x))", "(3, -0.16666666666666666)");
-	}
-
-	@Test
-	public void cmdHoles() {
-		if (app.has(Feature.COMMAND_HOLES)) {
-			t("Holes(x/x)", "(0, 1)");
-			t("Holes((x^2 - 4)/(x - 2))", "(2, 4)");
-			t("Holes(x + x/x)", "(0, 1)");
-			t("Holes(2^(x + x/x))", "(0, 2)");
-		}
+		t("RemovableDiscontinuity(x/x)", "(0, 1)");
+		t("RemovableDiscontinuity((x^2 - 4)/(x - 2))", "(2, 4)");
+		t("RemovableDiscontinuity(x + x/x)", "(0, 1)");
+		t("RemovableDiscontinuity(2^(x + x/x))", "(0, 2)");
 	}
 
 	@Test
@@ -394,6 +400,47 @@ public class CommandsUsingCASTest extends AlgebraTest {
 		t("PlotSolve(x^2-2)", "{(-1.4142135623730951, 0), (1.4142135623730951, 0)}");
 		GeoElement element = get("l1");
 		assertThat(element.isEuclidianVisible(), is(true));
+	}
+
+	@Test
+	public void functionComparisonShouldConsiderJustFiniteValues() {
+		t("f(x)=x^2/x", "x^(2) / x");
+		t("g(x)=x", "x");
+		t("f==g", "true");
+	}
+
+	@Test
+	public void functionComparisonShouldWorkForTrig() {
+		t("f(x)=sin(x)^2", "(sin(x))^(2)");
+		t("g(x)=1-cos(x)^2", "1 - (cos(x))^(2)");
+		t("f==g", "true");
+	}
+
+	@Test
+	public void simpleFunctionComparisonShouldNotNeedCAS() {
+		app = createApp();
+		ap = app.getKernel().getAlgebraProcessor();
+		app.setCASFactory(new CASFactory() {
+			@Override
+			public CASGenericInterface newGiac(CASparser parser, Kernel kernel) {
+				Assert.fail("No need for CAS");
+				return null;
+			}
+		});
+		// one or both functions undefined
+		t("f(x)=?", "?");
+		t("g(x)=?", "?");
+		t("f==g", "false");
+
+		// same string
+		t("f(x)=sin(x)", "sin(x)");
+		t("g(x)=sin(x)", "sin(x)");
+		t("f==g", "true");
+
+		// polynomial
+		t("f(x)=2x + 1", "(2 * x) + 1");
+		t("g(x)=1 + 2x", "1 + (2 * x)");
+		t("f==g", "true");
 	}
 
 	private void frac(String def, String expect) {

@@ -174,6 +174,10 @@ public class AppletParameters {
 		return hasAttribute("enableGraphing");
 	}
 
+	public boolean hasDataParamEnable3D() {
+		return hasAttribute("enable3D");
+	}
+
 	/**
 	 * @return rounding; consists of integer and suffix that determines whether
 	 *         significant figures are used (s) and whether fractions are
@@ -557,14 +561,6 @@ public class AppletParameters {
 	}
 
 	/**
-	 * @return whether suggestions buttons should be shown; default true if not
-	 *         set
-	 */
-	public boolean getDataParamShowSuggestionButtons() {
-		return getBoolDataParam("showSuggestionButtons", true);
-	}
-
-	/**
 	 * @return how much space should be left above the applet in fit-to-screen
 	 *         mode
 	 */
@@ -613,6 +609,10 @@ public class AppletParameters {
 	 */
 	public boolean getParamDisableAutoScale() {
 		return getBoolDataParam("disableAutoScale", false);
+	}
+
+	public boolean getParamRandomize() {
+		return getBoolDataParam("randomize", true);
 	}
 
 	/**
@@ -693,10 +693,9 @@ public class AppletParameters {
 	}
 
 	/**
-	 *
-	 * @return wether is multiuser applet
+	 * @return whether to show slides panel
 	 */
-	public boolean getDataParamMultiuserApplet() {
-		return getBoolDataParam("multiuserApplet", false);
+	public boolean getParamShowSlides() {
+		return getBoolDataParam("showSlides", getDataParamApp());
 	}
 }

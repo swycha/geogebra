@@ -10,7 +10,7 @@ import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.applet.GeoGebraFrameFull;
 import org.geogebra.web.full.gui.layout.panels.EuclidianDockPanelW;
-import org.geogebra.web.full.gui.toolbar.mow.ToolbarMow;
+import org.geogebra.web.full.gui.toolbar.mow.NotesLayout;
 import org.geogebra.web.full.main.AppWFull;
 import org.geogebra.web.html5.gui.view.button.StandardButton;
 import org.geogebra.web.html5.main.GgbFile;
@@ -44,7 +44,7 @@ public class PageListPanel
 	private boolean isTouch = false;
 
 	@Nonnull
-	private final ToolbarMow toolbarMow;
+	private final NotesLayout notesLayout;
 
 	/**
 	 * @param app
@@ -55,7 +55,7 @@ public class PageListPanel
 		this.frame = app.getAppletFrame();
 		this.dockPanel = (EuclidianDockPanelW) (app.getGuiManager().getLayout()
 				.getDockManager().getPanel(App.VIEW_EUCLIDIAN));
-		this.toolbarMow = frame.getToolbarMowSafe(app);
+		this.notesLayout = frame.getNotesLayoutSafe(app);
 		pageController = new PageListController(app, this);
 		app.setPageController(pageController);
 		initGUI();
@@ -88,7 +88,7 @@ public class PageListPanel
 
 	private void addPlusButton() {
 		plusButton = new StandardButton(
-				MaterialDesignResources.INSTANCE.add_white(), null, 24, app);
+				MaterialDesignResources.INSTANCE.add_white(), null, 24);
 		plusButton.setStyleName("mowFloatingButton");
 		plusButton.addStyleName("mowPlusButton");
 		plusButton.addFastClickHandler(source -> {
@@ -109,8 +109,7 @@ public class PageListPanel
 	public void loadNewPage(boolean selected) {
 		int index = addNewPreviewCard(selected);
 		pageController.loadNewPage(index);
-		app.getKernel().getConstruction().getUndoManager()
-				.storeAction(EventType.ADD_SLIDE, index + "",
+		app.getUndoManager().storeAction(EventType.ADD_SLIDE, index + "",
 						pageController.getSlide(index).getID());
 	}
 
@@ -128,16 +127,14 @@ public class PageListPanel
 				doShow ? "hideMowFloatingButton" : "showMowFloatingButton");
 	}
 
-	/**
-	 * opens the page control panel
-	 */
+	@Override
 	public void open() {
 		if (isVisible()) {
 			return;
 		}
 
 		dockPanel.hideZoomPanel();
-		toolbarMow.showPageControlButton(false);
+		notesLayout.showPageControlButton(false);
 
 		setVisible(true);
 		setLabels();
@@ -158,7 +155,7 @@ public class PageListPanel
 		}
 		showPlusButton(false);
 		addStyleName("animateOut");
-		CSSAnimation.runOnAnimation(() -> onClose(),
+		CSSAnimation.runOnAnimation(this::onClose,
 				getElement(), "animateOut");
 		return true;
 	}
@@ -168,7 +165,7 @@ public class PageListPanel
 	 */
 	protected void onClose() {
 		if (app.isWhiteboardActive()) {
-			toolbarMow.showPageControlButton(true);
+			notesLayout.showPageControlButton(true);
 			dockPanel.showZoomPanel();
 		}
 		setVisible(false);
@@ -225,14 +222,14 @@ public class PageListPanel
 		// remove associated ggb file
 		String id = pageController.getSlide(index).getID();
 		if (index == 0 && pageController.getSlideCount() == 1) {
-			app.getKernel().getConstruction().getUndoManager().storeAction(
-					EventType.CLEAR_SLIDE, id);
+			app.getUndoManager().storeActionWithSlideId(
+					EventType.CLEAR_SLIDE, id, new String[]{id});
 			pageController.loadNewPage(0);
 		} else {
 			pageController.removeSlide(index);
-			app.getKernel().getConstruction().getUndoManager()
-					.storeAction(EventType.REMOVE_SLIDE, index + "", id,
-							pageController.getSlideCount() + "");
+			app.getUndoManager()
+					.storeActionWithSlideId(EventType.REMOVE_SLIDE, id, new String[]{index + "", id,
+							pageController.getSlideCount() + ""});
 			updateIndexes(index);
 			// load new slide
 			if (index == pageController.getSlideCount()) {
@@ -270,9 +267,7 @@ public class PageListPanel
 		}
 	}
 
-	/**
-	 * resets the page control panel
-	 */
+	@Override
 	public void reset() {
 		contentPanel.clear();
 		addNewPreviewCard(true);

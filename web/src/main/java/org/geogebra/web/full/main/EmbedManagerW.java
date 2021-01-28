@@ -19,6 +19,7 @@ import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoEmbed;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.OpenFileListener;
+import org.geogebra.common.main.undo.ActionExecutor;
 import org.geogebra.common.move.events.BaseEvent;
 import org.geogebra.common.move.ggtapi.models.Material;
 import org.geogebra.common.move.views.EventRenderable;
@@ -34,6 +35,7 @@ import org.geogebra.web.full.html5.Sandbox;
 import org.geogebra.web.full.main.embed.CalcEmbedElement;
 import org.geogebra.web.full.main.embed.EmbedElement;
 import org.geogebra.web.full.main.embed.GraspableEmbedElement;
+import org.geogebra.web.html5.euclidian.EuclidianViewWInterface;
 import org.geogebra.web.html5.main.GgbFile;
 import org.geogebra.web.html5.main.MyImageW;
 import org.geogebra.web.html5.main.ScriptManagerW;
@@ -51,6 +53,7 @@ import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.Widget;
 
 import elemental2.core.Global;
+import jsinterop.base.Js;
 import jsinterop.base.JsPropertyMap;
 
 /**
@@ -59,7 +62,7 @@ import jsinterop.base.JsPropertyMap;
  * @author Zbynek
  *
  */
-public class EmbedManagerW implements EmbedManager, EventRenderable {
+public class EmbedManagerW implements EmbedManager, EventRenderable, ActionExecutor {
 
 	private AppWFull app;
 	private HashMap<DrawWidget, EmbedElement> widgets = new HashMap<>();
@@ -78,6 +81,7 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 		this.app = app;
 		this.counter = 0;
 		app.getLoginOperation().getView().add(this);
+		app.getUndoManager().addActionExecutor(this);
 	}
 
 	@Override
@@ -164,6 +168,8 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 		fr.runAsyncAfterSplash();
 
 		CalcEmbedElement element = new CalcEmbedElement(fr, this, drawEmbed.getEmbedID());
+		addDragHandler(Js.uncheckedCast(fr.getElement()));
+
 		element.setJsEnabled(isJsEnabled());
 		if (currentBase64 != null) {
 			fr.getApp().registerOpenFileListener(
@@ -177,6 +183,19 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 			}
 		}
 		return element;
+	}
+
+	private void addDragHandler(elemental2.dom.Element element) {
+		Style evPanelStyle = ((EuclidianViewWInterface) app.getActiveEuclidianView())
+				.getCanvasElement().getParentElement().getStyle();
+
+		element.addEventListener("dragstart", (event) -> {
+			evPanelStyle.setProperty("pointerEvents", "none");
+		});
+
+		element.addEventListener("dragend", (event) -> {
+			evPanelStyle.setProperty("pointerEvents", "initial");
+		});
 	}
 
 	private boolean hasWidgetWithId(int embedId) {
@@ -470,15 +489,13 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	 *            embed ID
 	 */
 	public void createUndoAction(int id) {
-		app.getKernel().getConstruction().getUndoManager()
-				.storeAction(EventType.EMBEDDED_STORE_UNDO,
+		app.getUndoManager().storeAction(EventType.EMBEDDED_STORE_UNDO,
 				String.valueOf(id));
 	}
 
-	@Override
-	public void executeAction(EventType action, int embedId) {
+	private void executeAction(EventType action, int embedId) {
 		restoreEmbeds();
-		for (Entry<DrawWidget, EmbedElement> entry : widgets.entrySet()) {
+		for (Entry<DrawWidget, EmbedElement> entry: widgets.entrySet()) {
 			if (entry.getKey().getEmbedID() == embedId) {
 				entry.getValue().executeAction(action);
 			}
@@ -522,12 +539,13 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	 *
 	 * @return the APIs of the embedded calculators.
 	 */
-	JsPropertyMap<Object> getEmbeddedCalculators() {
+	JsPropertyMap<Object> getEmbeddedCalculators(boolean includeGraspableMath) {
 		JsPropertyMap<Object> jso = JsPropertyMap.of();
 
 		for (Entry<DrawWidget, EmbedElement> entry : widgets.entrySet()) {
 			Object api = entry.getValue().getApi();
-			if (api != null) {
+			if (api != null && (includeGraspableMath
+					|| entry.getValue() instanceof CalcEmbedElement)) {
 				jso.set(entry.getKey().getGeoElement().getLabelSimple(), api);
 			}
 		}
@@ -556,5 +574,33 @@ public class EmbedManagerW implements EmbedManager, EventRenderable {
 	private boolean isJsEnabled() {
 		return !app.isMebis()
 				|| app.getLoginOperation().isTeacherLoggedIn();
+	}
+
+	@Override
+	public boolean executeAction(EventType action, String[] args) {
+		if (action == EventType.EMBEDDED_STORE_UNDO) {
+			embeddedAction(EventType.REDO, args[0]);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean undoAction(EventType action, String... args) {
+		if (action == EventType.EMBEDDED_STORE_UNDO) {
+			embeddedAction(EventType.UNDO, args[0]);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void embeddedAction(EventType action, String id) {
+		try {
+			int embedId = Integer.parseInt(id);
+			executeAction(action, embedId);
+		} catch (RuntimeException e) {
+			Log.warn("No undo possible for embed " + id);
+		}
 	}
 }

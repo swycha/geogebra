@@ -43,7 +43,6 @@ import org.geogebra.common.kernel.arithmetic.MySpecialDouble;
 import org.geogebra.common.kernel.arithmetic.SymbolicMode;
 import org.geogebra.common.kernel.arithmetic.Traversing;
 import org.geogebra.common.kernel.cas.AlgoUsingTempCASalgo;
-import org.geogebra.common.kernel.cas.UsesCAS;
 import org.geogebra.common.kernel.commands.AlgebraProcessor;
 import org.geogebra.common.kernel.geos.CasEvaluableFunction;
 import org.geogebra.common.kernel.geos.GProperty;
@@ -83,7 +82,6 @@ import org.geogebra.common.media.VideoManager;
 import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
 import org.geogebra.common.plugin.GeoClass;
-import org.geogebra.common.plugin.Operation;
 import org.geogebra.common.plugin.script.GgbScript;
 import org.geogebra.common.plugin.script.Script;
 import org.geogebra.common.util.DoubleUtil;
@@ -165,8 +163,6 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 	protected boolean insertLineBreaks = false;
 
 	// angle unit: degree, radians
-	// although this is initialized from the default preferences XML,
-	// we need to initialize this here too for GeoGebraWeb
 	private int angleUnit = Kernel.ANGLE_DEGREE;
 
 	private boolean viewReiniting = false;
@@ -2301,15 +2297,33 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 	 *            string template
 	 * @param unbounded
 	 *            whether to allow angles out of [0,2pi]
-	 * @return formated angle
+	 * @return formatted angle
 	 */
 	final public StringBuilder formatAngle(double phi, StringTemplate tpl,
 			boolean unbounded) {
 		// STANDARD_PRECISION * 10 as we need a little leeway as we've converted
 		// from radians
-		StringBuilder ret = formatAngle(phi, 10, tpl, unbounded);
+		return formatAngle(phi, 10, tpl, unbounded, false);
+	}
 
-		return ret;
+	/**
+	 * Returns formated angle (in degrees if necessary)
+	 *
+	 * @param phi
+	 *            angle in radians
+	 * @param tpl
+	 *            string template
+	 * @param unbounded
+	 *            whether to allow angles out of [0,2pi]\
+	 * @param forceDegrees
+	 *            whether to keep format in degrees]
+	 * @return formatted angle
+	 */
+	final public StringBuilder formatAngle(double phi, StringTemplate tpl,
+			boolean unbounded, boolean forceDegrees) {
+		// STANDARD_PRECISION * 10 as we need a little leeway as we've converted
+		// from radians
+		return formatAngle(phi, 10, tpl, unbounded, forceDegrees);
 	}
 
 	/**
@@ -2324,7 +2338,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 	 * @return formatted angle
 	 */
 	final public StringBuilder formatAngle(double alpha, double precision,
-			StringTemplate tpl, boolean unbounded) {
+			StringTemplate tpl, boolean unbounded, boolean forceDegrees) {
 		double phi = alpha;
 		sbFormatAngle.setLength(0);
 		switch (tpl.getStringType()) {
@@ -2338,7 +2352,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 				return sbFormatAngle;
 			}
 
-			if (degreesMode()) {
+			if (forceDegrees || degreesMode()) {
 				boolean rtl = getLocalization().isRightToLeftDigits(tpl);
 				if (rtl) {
 					if (tpl.hasCASType()) {
@@ -4139,6 +4153,26 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 		}
 	}
 
+	/**
+	 * @param geo
+	 *            animated geo
+	 */
+	public void notifyStartAnimation(GeoElement geo) {
+		if (notifyViewsActive) {
+			app.getEventDispatcher().startAnimation(geo);
+		}
+	}
+
+	/**
+	 * @param geo
+	 *            animated geo
+	 */
+	public void notifyStopAnimation(GeoElement geo) {
+		if (notifyViewsActive) {
+			app.getEventDispatcher().stopAnimation(geo);
+		}
+	}
+
 	public boolean isNotifyViewsActive() {
 		return notifyViewsActive && !viewReiniting;
 	}
@@ -4438,60 +4472,6 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 	 */
 	public void setInsertLineBreaks(boolean insertLineBreaks) {
 		this.insertLineBreaks = insertLineBreaks;
-	}
-
-	/**
-	 * @param type
-	 *            trig operation
-	 * @param en
-	 *            argument
-	 * @return type^-1(x)
-	 */
-	public ExpressionNode inverseTrig(Operation type, ExpressionValue en) {
-		switch (type) {
-		case SIN:
-		case COS:
-		case TAN:
-		case SINH:
-		case COSH:
-		case TANH:
-			return new ExpressionNode(this, en, Operation.inverse(type), null);
-
-		// asec(x) = acos(1/x)
-		case SEC:
-			return new ExpressionNode(this, new ExpressionNode(this,
-					(new MyDouble(this, 1)).wrap(), Operation.DIVIDE, en),
-					Operation.ARCCOS, null);
-		case CSC:
-			return new ExpressionNode(this, new ExpressionNode(this,
-					(new MyDouble(this, 1)).wrap(), Operation.DIVIDE, en),
-					Operation.ARCSIN, null);
-		case SECH:
-			return new ExpressionNode(this, new ExpressionNode(this,
-					(new MyDouble(this, 1)).wrap(), Operation.DIVIDE, en),
-					Operation.ACOSH, null);
-		case CSCH:
-			return new ExpressionNode(this, new ExpressionNode(this,
-					(new MyDouble(this, 1)).wrap(), Operation.DIVIDE, en),
-					Operation.ASINH, null);
-		case COTH:
-			return new ExpressionNode(this, new ExpressionNode(this,
-					(new MyDouble(this, 1)).wrap(), Operation.DIVIDE, en),
-					Operation.ATANH, null);
-
-		// acot(x) = pi/2 - atan(x)
-		case COT:
-
-			ExpressionNode halfPi = new ExpressionNode(this,
-					(new MyDouble(this, Math.PI)).wrap(), Operation.DIVIDE,
-					(new MyDouble(this, 2)).wrap());
-			return new ExpressionNode(this, halfPi, Operation.MINUS,
-					new ExpressionNode(this, en, Operation.ARCTAN, null));
-
-		default:
-			return new MyDouble(this, Double.NaN).wrap();
-
-		}
 	}
 
 	/**
@@ -4953,7 +4933,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 				geosToUpdate.add(geo);
 			}
 		}
-
+		CasAlgoChecker checker = new CasAlgoChecker();
 		for (AlgoElement algo : cons.getAlgoList()) {
 			if (algo instanceof AlgoCasBase) {
 				((AlgoCasBase) algo).clearCasEvalMap();
@@ -4962,7 +4942,7 @@ public class Kernel implements SpecialPointsListener, ConstructionStepper {
 				((AlgoUsingTempCASalgo) algo).refreshCASResults();
 			}
 
-			if (algo instanceof UsesCAS || algo instanceof AlgoCasCellInterface) {
+			if (checker.isAlgoUsingCas(algo)) {
 				// eg Limit, LimitAbove, LimitBelow, SolveODE
 				// AlgoCasCellInterface: eg Solve[x^2]
 				algo.compute();

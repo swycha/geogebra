@@ -36,7 +36,6 @@ import org.geogebra.common.kernel.GeoFactory;
 import org.geogebra.common.kernel.Kernel;
 import org.geogebra.common.kernel.Macro;
 import org.geogebra.common.kernel.ModeSetter;
-import org.geogebra.common.kernel.UndoManager;
 import org.geogebra.common.kernel.commands.Commands;
 import org.geogebra.common.kernel.geos.GeoElement;
 import org.geogebra.common.kernel.geos.GeoElementGraphicsAdapter;
@@ -44,12 +43,9 @@ import org.geogebra.common.kernel.geos.GeoImage;
 import org.geogebra.common.kernel.geos.GeoNumeric;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.DialogManager;
-import org.geogebra.common.main.Feature;
 import org.geogebra.common.main.FontManager;
 import org.geogebra.common.main.GeoElementSelectionListener;
 import org.geogebra.common.main.MaterialsManagerI;
-import org.geogebra.common.main.MyError;
-import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.SpreadsheetTableModel;
 import org.geogebra.common.main.SpreadsheetTableModelSimple;
 import org.geogebra.common.main.error.ErrorHandler;
@@ -58,6 +54,7 @@ import org.geogebra.common.main.settings.DefaultSettings;
 import org.geogebra.common.main.settings.EuclidianSettings;
 import org.geogebra.common.main.settings.SettingsBuilder;
 import org.geogebra.common.main.settings.config.AppConfigDefault;
+import org.geogebra.common.main.undo.UndoManager;
 import org.geogebra.common.move.events.BaseEventPool;
 import org.geogebra.common.move.ggtapi.models.Chapter;
 import org.geogebra.common.move.ggtapi.models.ClientInfo;
@@ -845,7 +842,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 				setRandomSeed(seed);
 			}
 			getXMLio().processXMLString(def.getConstruction(), true, false,
-					true);
+					getAppletParameters().getParamRandomize());
 			// defaults (optional)
 			if (def.hasDefaults2d()) {
 				getXMLio().processXMLString(def.getDefaults2d(), false, true);
@@ -959,26 +956,8 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	}
 
 	@Override
-	public final void setXML(String xml, boolean clearAll) {
-		if (clearAll) {
-			setCurrentFile(null);
-		}
-
-		try {
-			// make sure objects are displayed in the correct View
-			setActiveView(App.VIEW_EUCLIDIAN);
-			getXMLio().processXMLString(xml, clearAll, false);
-		} catch (MyError err) {
-			err.printStackTrace();
-			showError(err);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showError(Errors.LoadFileFailed);
-		}
-	}
-
-	@Override
 	public boolean clearConstruction() {
+		getSelectionManager().clearSelectedGeos(false);
 		kernel.clearConstruction(true);
 
 		kernel.initUndoInfo();
@@ -1222,7 +1201,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 *            archive
 	 * @return whether file is valid
 	 */
-	public boolean openFile(JavaScriptObject fileToHandle) {
+	public boolean openFile(File fileToHandle) {
+		if (getLAF().supportsLocalSave()) {
+			getFileManager().setFileProvider(Provider.LOCAL);
+		}
 		resetPerspectiveParam();
 		resetUrl();
 		return doOpenFile(fileToHandle, null);
@@ -1249,7 +1231,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 *         mean, that the file opening was successful, and the opening
 	 *         finished already.
 	 */
-	public native boolean doOpenFile(JavaScriptObject fileToHandle,
+	public native boolean doOpenFile(File fileToHandle,
 			JavaScriptObject callback) /*-{
 		var ggbRegEx = /\.(ggb|ggt|ggs|csv|off|pdf)$/i;
 		var fileName = fileToHandle.name.toLowerCase();
@@ -1497,7 +1479,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 *         Note that If the function returns true, it's don't mean, that the
 	 *         file opening was successful, and the opening finished already.
 	 */
-	public native boolean openFileAsImage(JavaScriptObject fileToHandle,
+	public native boolean openFileAsImage(File fileToHandle,
 			JavaScriptObject callback) /*-{
 		var imageRegEx = /\.(png|jpg|jpeg|gif|bmp|svg)$/i;
 		if (!fileToHandle.name.toLowerCase().match(imageRegEx))
@@ -1649,6 +1631,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 */
 	protected void initCoreObjects() {
 		kernel = newKernel(this);
+		kernel.setAngleUnit(kernel.getApplication().getConfig().getDefaultAngleUnit());
 
 		initSettings();
 
@@ -1690,21 +1673,13 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 			getSettings().getCasSettings().setEnabled(
 					getAppletParameters().getDataParamEnableCAS(false));
 		}
-		if (getSettings().getCasSettings().isEnabled()
-				&& has(Feature.SYMBOLIC_AV)) {
+		if (getSettings().getCasSettings().isEnabled()) {
 			getKernel().setSymbolicMode(getConfig().getSymbolicMode());
 		}
 
-		if (is3DDisabledForApp()) {
-			if (getSettings().getEuclidian(-1) != null) {
-				getSettings().getEuclidian(-1).setEnabled(false);
-			}
-		} else if (getAppletParameters().getDataParamEnable3D(false)
-				|| !getAppletParameters().getDataParamEnable3D(true)) {
-			if (getSettings().supports3D()) {
-				getSettings().getEuclidian(-1).setEnabled(
-						getAppletParameters().getDataParamEnable3D(false));
-			}
+		if (getSettings().getEuclidian(-1) != null) {
+			getSettings().getEuclidian(-1)
+					.setEnabled(getAppletParameters().getDataParamEnable3D(true));
 		}
 
 		if (getAppletParameters().getDataParamEnableGraphing(false)
@@ -2026,7 +2001,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		translateHeader();
 	}
 
-	private void setTitle() {
+	protected void setTitle() {
 		String titleTransKey = getVendorSettings().getAppTitle(getConfig());
 		String title = getLocalization().getMenu(titleTransKey);
 		if (getAppletParameters().getLoginAPIurl() != null) {
@@ -3090,6 +3065,10 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		}
 	}
 
+	public void updateMaterialURL(Material material) {
+		updateMaterialURL(material.getId(), material.getSharingKeyOrId(), material.getTitle());
+	}
+
 	/**
 	 * @param sharingKey
 	 *            material sharing key
@@ -3272,12 +3251,6 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 		return hiddenTextArea;
 	}-*/;
 
-	@Override
-	public void copyTextToSystemClipboard(String text) {
-		Log.debug("copying to clipboard " + text);
-		CopyPasteW.writeToExternalClipboard(text);
-	}
-
 	/**
 	 * Toggle menu visibility
 	 */
@@ -3314,27 +3287,33 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public boolean isUnbundled() {
-		return AppConfigDefault
-				.isUnbundledOrNotes(appletParameters.getDataParamAppName())
-				&& !"notes".equals(appletParameters.getDataParamAppName());
-
+		return AppConfigDefault.isUnbundled(getConfig().getAppCode());
 	}
 
 	@Override
 	public boolean isUnbundledGraphing() {
-		return "graphing".equals(appletParameters.getDataParamAppName());
+		return "graphing".equals(getSubAppCode());
 	}
 
 	@Override
 	public boolean isUnbundledGeometry() {
-		return "geometry".equals(appletParameters.getDataParamAppName());
+		return "geometry".equals(getSubAppCode());
 	}
 
 	/**
 	 * @return whether we are running 3D grapher
 	 */
 	public boolean isUnbundled3D() {
-		return "3d".equals(appletParameters.getDataParamAppName());
+		return "3d".equals(getSubAppCode());
+	}
+
+	/**
+	 * @return the sub app code, if it exists, or the app code
+	 */
+	private String getSubAppCode() {
+		return getConfig().getSubAppCode() != null
+				? getConfig().getSubAppCode()
+				: getConfig().getAppCode();
 	}
 
 	/**
@@ -3409,12 +3388,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	}
 
-	/**
-	 * When multiple slides are present give ID of the current one, otherwise
-	 * give default slide ID
-	 *
-	 * @return the string ID of current slide
-	 */
+	@Override
 	public String getSlideID() {
 		return getPageController() == null
 				? GgbFile.SLIDE_PREFIX + GgbFile.getCounter()
@@ -3423,7 +3397,7 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 
 	@Override
 	public void copyGraphicsViewToClipboard() {
-		EuclidianViewW ev = (EuclidianViewW) getActiveEuclidianView();
+		EuclidianViewWInterface ev = (EuclidianViewWInterface) getActiveEuclidianView();
 		copyImageToClipboard(ev.getExportImageDataUrl(3, false, false));
 	}
 
@@ -3562,8 +3536,8 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 	 *
 	 * @return then embedded calculator apis.
 	 */
-	public JsPropertyMap<Object> getEmbeddedCalculators() {
-		// iplemented in AppWFull
+	public JsPropertyMap<Object> getEmbeddedCalculators(boolean includeGraspableMath) {
+		// implemented in AppWFull
 		return null;
 	}
 
@@ -3666,5 +3640,12 @@ public abstract class AppW extends App implements SetLabels, HasLanguage {
 				dispatchEvent(new Event(EventType.CLOSE_KEYBOARD));
 			}
 		}
+	}
+
+	/**
+	 * @return whether a file with multiple slides is open
+	 */
+	public boolean isMultipleSlidesOpen() {
+		return getPageController() != null && getPageController().getSlideCount() > 1;
 	}
 }

@@ -13,8 +13,8 @@ public class ParserFunctionsFactory {
 
 	private static final String[] TRANSLATABLE_1_VAR = new String[] { "sin", "cos",
 			"tan", "cot", "csc", "sec", "sinh", "cosh", "tanh", "coth", "csch",
-			"sech", "asin", "acos", "atan", "asind", "acosd", "atand", "asinh",
-			"acosh", "atanh", "real", "imaginary", "conjugate",
+			"sech", "arcsin", "arccos", "arctan", "asind", "acosd", "atand", "arcsinh",
+			"arccosh", "arctanh", "real", "imaginary", "conjugate",
 			"fractionalPart" };
 
 	private final boolean addExtra;
@@ -241,7 +241,7 @@ public class ParserFunctionsFactory {
 		for (String fn: TRANSLATABLE_1_VAR) {
 			pf.addTranslatable(fn, SINGLE_ARG);
 		}
-		pf.addTranslatable("nroot", 2, "( <x>, <n> )", Operation.NROOT);
+		pf.addTranslatable("nroot", 2, ParserFunctions.NROOT_SUFFIX, Operation.NROOT);
 		pf.addTranslatable("nPr", 2, "( <n>, <r> )", Operation.NPR);
 	}
 }

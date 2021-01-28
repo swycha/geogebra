@@ -94,7 +94,6 @@ class Header extends FlowPanel implements KeyDownHandler {
 		createCenter();
 		maybeAddUndoRedoPanel();
 		setLabels();
-		ClickStartHandler.initDefaults(this, true, true);
 		setTabIndexes();
 		lastOrientation = app.isPortrait();
 	}
@@ -105,6 +104,15 @@ class Header extends FlowPanel implements KeyDownHandler {
 			addUndoRedoButtons();
 		}
 		return isAllowed;
+	}
+
+	/**
+	 * Remove the undo-redo panel from the frame
+	 */
+	public void removeUndoRedoPanel() {
+		if (undoRedoPanel != null) {
+			toolbarPanel.getFrame().remove(undoRedoPanel);
+		}
 	}
 
 	private void createCenter() {
@@ -523,7 +531,7 @@ class Header extends FlowPanel implements KeyDownHandler {
 			if ((evLeft <= 0) && !app.isPortrait()) {
 				return;
 			}
-			int move = app.isPortrait() && !needsHeader() ? 48 : 0;
+			int move = app.isPortrait() && app.showMenuBar() && !needsHeader() ? 48 : 0;
 			undoRedoPanel.getElement().getStyle().setTop(evTop, Unit.PX);
 			undoRedoPanel.getElement().getStyle().setLeft(evLeft + move,
 					Unit.PX);

@@ -23,9 +23,7 @@ import org.geogebra.common.jre.kernel.commands.CommandDispatcherJre;
 import org.geogebra.common.jre.main.LocalizationJre;
 import org.geogebra.common.jre.plugin.GgbAPIJre;
 import org.geogebra.common.kernel.Construction;
-import org.geogebra.common.kernel.DefaultUndoManager;
 import org.geogebra.common.kernel.Kernel;
-import org.geogebra.common.kernel.UndoManager;
 import org.geogebra.common.kernel.commands.CommandDispatcher;
 import org.geogebra.common.kernel.geos.GeoAudio;
 import org.geogebra.common.kernel.geos.GeoElement;
@@ -37,9 +35,6 @@ import org.geogebra.common.main.DialogManager;
 import org.geogebra.common.main.FontManager;
 import org.geogebra.common.main.GlobalKeyDispatcher;
 import org.geogebra.common.main.GuiManagerInterface;
-import org.geogebra.common.main.Localization;
-import org.geogebra.common.main.MyError;
-import org.geogebra.common.main.MyError.Errors;
 import org.geogebra.common.main.SpreadsheetTableModel;
 import org.geogebra.common.main.SpreadsheetTableModelSimple;
 import org.geogebra.common.main.settings.DefaultSettings;
@@ -48,6 +43,9 @@ import org.geogebra.common.main.settings.config.AppConfigDefault;
 import org.geogebra.common.main.settings.config.AppConfigGeometry;
 import org.geogebra.common.main.settings.config.AppConfigGraphing;
 import org.geogebra.common.main.settings.config.AppConfigGraphing3D;
+import org.geogebra.common.main.settings.config.AppConfigNotes;
+import org.geogebra.common.main.undo.DefaultUndoManager;
+import org.geogebra.common.main.undo.UndoManager;
 import org.geogebra.common.plugin.GgbAPI;
 import org.geogebra.common.plugin.ScriptManager;
 import org.geogebra.common.sound.SoundManager;
@@ -375,31 +373,6 @@ public class AppCommon extends App {
 	}
 
     @Override
-	public void setXML(String xml, boolean clearAll) {
-		// TODO copied from AppDNoGui
-		if (xml == null) {
-			return;
-		}
-		if (clearAll) {
-			resetCurrentFile();
-		}
-
-		try {
-
-			// make sure objects are displayed in the correct View
-			setActiveView(App.VIEW_EUCLIDIAN);
-
-			getXMLio().processXMLString(xml, clearAll, false);
-		} catch (MyError err) {
-			err.printStackTrace();
-			showError(err);
-		} catch (Exception e) {
-			e.printStackTrace();
-			showError(Errors.LoadFileFailed);
-		}
-    }
-
-    @Override
     public GgbAPI getGgbApi() {
 		return new GgbAPIJre(this) {
 
@@ -496,7 +469,7 @@ public class AppCommon extends App {
 			}
 
 			@Override
-			public void playFile(String string) {
+			public void playFile(GeoElement geoElement, String file) {
 				// stub
 			}
 
@@ -512,19 +485,19 @@ public class AppCommon extends App {
 			}
 
 			@Override
-			public int getDuration(String url) {
+			public int getDuration(GeoAudio geoAudio) {
 				// stub
 				return 0;
 			}
 
 			@Override
-			public int getCurrentTime(String url) {
+			public int getCurrentTime(GeoAudio geoAudio) {
 				// stub
 				return 0;
 			}
 
 			@Override
-			public void setCurrentTime(String url, int pos) {
+			public void setCurrentTime(GeoAudio geoAudio, int pos) {
 				// stub
 
 			}
@@ -695,7 +668,7 @@ public class AppCommon extends App {
     }
 
     @Override
-    public Localization getLocalization() {
+    public LocalizationJre getLocalization() {
         return localization;
     }
 
@@ -804,5 +777,10 @@ public class AppCommon extends App {
 
 	public void setAppletFlag(boolean appletFlag) {
 		this.appletFlag = appletFlag;
+	}
+
+	@Override
+	public boolean isWhiteboardActive() {
+		return getConfig() instanceof AppConfigNotes;
 	}
 }

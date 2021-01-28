@@ -1864,10 +1864,12 @@ public class GeoNumeric extends GeoElement
 
 	@Override
 	public DescriptionMode getDescriptionMode() {
-		if (getDefinition() != null && getDefinition().isFraction()) {
+		if (getDefinition() != null
+				&& (getDefinition().isFraction() || value != Math.round(value))
+				&& !"?".equals(getDefinition(StringTemplate.defaultTemplate))) {
 			return DescriptionMode.DEFINITION_VALUE;
 		}
-		if (isSimple()) {
+		if (isSimple() || (!isDefined() && isIndependent())) {
 			// matters in scientific where we don't have AV sliders
 			return DescriptionMode.VALUE;
 		}
@@ -1957,11 +1959,6 @@ public class GeoNumeric extends GeoElement
 	@Override
 	public double evaluateDouble() {
 		return getDouble();
-	}
-
-	@Override
-	protected boolean mayShowDescriptionInsteadOfDefinitionNoAlgoParent() {
-		return false;
 	}
 
 	private void addAuralSliderValue(ScreenReaderBuilder sb) {

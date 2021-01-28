@@ -2,6 +2,7 @@ package org.geogebra.web.full.gui.view.algebra;
 
 import java.util.HashMap;
 
+import org.geogebra.common.GeoGebraConstants;
 import org.geogebra.common.kernel.kernelND.GeoElementND;
 import org.geogebra.common.plugin.Event;
 import org.geogebra.common.plugin.EventType;
@@ -15,8 +16,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.himamis.retex.editor.share.event.MathFieldListener;
-import com.himamis.retex.editor.share.model.MathSequence;
-import com.himamis.retex.editor.share.serializer.GeoGebraSerializer;
 import com.himamis.retex.editor.web.MathFieldW;
 
 /**
@@ -156,11 +155,6 @@ public class LatexTreeItemController extends RadioTreeItemController
 	}
 
 	@Override
-	public String serialize(MathSequence selectionText) {
-		return GeoGebraSerializer.serialize(selectionText);
-	}
-
-	@Override
 	public void onInsertString() {
 		// nothing to do
 	}
@@ -260,7 +254,8 @@ public class LatexTreeItemController extends RadioTreeItemController
 	 */
 	MathFieldInputSuggestions getInputSuggestions() {
 		if (sug == null) {
-			sug = new MathFieldInputSuggestions(app, item, false);
+			boolean forCas = getApp().getConfig().getVersion() == GeoGebraConstants.Version.CAS;
+			sug = new MathFieldInputSuggestions(app, item, forCas);
 		}
 		return sug;
 	}

@@ -48,6 +48,8 @@ public class DrawInputBox extends CanvasDrawable {
 	public static final int TF_MARGIN_VERTICAL = 10;
 	/** Padding of the field (plain text) */
 	public static final int TF_PADDING_HORIZONTAL = 2;
+
+	public static final int SYMBOLIC_MIN_HEIGHT = 40;
 	public static final int MIN_HEIGHT = 24;
 
 	/** textfield */
@@ -438,7 +440,8 @@ public class DrawInputBox extends CanvasDrawable {
 			view.getViewTextField().setBoxBounds(labelRectangle);
 		}
 
-		if (!editing) {
+		// no painting while editing to avoid double border: both symbolic and nonsymbolic
+		if ((!editing && !isSelectedForInput()) || view.getApplication().isExporting()) {
 			drawTextfieldOnCanvas(g2);
 		}
 
@@ -500,7 +503,7 @@ public class DrawInputBox extends CanvasDrawable {
 		if (drawDynamicCaption.isEnabled()) {
 			drawDynamicCaption.draw(g2);
 		} else if (isLatexString(text)) {
-			labelDimension = drawLatex(g2, geo0, getLabelFont(), text, xLabel, getLabelTop());
+			labelDimension = drawLatex(g2, geo0, getLabelFont(), text, xLabel, (int) getLabelTop());
 		} else {
 			g2.setPaint(geo.getObjectColor());
 
@@ -528,11 +531,21 @@ public class DrawInputBox extends CanvasDrawable {
 		view.getViewTextField().revalidateBox();
 		recomputeSize();
 		labelRectangle.setBounds(boxLeft,
-				(int) Math.round(getLabelTop() + ((getHeightForLabel(labelDesc)
-						- getPreferredHeight()) / 2.0)),
+				computeBoxTop(getPreferredHeight()),
 				getPreferredWidth(),
 				getPreferredHeight());
 		view.getViewTextField().setBoxBounds(labelRectangle);
+	}
+
+	/**
+	 * Compute the top of the box based on the position of the label, the height
+	 * of the label and the height of the box
+	 * @param height height of the box
+	 * @return y coordinate of the box
+	 */
+	public int computeBoxTop(double height) {
+		double labelHeight = getHeightForLabel(labelDesc);
+		return (int) Math.floor(getLabelTop() + ((labelHeight - height) / 2));
 	}
 
 	/**
@@ -634,13 +647,6 @@ public class DrawInputBox extends CanvasDrawable {
 	 */
 	public AutoCompleteTextField getTextField() {
 		return view.getTextField(getGeoInputBox(), this);
-	}
-
-	/**
-	 * Writes the real textfield's value to the GeoInputBox.
-	 */
-	public void apply() {
-		getGeoInputBox().updateLinkedGeo(getTextField().getText());
 	}
 
 	/**

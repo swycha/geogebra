@@ -1178,6 +1178,12 @@ public class Ggb2giac {
 		// p("Prog.1","<<%0>>");
 		// p("Prog.2","<<begin scalar %0; return %1 end>>");
 
+		// return the median of that part of the list which fall at or below the list median
+		p("Q1.1","[[ggblist:=sort(%0)],[ggbmedian:=median(ggblist)], [ggbsublist:=at(ggblist,0..floor(length(ggblist)/2)-1)], when(length(ggblist)<2,undef, median(ggbsublist))][3]");
+
+		// return the number q3 such that three-fourths of the list numbers fall at or below q3.
+		p("Q3.1","[[ggblist:=sort(%0)],[ggbmedian:=median(ggblist)], [ggbsublist:=at(ggblist, (ceil(length(ggblist)/2))..(length(ggblist)-1))], when(length(ggblist)<2,undef, median(ggbsublist))][3]");
+
 		p("RandomUniform.2", "exact(%0+rand(0,1)*(%1-%0))");
 		p("Random.2", "(%0+rand(%1-(%0)+1))"); // "RandomBetween"
 		p("RandomBinomial.2", "binomial_icdf(%0,%1,rand(0,1))");
@@ -1435,7 +1441,10 @@ public class Ggb2giac {
 
 		// eg tlin(halftan(csc(x)-cot(x)+csc(y)-cot(y))) ->
 		// tan(x/2)+tan(y/2)
-		p("TrigExpand.1", "tan2sincos(trigexpand(%0))");
+		// check both methods and pick the *longer* answer
+		p("TrigExpand.1",
+				"[[[ggbsimparg0:=%0],[ggbsimpans:=?],[ggbsimpans:=tan2sincos(trigexpand(ggbsimparg0))],[ggbsimpans2:=tlin(ggbsimparg0)]],"
+						+ "when(length(\"\"+ggbsimpans)>length(\"\"+ggbsimpans2),ggbsimpans,ggbsimpans2)][1]");
 		p("TrigExpand.2",
 				"[[ggbtrigarg0:=%0],when((%1)[0]=='tan',trigexpand(ggbtrigarg0),tan2sincos(trigexpand(ggbtrigarg0)))][1]");
 
