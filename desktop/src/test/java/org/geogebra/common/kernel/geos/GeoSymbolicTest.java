@@ -1313,13 +1313,6 @@ public class GeoSymbolicTest extends BaseSymbolicTest {
 	}
 
 	@Test
-	public void testNestedFunction() {
-		add("f(x)=1+7*e^(-0.2x)");
-		GeoSymbolic nestedFunction = add("r(s)=s*(f(s)-1)");
-		assertThat(nestedFunction.getTwinGeo(), instanceOf(GeoFunction.class));
-	}
-
-	@Test
 	public void testExtremum() {
 		GeoSymbolic extremum = add("Extremum(x*ln(x^2))");
 		GeoList twin = (GeoList) extremum.getTwinGeo();
