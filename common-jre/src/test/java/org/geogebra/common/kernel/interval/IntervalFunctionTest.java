@@ -1,6 +1,7 @@
 package org.geogebra.common.kernel.interval;
 
 import static java.lang.Math.PI;
+import static org.geogebra.common.kernel.interval.IntervalConstants.undefined;
 import static org.geogebra.common.kernel.interval.IntervalFunction.isSupported;
 import static org.geogebra.common.kernel.interval.IntervalTest.interval;
 import static org.junit.Assert.assertEquals;
@@ -106,11 +107,19 @@ public class IntervalFunctionTest extends BaseUnitTest {
 	}
 
 	@Test
+	public void evaluateReciprocalX() throws Exception {
+		GeoFunction geo = add("1/x");
+		IntervalFunction function = new IntervalFunction(geo);
+		Interval actual = function.evaluate(interval(0, 0));
+		assertEquals(undefined(), actual);
+	}
+
+	@Test
 	public void evaluateSqrtReciprocalX() throws Exception {
 		GeoFunction geo = add("sqrt(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
-		assertEquals(interval(0, Double.POSITIVE_INFINITY), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -118,7 +127,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-1E-7, 1E-7));
-		assertEquals(IntervalConstants.whole(), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -126,7 +135,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/(0/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-5, 5));
-		assertEquals(IntervalConstants.whole(), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -134,7 +143,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/(0/x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-15, 15));
-		assertEquals(interval(0, Double.POSITIVE_INFINITY), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -142,7 +151,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("1/tan(x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
-		assertEquals(IntervalConstants.whole(), actual);
+		assertEquals(undefined(), actual);
 	}
 
 
@@ -151,7 +160,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("sqrt(1/tan(x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(1.5599999, 1.57999999));
-		assertEquals(interval(0, Double.POSITIVE_INFINITY), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -159,7 +168,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("tan(1/x)");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(Double.NEGATIVE_INFINITY, 0));
-		assertEquals(IntervalConstants.whole(), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
@@ -167,7 +176,7 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		GeoFunction geo = add("tan(cot(x))");
 		IntervalFunction function = new IntervalFunction(geo);
 		Interval actual = function.evaluate(interval(-0.1, 0.1));
-		assertEquals(IntervalConstants.whole(), actual);
+		assertEquals(undefined(), actual);
 	}
 
 	@Test
