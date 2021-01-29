@@ -504,11 +504,7 @@
 		margin-left: 0;
 	}
 
-	.gwt-TabLayoutPanel {
-		background-color: #F8F8F8;
-	}
-
-	.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs, .gwt-TabBar {
+	.gwt-TabLayoutPanel .gwt-TabLayoutPanelTabs {
 		border-bottom: 1px solid #DCDCDC;
 	}
 
@@ -552,13 +548,9 @@
 	}
 
 	.gwt-TabPanelBottom,
-	.propertiesPanel {
-		padding-left: 8px;
-		border-right: 1px solid #DCDCDC;
-	}
-
-	.gwt-TabPanelBottom {
-		padding-top: 8px;
+	.gwt-TabLayoutPanelContent {
+		padding: 8px;
+		border: 1px solid #DCDCDC;
 	}
 
 	.propertiesPanel {
@@ -1697,7 +1689,6 @@
 	.textEditorDisclosurePanelContent {
 		margin: 0;
 		padding: 0;
-		border: none;
 		font-size: 80%;
 	}
 
