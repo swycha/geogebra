@@ -81,13 +81,13 @@ public class IntervalTrigonometricTest {
 		assertEquals(interval(-1, 1), interval(-PI / 4, PI / 4).tan());
 		assertEquals(interval(-1, 1), interval(-9 * PI / 4, -7 * PI / 4).tan());
 		assertEquals(interval(-1, 1), interval(7 * PI / 4, 9 * PI / 4).tan());
-		assertEquals(IntervalConstants.undefined(),
+		assertEquals(undefined(),
 				interval(PI / 2, PI / 2).tan());
-		assertEquals(IntervalConstants.undefined(),
+		assertEquals(undefined(),
 				interval(5 * PI / 2, 5 * PI / 2).tan());
-		assertEquals(IntervalConstants.undefined(),
+		assertEquals(undefined(),
 				interval(-5 * PI / 2, -5 * PI / 2).tan());
-		assertEquals(IntervalConstants.undefined(),
+		assertEquals(undefined(),
 				interval(0, PI / 2).tan());
 		assertEquals(interval(0.16767801556, 0.18877817478),
 				interval(-2.975460122699386, -2.955010224948875).tan());
@@ -95,12 +95,12 @@ public class IntervalTrigonometricTest {
 
 	@Test
 	public void testTanCutOffPoint() {
-		assertEquals(IntervalConstants.undefined(), interval(PI/2, PI/2).tan());
+		assertEquals(undefined(), interval(PI / 2, PI / 2).tan());
 	}
 
 	@Test
 	public void testTanWithInfinity() {
-		assertEquals(IntervalConstants.undefined(), IntervalConstants.whole().tan());
+		assertEquals(undefined(), IntervalConstants.whole().tan());
 	}
 
 	@Test

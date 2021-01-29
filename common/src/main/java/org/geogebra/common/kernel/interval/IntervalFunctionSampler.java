@@ -78,7 +78,7 @@ public class IntervalFunctionSampler {
 			addEmpty = !y.isEmpty();
 		}
 
-		IntervalAsymptotes asymtotes = new IntervalAsymptotes(function, samples, range);
+		IntervalAsymptotes asymtotes = new IntervalAsymptotes(samples);
 		asymtotes.process();
 		return samples;
 	}

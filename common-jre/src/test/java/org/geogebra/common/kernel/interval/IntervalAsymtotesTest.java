@@ -17,7 +17,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 	@Test
 	public void tanX() {
 		GeoFunction tanX = add("tan(x)");
-		double xMin = -Math.PI/4;
+		double xMin = -Math.PI / 4;
 		IntervalTuple range = PlotterUtils.newRange(xMin, (3 * Math.PI) / 4, 8, 8);
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(tanX, range, 100);
@@ -56,7 +56,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
-		assertTrue(new Interval(3.1622776016, Double.POSITIVE_INFINITY).almostEqual(result.get(0).y()));
+		assertEquals(new Interval(3.1622776016, Double.POSITIVE_INFINITY), result.get(0).y());
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(function, range, 100);
 		IntervalTupleList result = sampler.result();
-		assertTrue(new Interval(Double.NEGATIVE_INFINITY, -3.1622776016).almostEqual(result.get(0).y()));
+		assertEquals(new Interval(Double.NEGATIVE_INFINITY, -3.1622776016), result.get(0).y());
 	}
 
 	@Test

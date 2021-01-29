@@ -7,24 +7,15 @@ package org.geogebra.common.kernel.interval;
  * that data should be fixed there.
  */
 public class IntervalAsymptotes {
-	private final IntervalFunction function;
 	private final IntervalTupleList samples;
-	private final IntervalTuple range;
-	private final Interval extremum;
 
 	/**
 	 * Constructor
+	 *  @param samples the evaluated data
 	 *
-	 * @param function the original interval function.
-	 * @param samples the evaluated data
-	 * @param range the visible range of x and y
 	 */
-	public IntervalAsymptotes(IntervalFunction function, IntervalTupleList samples,
-			IntervalTuple range) {
-		this.function = function;
+	public IntervalAsymptotes(IntervalTupleList samples) {
 		this.samples = samples;
-		this.range = range;
-		extremum = IntervalConstants.empty();
 	}
 
 	/**

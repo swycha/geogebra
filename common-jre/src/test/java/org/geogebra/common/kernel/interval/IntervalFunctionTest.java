@@ -154,7 +154,6 @@ public class IntervalFunctionTest extends BaseUnitTest {
 		assertEquals(undefined(), actual);
 	}
 
-
 	@Test
 	public void evaluateSqrtTangentInverse() throws Exception {
 		GeoFunction geo = add("sqrt(1/tan(x))");

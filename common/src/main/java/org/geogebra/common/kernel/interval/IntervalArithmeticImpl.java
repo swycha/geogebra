@@ -74,7 +74,7 @@ public class IntervalArithmeticImpl implements IntervalArithmetic {
 		}
 
 		if (interval.hasZero()) {
-			return IntervalConstants.undefined();
+			return undefined();
 		}
 
 		if (interval.getHigh() < 0) {
