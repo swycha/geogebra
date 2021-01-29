@@ -1,5 +1,6 @@
 package org.geogebra.common.kernel.interval;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -9,7 +10,6 @@ import java.util.List;
 import org.geogebra.common.BaseUnitTest;
 import org.geogebra.common.euclidian.plot.interval.PlotterUtils;
 import org.geogebra.common.kernel.geos.GeoFunction;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class IntervalAsymtotesTest extends BaseUnitTest {
@@ -22,7 +22,7 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		IntervalFunctionSampler sampler =
 				new IntervalFunctionSampler(tanX, range, 100);
 		IntervalTupleList result = sampler.result();
-		assertTrue(result.get(74).y().isEmpty());
+		assertEquals(IntervalConstants.undefined(), result.get(74).y());
 	}
 
 	@Test
@@ -34,17 +34,6 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 		IntervalTupleList result = sampler.result();
 		assertTrue(result.get(0).y().isUndefined()
 				&& result.get(100).y().isUndefined());
-	}
-
-	@Ignore
-	@Test
-	public void cscLnXInverseTimesMinusTen() {
-		GeoFunction tanX = add("(-10)/csc(ln(x))");
-		IntervalTuple range = PlotterUtils.newRange(0, 2, -10, 10);
-		IntervalFunctionSampler sampler =
-				new IntervalFunctionSampler(tanX, range, 100);
-		IntervalTupleList result = sampler.result();
-		assertTrue(false);
 	}
 
 	@Test

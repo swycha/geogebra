@@ -156,12 +156,12 @@ public class IntervalTrigonometricTest {
 
 	@Test
 	public void testSinUndefinedShouldReturnUndefined() {
-		assertEquals(undefined(), undefined().sin());
+		assertEquals(interval(-1, 1), undefined().sin());
 	}
 
 	@Test
 	public void testCosUndefinedShouldReturnUndefined() {
-		assertEquals(undefined(), undefined().cos());
+		assertEquals(interval(-1, 1), undefined().cos());
 	}
 
 	@Test
