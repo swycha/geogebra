@@ -230,7 +230,6 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 			.gwt-Label {
 				cursor: default;
 				font-size: 80%;
-				color: $teal-default;
 			}
 
 			.AutoCompleteTextFieldW {
@@ -443,12 +442,6 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 			-moz-box-sizing: border-box;
 			font-size: 90%;
 			box-shadow: none;
-		}
-
-		.gwt-DisclosurePanel
-		.gwt-TabLayoutPanelTab
-		.com-google-gwt-resources-client-CommonResources-InlineBlockStyle-inlineBlock {
-			height: 28px;
 		}
 	}
 

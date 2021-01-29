@@ -551,19 +551,17 @@
 		display: none;
 	}
 
-	.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent,
 	.gwt-TabPanelBottom,
-	.objectPropertiesPanel {
-		overflow: auto;
+	.propertiesPanel {
 		padding-left: 8px;
-		padding-right: 8px;
-		padding-top: 8px;
-		background-color: #FFFFFF;
-		border: 1px solid #DCDCDC;
-		border-top: none;
+		border-right: 1px solid #DCDCDC;
 	}
 
-	.objectPropertiesPanel {
+	.gwt-TabPanelBottom {
+		padding-top: 8px;
+	}
+
+	.propertiesPanel {
 		box-sizing: border-box;
 		height: 100%;
 		border-bottom: none;
@@ -1910,12 +1908,6 @@
 		PROPERTIES
 	###################################################################*/
 
-	.PropertiesViewW {
-		background-color: #F8F8F8;
-		border-radius: 0;
-		padding: 0;
-	}
-
 	.contentsPanel {
 		overflow-x: hidden;
 		overflow-y: hidden;
@@ -1956,12 +1948,12 @@
 		display: block;
 	}
 
-	.objectPropertiesPanel > .checkBoxPanel {
+	.propertiesPanel > .checkBoxPanel {
 		white-space: nowrap;
 		margin-bottom: 10px;
 	}
 
-	.objectPropertiesPanel > .checkBoxPanel:last-child {
+	.propertiesPanel > .checkBoxPanel:last-child {
 		margin-bottom: 0;
 	}
 

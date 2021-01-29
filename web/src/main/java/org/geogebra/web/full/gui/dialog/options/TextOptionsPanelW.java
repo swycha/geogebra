@@ -233,10 +233,8 @@ class TextOptionsPanelW extends OptionPanel implements ITextOptionsListener,
 
 		btnCancel = new Button();
 		btnPanel.add(btnCancel);
-		if (appw.isUnbundledOrWhiteboard()) {
-			btnOk.addStyleName("okBtn");
-			btnCancel.addStyleName("cancelBtn");
-		}
+		btnOk.addStyleName("okBtn");
+		btnCancel.addStyleName("cancelBtn");
 		btnCancel.addClickHandler(new ClickHandler() {
 
 			@Override
