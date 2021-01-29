@@ -191,7 +191,6 @@
 		background-color: transparent;
 	}
 
-	.gwt-Button:active,
 	.buttonPanel .button:active,
 	.headerbar .headerSecond .signInButton:active {
 		border: 1px inset #6666FF;
@@ -1927,53 +1926,8 @@
 		width: 100%;
 	}
 
-	.propertiesStyleBar {
-		width: 34px;
-		position: absolute;
-		right: 0;
-		top: 0;
-		max-width: 100%;
-		overflow: hidden;
-	}
-
-	.menuProperties {
-		margin: 0;
-		padding: 0;
-	}
-
-	.menuProperties table {
-		cellpadding: 0px;
-		border-collapse: collapse;
-	}
-
-	.menuProperties .gwt-MenuItem {
-		padding: 5px;
-		cursor: pointer;
-	}
-
-	.menuProperties .gwt-MenuItem:hover {
-		background: #F0F0F0;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-	}
-
-	.propertiesStyleBar .selected,
-	.propertiesStyleBar .gwt-MenuItem.selected:hover {
-		background-image: linear-gradient(left, #DCDCDC, #F8F8F8);
-		zoom: 1;
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-	}
-
-	.menuProperties .gwt-MenuItem img {
-		width: 24px !important;
-		height: 24px !important;
-	}
-
 	.ggb-MultiRowsTabPanel > * {
 		float: left;
-	}
-
-	.propertiesPanel2 {
-		height: 100%;
 	}
 
 	/* EUCLIDIAN PROPERTIES */
