@@ -2137,8 +2137,7 @@
 		margin: 3px 0;
 	}
 
-	.advanced-TextButtonPanel input[disabled=""],
-	.advanced-TextButtonPanel .choice-button-up-disabled {
+	.advanced-TextButtonPanel input[disabled=""] {
 		opacity: 1;
 		cursor: default;
 	}
@@ -2152,26 +2151,6 @@
 		right: 0.3em;
 		top: 0.3em;
 		cursor: pointer;
-	}
-
-	.advanced-ListPopupPanel {
-		border-radius: 5px;
-		padding: 5px;
-		background-color: rgba(255, 255, 255, 0.9);
-		box-shadow: 0 0 2px 1px rgba(102, 102, 102, 0.3);
-		overflow: visible;
-		position: absolute;
-		background-color: white;
-		font-family: geogebra-sans-serif, Arial Unicode MS, Arial, sans-serif;
-	}
-
-	.advanced-ListPopupPanel .item {
-		cursor: pointer;
-		padding: 0 5px;
-	}
-
-	.advanced-ListPopupPanel .item:hover {
-		background: #CCCCFF;
 	}
 
 	.geoSelectFirst {

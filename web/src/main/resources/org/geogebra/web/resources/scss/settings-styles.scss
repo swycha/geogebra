@@ -16,7 +16,7 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 		z-index: $z-dialog-under-keyboard;
 		height: 100%;
 		width: 500px;
-		overflow-y: auto;
+		overflow: hidden;
 	}
 
 	.propertiesTabPanel {
@@ -129,13 +129,25 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 			}
 		}
 
-		.panelRowIndent, .optionsPanel, .sliderIntervalPanel,
-		.panelRow, .listBoxPanel, .sliderWidthPanel,
-		.optionsInput, .optionsPanelCell {
-			.gwt-ToggleButton {
-				cursor: pointer;
-				padding: 4px;
-				margin: 0px;
+		.gwt-ToggleButton {
+			cursor: pointer;
+			padding: 4px;
+			margin: 0px;
+
+			img {
+				opacity: 0.54;
+			}
+
+			&:hover {
+				img {
+					opacity: 1;
+				}
+			}
+		}
+
+		.advanced-TextButtonPanel {
+			.choice-button {
+				top: 2px !important;
 
 				img {
 					opacity: 0.54;
@@ -146,55 +158,40 @@ $shadow-dark: 0px 0px 2px 1px rgba(102, 102, 102, 0.3);
 						opacity: 1;
 					}
 				}
-			}
 
-			.advanced-TextButtonPanel {
-				.choice-button {
-					top: 2px !important;
+				&.choice-button-up-disabled {
+					cursor: default;
 
 					img {
-						opacity: 0.54;
-					}
-
-					&:hover {
-						img {
-							opacity: 1;
-						}
-					}
-
-					&.choice-button-up-disabled {
-						cursor: default;
-
-						img {
-							opacity: 0.3;
-						}
+						opacity: 0.3;
 					}
 				}
 			}
+		}
 
-			input[type="text"] {
-				width: 100%;
-				font-size: 90%;
-				border-radius: 0px;
+		input[type="text"] {
+			width: 100%;
+			font-size: 90%;
+			border-radius: 0px;
+			border: none;
+			box-shadow: none;
+			border-bottom: 1px solid $tool-border;
+			padding: 0px;
+			padding-left: 8px;
+			margin-bottom: 2px;
+			transition: border-bottom 0.3s ease-out;
+
+			&:hover, &:focus {
 				border: none;
-				box-shadow: none;
-				border-bottom: 1px solid $tool-border;
-				padding: 0px;
-				padding-left: 8px;
-				margin-bottom: 2px;
-				transition: border-bottom 0.3s ease-out;
+				border-bottom: 1px solid $teal-default;
+			}
 
-				&:hover, :focus {
-					border-bottom: 1px solid $teal-default;
-				}
+			&:disabled {
+				background-color: $transparent;
+				opacity: 0.42;
 
-				&:disabled {
-					background-color: $transparent;
-					opacity: 0.42;
-
-					&:hover {
-						border-bottom: 1px solid $tool-border;
-					}
+				&:hover {
+					border-bottom: 1px solid $tool-border;
 				}
 			}
 		}
