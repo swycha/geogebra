@@ -126,15 +126,6 @@ public interface AppResources extends ClientBundle {
 	@Source("org/geogebra/common/icons/png16x16/bar_graph.png")
 	ImageResource bar_graph();
 
-	@Source("org/geogebra/common/icons/png/web/stylingbar/stylingbar_dots.png")
-	ImageResource dots();
-
-	@Source("org/geogebra/common/icons/png/web/stylingbar/stylebar_more.png")
-	ImageResource more();
-
-	@Source("org/geogebra/common/icons/png/web/stylingbar/stylingbar_dots_active.png")
-	ImageResource dots_active();
-
 	@Source("org/geogebra/common/icons/png/web/stylingbar/stylingbar_data_analysis_show_statistics.png")
 	ImageResource dataview_showstatistics();
 
@@ -146,21 +137,6 @@ public interface AppResources extends ClientBundle {
 
 	@Source("org/geogebra/common/icons/png/web/stylingbar/stylebar_angle_interval.png")
 	ImageResource stylingbar_angle_interval();
-
-	@Source("org/geogebra/common/icons_view_perspectives/p24/menu_view_algebra.png")
-	ImageResource options_algebra24();
-	
-	/*
-	 * NEW ICONS USING MATERIAL DESIGN GUIDELINES
-	 * 
-	 * icon color = #000000 + active opacity: 0.54, inactive opacity: 0.26
-	 */
-
-	@Source("org/geogebra/common/icons/png/web/context_menu_20/angle.png")
-	ImageResource angle20();
-
-	@Source("org/geogebra/common/icons/png/web/context_menu_20/animation.png")
-	ImageResource animation20();
 
 	@Source("org/geogebra/common/icons/png/web/context_menu_20/copy.png")
 	ImageResource copy20();

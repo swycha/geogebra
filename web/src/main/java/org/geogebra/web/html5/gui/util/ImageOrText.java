@@ -4,6 +4,7 @@ import org.geogebra.common.awt.GColor;
 import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ResourcePrototype;
 import com.google.gwt.user.client.ui.Label;
 
 /**
@@ -66,9 +67,9 @@ public class ImageOrText {
 	 * @param res
 	 *            resource
 	 */
-	public void setResource(ImageResource res) {
+	public void setResource(ResourcePrototype res) {
 		if (res != null) {
-			setUrl(res.getSafeUri().asString());
+			setUrl(NoDragImage.safeURI(res));
 		}
 	}
 

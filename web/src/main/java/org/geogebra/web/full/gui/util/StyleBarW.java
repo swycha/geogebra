@@ -4,8 +4,8 @@ import org.geogebra.common.gui.SetLabels;
 import org.geogebra.common.main.App;
 import org.geogebra.common.main.OptionType;
 import org.geogebra.web.full.css.GuiResources;
+import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.GuiManagerW;
-import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.laf.GLookAndFeel;
 import org.geogebra.web.full.gui.properties.PropertiesViewW;
 import org.geogebra.web.full.gui.view.Views;
@@ -82,16 +82,8 @@ public abstract class StyleBarW extends HorizontalPanel implements
 			return;
 		}
 		if (menuButton == null) {
-			if (app.isUnbundledOrWhiteboard()) {
-				menuButton = new StandardButton(
-						GuiResources.INSTANCE.stylebar_more());
-				menuButton.addStyleName("MyCanvasButton-borderless");
-			} else {
-				menuButton = new StandardButton(
-						GuiResources.INSTANCE.menu_icon_options());
-				menuButton.setStyleName("MyCanvasButton");
-				menuButton.addStyleName("gereBtn");
-			}
+			menuButton = new StandardButton(MaterialDesignResources.INSTANCE.gear(), null, 24);
+			menuButton.addStyleName("MyCanvasButton");
 
 			menuButton.addFastClickHandler(new FastClickHandler() {
 				@Override
@@ -182,8 +174,11 @@ public abstract class StyleBarW extends HorizontalPanel implements
 				org.geogebra.common.gui.util.SelectionTable.MODE_TEXT, false);
 		viewButton.addStyleDependentName("borderless");
 		viewButton.addStyleDependentName("rightaligned");
+
+		MaterialDesignResources res = MaterialDesignResources.INSTANCE;
+
 		ImageOrText views = new ImageOrText();
-		views.setResource(AppResources.INSTANCE.dots());
+		views.setResource(res.more_vert_black());
 		viewButton.setFixedIcon(views);
 	
 		if (separator != null) {
@@ -194,12 +189,10 @@ public abstract class StyleBarW extends HorizontalPanel implements
 			@Override
 			public void onClick(ClickEvent event) {
 				if (!getViewButton().getMyPopup().isVisible()) {
-					ImageOrText icon = new ImageOrText(AppResources.INSTANCE
-							.dots());
+					ImageOrText icon = new ImageOrText(res.more_vert_black(), 24);
 					getViewButton().setFixedIcon(icon);
 				} else {
-					ImageOrText icon = new ImageOrText(AppResources.INSTANCE
-							.dots_active());
+					ImageOrText icon = new ImageOrText(res.more_vert_purple(), 24);
 					getViewButton().setFixedIcon(icon);
 				}
 			}
@@ -209,8 +202,8 @@ public abstract class StyleBarW extends HorizontalPanel implements
 				new CloseHandler<GPopupPanel>() {
 					@Override
 					public void onClose(CloseEvent<GPopupPanel> event) {
-				ImageOrText icon = new ImageOrText(AppResources.INSTANCE.dots());
-						getViewButton().setFixedIcon(icon);
+				ImageOrText icon = new ImageOrText(res.more_vert_black(), 24);
+				getViewButton().setFixedIcon(icon);
 			}
 		});
 

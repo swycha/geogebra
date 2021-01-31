@@ -231,39 +231,6 @@ public interface GuiResources extends ClientBundle, StylesProvider {
 	@Source("org/geogebra/common/icons/png/web/decoration_icons/decoration_axes_arrows_filled.png")
 	ImageResource deco_axes_arrows_filled();
 
-	/*
-	 * STYLINGBARS
-	 * 
-	 */
-	// General stylingbar icons
-	@Source("org/geogebra/common/stylingbar/p24/stylingbar_dots.png")
-	ImageResource dots();
-
-	@Source("org/geogebra/common/stylingbar/p24/stylingbar_dots_hover.png")
-	ImageResource dots_hover();
-
-	@Source("org/geogebra/common/stylingbar/p24/stylebar_more.png")
-	ImageResource stylebar_more();
-
-	// ALGEBRA VIEW SPECIAL EDITING
-	@Source("org/geogebra/common/icons/png/web/stylingbar/algebra_matrix_size.png")
-	ImageResource algebra_matrix_size();
-
-	@Source("org/geogebra/common/icons/png/web/stylingbar/algebra_matrix_size_hover.png")
-	ImageResource algebra_matrix_size_hover();
-
-	@Source("org/geogebra/common/menu_icons/p20/menu-remove.png")
-	ImageResource algebra_remove();
-
-	@Source("org/geogebra/common/icons/png/web/menu_icons/stylingbar_algebraview_new_matrix.png")
-	ImageResource algebra_new_matrix();
-
-	@Source("org/geogebra/common/icons/png/web/menu_icons/stylingbar_algebraview_new_piecewise_function.png")
-	ImageResource algebra_new_piecewise();
-
-	@Source("org/geogebra/common/icons/png/web/menu_icons/stylingbar_algebraview_new_parametric_curve.png")
-	ImageResource algebra_new_parametric();
-
 	// PLAY, PAUSE, REWIND, ETC. USED IN ALGEBRA VIEW, EV AND IN NAVIGATION BAR
 
 	@Source("org/geogebra/common/icons_play/p24/nav_skipback.png")

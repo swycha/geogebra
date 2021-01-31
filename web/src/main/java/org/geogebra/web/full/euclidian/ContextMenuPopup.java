@@ -6,7 +6,6 @@ import org.geogebra.common.euclidian.event.PointerEventType;
 import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.gui.ContextMenuGeoElementW;
 import org.geogebra.web.full.gui.GuiManagerW;
-import org.geogebra.web.full.gui.images.AppResources;
 import org.geogebra.web.full.gui.util.MyCJButton;
 import org.geogebra.web.html5.gui.GPopupPanel;
 import org.geogebra.web.html5.gui.util.ClickEndHandler;
@@ -46,9 +45,7 @@ public class ContextMenuPopup extends MyCJButton
 	public ContextMenuPopup(AppW app) {
 		super();
 		this.app = app;
-		ImgResourceHelper.setIcon(app.isUnbundledOrWhiteboard()
-				? MaterialDesignResources.INSTANCE.more_vert_black()
-				: AppResources.INSTANCE.dots(), this);
+		ImgResourceHelper.setIcon(MaterialDesignResources.INSTANCE.more_vert_black(), this);
 		ec = app.getActiveEuclidianView().getEuclidianController();
 		location = new GPoint();
 		updateLocation();
@@ -157,9 +154,7 @@ public class ContextMenuPopup extends MyCJButton
 	}
 
 	private void unselectButton() {
-		ImgResourceHelper.setIcon(app.isUnbundledOrWhiteboard()
-				? MaterialDesignResources.INSTANCE.more_vert_black()
-				: AppResources.INSTANCE.dots(), this);
+		ImgResourceHelper.setIcon(MaterialDesignResources.INSTANCE.more_vert_black(), this);
 		this.removeStyleName("noOpacity");
 	}
 
