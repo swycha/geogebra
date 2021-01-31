@@ -53,6 +53,7 @@ import org.geogebra.common.util.GPredicate;
 import org.geogebra.common.util.debug.Log;
 import org.geogebra.web.full.css.GuiResources;
 import org.geogebra.web.full.css.MaterialDesignResources;
+import org.geogebra.web.full.css.ToolbarSvgResourcesSync;
 import org.geogebra.web.full.gui.color.BgColorPopup;
 import org.geogebra.web.full.gui.color.BorderTextPopup;
 import org.geogebra.web.full.gui.color.ColorPopupMenuButton;
@@ -81,6 +82,8 @@ import org.geogebra.web.resources.SVGResource;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ResourcePrototype;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -779,14 +782,14 @@ public class EuclidianStyleBarW extends StyleBarW2
 	protected void createChangeViewButtons() {
 		ImageOrText[] directionIcons = ImageOrText
 				.convert(
-						new ImageResource[] {
-								StyleBarResources.INSTANCE.standard_view(),
-								StyleBarResources.INSTANCE.view_all_objects() },
+						new ResourcePrototype[] {
+								MaterialDesignResources.INSTANCE.home_black(),
+								MaterialDesignResources.INSTANCE.show_all_objects_black() },
 						24);
 
 		btnChangeView = new ProjectionPopup(app, directionIcons);
 		btnChangeView.setIcon(
-				new ImageOrText(StyleBarResources.INSTANCE.standard_view()));
+				new ImageOrText(MaterialDesignResources.INSTANCE.home_black(), 24));
 		btnChangeView.addPopupHandler(this);
 	}
 
@@ -855,7 +858,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 		};
 
 		// it is not needed, must be an Image preloaded like others.
-		ImageResource ptCaptureIcon = StyleBarResources.INSTANCE.magnet();
+		ResourcePrototype ptCaptureIcon = MaterialDesignResources.INSTANCE.snap_to_grid();
 		// must be done in callback btnPointCapture.setIcon(ptCaptureIcon);
 		ImgResourceHelper.setIcon(ptCaptureIcon, btnPointCapture);
 		btnPointCapture.addPopupHandler(this);
@@ -892,7 +895,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 				return this.getIcon();
 			}
 		};
-		ImageResource ic = AppResources.INSTANCE.mode_showhidelabel_16();
+		ResourcePrototype ic = ToolbarSvgResourcesSync.INSTANCE.mode_showhidelabel_32();
 		// must be done with callback btnLabelStyle.setIcon(ic);
 		ImgResourceHelper.setIcon(ic, btnLabelStyle);
 		btnLabelStyle.addPopupHandler(this);
@@ -942,7 +945,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 	private void createStandardViewBtn() {
 		btnStandardView = new MyCJButton();
 		ImageOrText icon = new ImageOrText(
-				StyleBarResources.INSTANCE.standard_view());
+				MaterialDesignResources.INSTANCE.home_black(), 24);
 		btnStandardView.setIcon(icon);
 		btnStandardView.addClickHandler(event -> setEvStandardView());
 	}
@@ -1325,7 +1328,7 @@ public class EuclidianStyleBarW extends StyleBarW2
 
 	private void createFixPositionBtn() {
 		btnFixPosition = new MyToggleButtonW(
-				StyleBarResources.INSTANCE.fixPosition()) {
+				new Image(MaterialDesignResources.INSTANCE.pin_black().getSafeUri())) {
 
 			@Override
 			public void update(List<GeoElement> geos) {
@@ -1345,8 +1348,8 @@ public class EuclidianStyleBarW extends StyleBarW2
 
 	private void createFixObjectBtn() {
 		btnFixObject = new MyToggleButtonW(
-				StyleBarResources.INSTANCE.objectUnfixed(),
-				StyleBarResources.INSTANCE.objectFixed()) {
+				new Image(MaterialDesignResources.INSTANCE.lock_open_black().getSafeUri()),
+				new Image(MaterialDesignResources.INSTANCE.lock_black().getSafeUri())) {
 
 			@Override
 			public void update(List<GeoElement> geos) {
@@ -1543,10 +1546,8 @@ public class EuclidianStyleBarW extends StyleBarW2
 		};
 		btnTextSize.addPopupHandler(this);
 		btnTextSize.setKeepVisible(false);
-		btnTextSize.setIcon(app.isUnbundledOrWhiteboard()
-				? new ImageOrText(
-						MaterialDesignResources.INSTANCE.text_size_black(), 24)
-				: new ImageOrText(StyleBarResources.INSTANCE.font_size()));
+		btnTextSize.setIcon(new ImageOrText(
+				MaterialDesignResources.INSTANCE.text_size_black(), 24));
 		btnTextSize.addStyleName("withIcon");
 		btnTextSize.getMyPopup().removeStyleName("matPopupPanel");
 		btnTextSize.getMyPopup().addStyleName("textSizePopupPanel");

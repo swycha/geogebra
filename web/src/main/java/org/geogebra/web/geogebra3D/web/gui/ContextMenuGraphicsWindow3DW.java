@@ -118,10 +118,7 @@ public class ContextMenuGraphicsWindow3DW extends ContextMenuGraphicsWindowW {
 
 	private void addStandardViewMenuItem() {
 		String img;
-		if (app.isWhiteboardActive()) {
-			img = AppResources.INSTANCE.standard_view20().getSafeUri()
-					.asString();
-		} else if (app.isUnbundled()) {
+		if (app.isUnbundled()) {
 			img = MaterialDesignResources.INSTANCE.home_black().getSafeUri()
 					.asString();
 		} else {
@@ -143,10 +140,7 @@ public class ContextMenuGraphicsWindow3DW extends ContextMenuGraphicsWindowW {
 
 	private void addShowAllObjectsViewMenuItem() {
 		String img;
-		if (app.isWhiteboardActive()) {
-			img = AppResources.INSTANCE.show_all_objects20().getSafeUri()
-					.asString();
-		} else if (app.isUnbundled()) {
+		if (app.isUnbundled()) {
 			img = MaterialDesignResources.INSTANCE.show_all_objects_black()
 					.getSafeUri().asString();
 		} else {

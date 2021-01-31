@@ -1,7 +1,6 @@
 package org.geogebra.web.html5.gui.util;
 
 import org.geogebra.common.awt.GColor;
-import org.geogebra.web.resources.SVGResource;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ResourcePrototype;
@@ -48,19 +47,9 @@ public class ImageOrText {
 	 * @param width
 	 *            width
 	 */
-	public ImageOrText(SVGResource res, int width) {
-		setSvgRes(res);
+	public ImageOrText(ResourcePrototype res, int width) {
+		setResource(res);
 		bgSize = width;
-	}
-
-	/**
-	 * @param res
-	 *            svg resource
-	 */
-	public void setSvgRes(SVGResource res) {
-		if (res != null) {
-			setUrl(res.getSafeUri().asString());
-		}
 	}
 
 	/**
@@ -80,14 +69,13 @@ public class ImageOrText {
 	 *            size
 	 * @return converted array
 	 */
-	public static ImageOrText[] convert(ImageResource[] res, int size) {
+	public static ImageOrText[] convert(ResourcePrototype[] res, int size) {
 	    ImageOrText[] arr = new ImageOrText[res.length];
 		for (int i = 0; i < arr.length; i++) {
 			if (res[i] == null) {
 	    		return arr;
 	    	}
-			arr[i] = new ImageOrText(res[i]);
-			arr[i].bgSize = size;
+			arr[i] = new ImageOrText(res[i], size);
 	    }
 	    return arr;
     }

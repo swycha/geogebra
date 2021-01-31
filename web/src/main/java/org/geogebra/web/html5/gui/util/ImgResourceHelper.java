@@ -19,6 +19,7 @@ public class ImgResourceHelper {
 			final HasSetIcon button) {
 	    ImageOrText img = new ImageOrText();
 		img.setUrl(safeURI(ir));
+		img.setBgSize(24);
 	    button.setIcon(img);
 	}
 

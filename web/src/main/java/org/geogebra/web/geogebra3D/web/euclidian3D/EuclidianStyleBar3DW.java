@@ -11,6 +11,7 @@ import org.geogebra.common.main.App;
 import org.geogebra.common.main.Localization;
 import org.geogebra.common.main.OptionType;
 import org.geogebra.common.main.settings.EuclidianSettings3D;
+import org.geogebra.web.full.css.MaterialDesignResources;
 import org.geogebra.web.full.euclidian.EuclidianStyleBarW;
 import org.geogebra.web.full.euclidian.MyToggleButtonWforEV;
 import org.geogebra.web.full.gui.images.StyleBarResources;
@@ -20,6 +21,7 @@ import org.geogebra.web.geogebra3D.web.gui.images.StyleBar3DResources;
 import org.geogebra.web.html5.gui.util.ImageOrText;
 
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ResourcePrototype;
 
 /**
  * style bar for 3D view
@@ -119,9 +121,9 @@ public class EuclidianStyleBar3DW extends EuclidianStyleBarW {
 
 	@Override
 	protected void createChangeViewButtons() {
-		ImageOrText[] directionIcons = ImageOrText.convert(new ImageResource[] {
-				StyleBarResources.INSTANCE.standard_view(),
-				StyleBarResources.INSTANCE.view_all_objects(),
+		ImageOrText[] directionIcons = ImageOrText.convert(new ResourcePrototype[] {
+				MaterialDesignResources.INSTANCE.home_black(),
+				MaterialDesignResources.INSTANCE.show_all_objects_black(),
 				StyleBar3DResources.INSTANCE.standardViewRotate(),
 				StyleBar3DResources.INSTANCE.viewXY(),
 				StyleBar3DResources.INSTANCE.viewXZ(),
