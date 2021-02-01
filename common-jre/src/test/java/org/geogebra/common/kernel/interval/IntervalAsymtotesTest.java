@@ -82,6 +82,12 @@ public class IntervalAsymtotesTest extends BaseUnitTest {
 
 	}
 
+	@Test
+	public void sinSecInverse() {
+		IntervalTupleList tuples = functionValues("sin(1/sec(x))", 0, 2, -1, 1);
+		assertTrue(false);
+	}
+
 	private IntervalTupleList functionValues(String functionDescription,
 			double xmin, double xmax, double ymin, double ymax) {
 		GeoFunction function = add(functionDescription);

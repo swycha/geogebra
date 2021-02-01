@@ -8,35 +8,51 @@ package org.geogebra.common.kernel.interval;
  */
 public class IntervalAsymptotes {
 	private final IntervalTupleList samples;
+	private IntervalFunction function;
 
 	/**
 	 * Constructor
 	 *  @param samples the evaluated data
 	 *
 	 */
-	public IntervalAsymptotes(IntervalTupleList samples) {
+	public IntervalAsymptotes(IntervalTupleList samples, IntervalFunction function) {
 		this.samples = samples;
+		this.function = function;
 	}
 
 	/**
 	 * Check samples for cut-off points and fix them.
 	 */
 	public void process() {
-		for (int index = 1; index < samples.count() - 1; index++) {
+		for (int index = 0; index < samples.count(); index++) {
 			if (value(index).isUndefined()) {
-				fixGraph(index);
-			}
-			if (value(index).isWhole()) {
-				fixVerticalAsymptote(index);
+				try {
+					fixVerticalAsymptote(index);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (value(index).isWhole()) {
+				value(index).setEmpty();
 			}
 		}
 	}
 
-	private void fixVerticalAsymptote(int index) {
-		Interval left = leftValue(index);
-		Interval right = rightValue(index);
-		if (left.isFinite() && right.isFinite()) {
-			value(index).setEmpty();
+	private void fixVerticalAsymptote(int index) throws Exception {
+		Interval result = new Interval(0);
+		LinearSpace space = new LinearSpace();
+		Interval x1 = samples.get(index).x();
+		Interval refine = new Interval(x1.getLow() - 1E-7, x1.getHigh() + 1E-7);
+		space.update(refine, 100);
+		for (int i = 0; i < space.values.size() - 1; i += 1) {
+			Interval x = new Interval(space.values.get(i), space.values.get(i + 1));
+			Interval y = function.evaluate(x);
+			if (!y.isUndefined() && (y.getLength() > result.getLength())) {
+				result.set(y);
+			}
+		}
+		if (!result.isEmpty()) {
+			samples.get(index).y().set(result);
+			samples.get(index).y().set(result);
 		}
 	}
 

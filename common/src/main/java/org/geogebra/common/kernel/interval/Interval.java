@@ -660,7 +660,10 @@ public class Interval implements IntervalArithmetic, IntervalMiscOperands {
 	 * @return the length of the interval
 	 */
 	public double getLength() {
-		return high - low;
+		if (isEmpty()) {
+			return 0;
+		}
+		return Math.abs(high - low);
 	}
 
 	/**
