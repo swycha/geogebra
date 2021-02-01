@@ -14,11 +14,16 @@ class IntervalTrigonometric {
 	}
 
 	Interval cos() {
-		if (interval.isEmpty() || interval.isOnlyInfinity()) {
-			return IntervalConstants.empty();
+		if (interval.isUndefined()) {
+			return interval;
 		}
 
-		if (interval.isWhole() || interval.isUndefined()) {
+		if (interval.isEmpty() || interval.isOnlyInfinity()) {
+			interval.setEmpty();
+			return interval;
+		}
+
+		if (interval.isWhole()) {
 			interval.set(-1, 1);
 			return interval;
 		}
@@ -82,6 +87,8 @@ class IntervalTrigonometric {
 	 */
 	public Interval sin() {
 		if (interval.isUndefined()) {
+			return interval;
+		} if (interval.isWhole()) {
 			interval.set(-1, 1);
 		} else if (interval.isEmpty() || interval.isOnlyInfinity()) {
 			interval.setEmpty();
