@@ -26,6 +26,17 @@ public class IntervalAsymptotes {
 			if (value(index).isUndefined()) {
 				fixGraph(index);
 			}
+			if (value(index).isWhole()) {
+				fixVerticalAsymptote(index);
+			}
+		}
+	}
+
+	private void fixVerticalAsymptote(int index) {
+		Interval left = leftValue(index);
+		Interval right = rightValue(index);
+		if (left.isFinite() && right.isFinite()) {
+			value(index).setEmpty();
 		}
 	}
 

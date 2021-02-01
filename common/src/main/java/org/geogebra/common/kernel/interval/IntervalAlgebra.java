@@ -30,6 +30,11 @@ class IntervalAlgebra {
 			return interval;
 		}
 
+		if (interval.isUndefined()) {
+			interval.setWhole();
+			return interval;
+		}
+
 		double yb = interval.getLow() < 0 ? other.getLow() : other.getHigh();
 		double n = interval.getLow() / yb;
 		if (n < 0) {
