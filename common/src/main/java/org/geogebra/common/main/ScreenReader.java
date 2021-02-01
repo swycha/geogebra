@@ -91,13 +91,9 @@ public class ScreenReader {
 	 * @param text
 	 *            selected item text to read
 	 */
-	public static void readDropDownSelectorMoved(App app, String text) {
-		String readText = text;
-		if ("".equals(text)) {
-			readText = app.getLocalization().getMenuDefault("EmptyItem", "Empty item");
-		}
-
-		readText(readText, app);
+	public static void readDropDownSelectorMoved(App app, GeoList text, int index) {
+		readText(text.getItemDisplayString(index, StringTemplate.screenReader) + " "
+				+ text.getIndexDescription(index), app);
 	}
 
 	/**
